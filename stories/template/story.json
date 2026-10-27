@@ -1,16 +1,17 @@
 {
   "scriptVersion": 1,
-  "id": "ui-test-phone-v2",
-  "title": "捡手机",
-  "description": "仅用于界面测试，不含剧情",
-  "revision": 2,
+  "id": "transit-love-phone",
+  "title": "換乘戀愛｜第一天",
+  "description": "在原有手機中體驗六男六女的虛構互動戀愛節目。姓名僅用於虛構角色，內容不代表同名人物的真實經歷。先開備忘錄完成設定。",
+  "revision": 3,
   "phone": {
-    "owner": "机主",
+    "owner": "你",
     "date": "2026-10-25",
     "time": "09:41",
     "battery": 94,
     "network": "5G",
-    "wallpaper": "apple-wwdc26"
+    "wallpaper": "apple-wwdc26",
+    "passcode": "0112"
   },
   "installedApps": [
     "appstore",
@@ -89,611 +90,2300 @@
   ],
   "contacts": [
     {
-      "id": "test-contact",
-      "name": "测试联系人",
-      "phone": "",
-      "bio": "这是一条测试内容。"
+      "id": "production",
+      "name": "換乘戀愛節目組",
+      "bio": "合宿聯絡與匿名心意訊息"
     }
   ],
-  "chats": [
-    {
-      "id": "test-chat-messages",
-      "app": "messages",
-      "title": "测试会话",
-      "participants": [
-        "owner",
-        "test-contact"
-      ],
-      "messages": [
-        {
-          "id": "test-message-messages",
-          "body": "这是一条测试消息。",
-          "senderId": "test-contact"
-        }
-      ]
-    },
-    {
-      "id": "test-chat-wechat",
-      "app": "wechat",
-      "title": "测试会话",
-      "participants": [
-        "owner",
-        "test-contact"
-      ],
-      "messages": [
-        {
-          "id": "test-message-wechat",
-          "body": "这是一条测试消息。",
-          "senderId": "test-contact"
-        }
-      ]
-    },
-    {
-      "id": "test-chat-qq",
-      "app": "qq",
-      "title": "测试会话",
-      "participants": [
-        "owner",
-        "test-contact"
-      ],
-      "messages": [
-        {
-          "id": "test-message-qq",
-          "body": "这是一条测试消息。",
-          "senderId": "test-contact"
-        }
-      ]
-    },
-    {
-      "id": "test-chat-whatsapp",
-      "app": "whatsapp",
-      "title": "测试会话",
-      "participants": [
-        "owner",
-        "test-contact"
-      ],
-      "messages": [
-        {
-          "id": "test-message-whatsapp",
-          "body": "这是一条测试消息。",
-          "senderId": "test-contact"
-        }
-      ]
-    },
-    {
-      "id": "test-chat-telegram",
-      "app": "telegram",
-      "title": "测试会话",
-      "participants": [
-        "owner",
-        "test-contact"
-      ],
-      "messages": [
-        {
-          "id": "test-message-telegram",
-          "body": "这是一条测试消息。",
-          "senderId": "test-contact"
-        }
-      ]
-    },
-    {
-      "id": "test-chat-discord",
-      "app": "discord",
-      "title": "测试会话",
-      "participants": [
-        "owner",
-        "test-contact"
-      ],
-      "messages": [
-        {
-          "id": "test-message-discord",
-          "body": "这是一条测试消息。",
-          "senderId": "test-contact"
-        }
-      ]
-    },
-    {
-      "id": "test-chat-line",
-      "app": "line",
-      "title": "测试会话",
-      "participants": [
-        "owner",
-        "test-contact"
-      ],
-      "messages": [
-        {
-          "id": "test-message-line",
-          "body": "这是一条测试消息。",
-          "senderId": "test-contact"
-        }
-      ]
-    },
-    {
-      "id": "test-chat-messenger",
-      "app": "messenger",
-      "title": "测试会话",
-      "participants": [
-        "owner",
-        "test-contact"
-      ],
-      "messages": [
-        {
-          "id": "test-message-messenger",
-          "body": "这是一条测试消息。",
-          "senderId": "test-contact"
-        }
-      ]
-    },
-    {
-      "id": "test-chat-kakao",
-      "app": "kakao",
-      "title": "测试会话",
-      "participants": [
-        "owner",
-        "test-contact"
-      ],
-      "messages": [
-        {
-          "id": "test-message-kakao",
-          "body": "这是一条测试消息。",
-          "senderId": "test-contact"
-        },
-        {
-          "id": "test-reply-kakao",
-          "body": "这是一条测试回复。",
-          "senderId": "owner"
-        }
-      ]
-    }
-  ],
+  "chats": [],
   "content": {
-    "phone": [
-      {
-        "id": "test-item-phone",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "contacts": [
-      {
-        "id": "test-item-contacts",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "photos": [
-      {
-        "id": "test-item-photos",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "camera": [
-      {
-        "id": "test-item-camera",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "safari": [
-      {
-        "id": "test-item-safari",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
     "notes": [
       {
-        "id": "test-item-notes",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
+        "id": "setup",
+        "title": "01｜入住前的秘密備忘錄",
+        "body": "歡迎來到《換乘戀愛》。請先填寫這份只屬於你的設定。\n選六位男嘉賓，其中一位是你的前任 X。女嘉賓為你與另外五位固定的虛構角色。其餘五組前任依你選擇的男嘉賓順序配對。\n這是虛構節目；所有戀愛經歷均為遊戲設定。",
+        "hidden": false,
+        "sender": "換乘戀愛節目組",
         "kind": "text",
-        "meta": {}
-      }
-    ],
-    "calendar": [
+        "meta": {
+          "profileForm": "{\"men\":[\"金俊抒\",\"張家豪\",\"李理悟\",\"李相沅\",\"賀鑫隆\",\"周安信\",\"鄭相炫\"],\"women\":[\"尹書妍\",\"韓知恩\",\"宋夏琳\",\"崔有真\",\"白恩彩\"],\"reasons\":[\"遠距離與疏於聯絡\",\"工作與陪伴失衡\",\"信任破裂\",\"未來規劃不同\",\"爭執後缺少溝通\",\"和平分手但仍有遺憾\"]}"
+        }
+      },
       {
-        "id": "test-item-calendar",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "mail": [
+        "id": "cast",
+        "title": "02｜製作組私密名單",
+        "body": "玩家：{{player}}\n男嘉賓：{{men}}\n\n前任配對（玩家視角的秘密資料，不會公開給合宿成員）：\n{{pairs}}\n\n你的分手原因：{{reason}}\n{{arrival}}\n\n尹書妍｜27 歲｜出版社編輯\n說話慢、記得每個人的飲食習慣\n與 X 的分手原因：長期遠距離，兩人逐漸不再分享日常。\n\n韓知恩｜26 歲｜花藝師\n擅長緩和氣氛，但不願再委屈自己\n與 X 的分手原因：為了配合對方忽略自己的生活。\n\n宋夏琳｜28 歲｜紀錄片剪輯師\n觀察敏銳，習慣先聽再說\n與 X 的分手原因：雙方忙於工作，承諾一再延期。\n\n崔有真｜25 歲｜咖啡師\n開朗直率，不把眼淚當作丟臉\n與 X 的分手原因：面對衝突的方式不同，爭執後缺少溝通。\n\n白恩彩｜27 歲｜建築設計師\n重視界線，會用行動照顧朋友\n與 X 的分手原因：對未來定居城市有不同期待。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text"
+      },
       {
-        "id": "test-item-mail",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "clock": [
+        "id": "tendency",
+        "title": "03｜我的心意紀錄",
+        "body": "初始設定保存在入住備忘錄。選擇會讓心意在 0–100% 間變化。\n目前復合 {{reunion}}% ／換乘 {{transfer}}%\n\n復合與換乘相加始終為 100%。這是自我傾向，不是嘉賓對你的好感度。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text"
+      },
       {
-        "id": "test-item-clock",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "reminders": [
-      {
-        "id": "test-item-reminders",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "files": [
-      {
-        "id": "test-item-files",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "music": [
-      {
-        "id": "test-item-music",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "maps": [
-      {
-        "id": "test-item-maps",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "weather": [
-      {
-        "id": "test-item-weather",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "wallet": [
-      {
-        "id": "test-item-wallet",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "health": [
-      {
-        "id": "test-item-health",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "find": [
-      {
-        "id": "test-item-find",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "calculator": [
-      {
-        "id": "test-item-calculator",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "settings": [
-      {
-        "id": "test-item-settings",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "weibo": [
-      {
-        "id": "test-item-weibo",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "redbook": [
-      {
-        "id": "test-item-redbook",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "douyin": [
-      {
-        "id": "test-item-douyin",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "bilibili": [
-      {
-        "id": "test-item-bilibili",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "alipay": [
-      {
-        "id": "test-item-alipay",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "taobao": [
-      {
-        "id": "test-item-taobao",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "netease": [
-      {
-        "id": "test-item-netease",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "delivery": [
-      {
-        "id": "test-item-delivery",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "forum": [
-      {
-        "id": "test-item-forum",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "instagram": [
-      {
-        "id": "test-item-instagram",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "tiktok": [
-      {
-        "id": "test-item-tiktok",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
+        "id": "recap",
+        "title": "04｜第一天結束，寫給明天的自己",
+        "body": "{{player}}，你已度過入住的第一晚。\n\n{{arrival}}\n當初分開是因為：{{reason}}。\n現在的你：復合 {{reunion}}% ／換乘 {{transfer}}%。\n\n今晚的選擇已留在 KakaoTalk；X 與 Safari 的 theqoo 有完整後續。\n這些百分比不是結局。你的 X 仍是 {{ex}}，新認識的人也有自己的過去。\n第二天將從早餐與第一次約會邀請開始。\n\n閱讀完所有更新後，可點開 KakaoTalk 的「結束第一天」訊息。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text"
       }
     ],
     "twitter": [
       {
-        "id": "test-item-twitter",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "youtube": [
-      {
-        "id": "test-item-youtube",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "snapchat": [
-      {
-        "id": "test-item-snapchat",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "facebook": [
-      {
-        "id": "test-item-facebook",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "reddit": [
-      {
-        "id": "test-item-reddit",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "spotify": [
-      {
-        "id": "test-item-spotify",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "netflix": [
-      {
-        "id": "test-item-netflix",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "pinterest": [
-      {
-        "id": "test-item-pinterest",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
-      }
-    ],
-    "threads": [
-      {
-        "id": "test-item-threads",
-        "title": "测试内容",
-        "body": "这是一条测试内容。",
-        "sender": "测试用户",
-        "kind": "text",
-        "meta": {}
+        "id": "day1",
+        "title": "DAY 1｜同一屋簷下",
+        "body": "《換乘戀愛》EP.01 直播文字紀錄\n\n16:00 {{player}} 拎著行李站在玄關。第一位向你走來的人是 {{other}}：「鞋櫃還有空位，我幫你拿吧。」\n\n今日入住男嘉賓：{{present}}。\n女嘉賓：{{player}}、尹書妍、韓知恩、宋夏琳、崔有真、白恩彩。\n{{arrival}}\n\n書妍分好了房間鑰匙，知恩把花放到桌上；夏琳默默觀察座位，有真提議大家一起做飯，恩彩開始整理廚房。\n\n{{xScene}}\n\n規則：不得透露前任身分。每晚發送一則匿名心意訊息。\n請前往 KakaoTalk，點開「合宿節目組」的晚餐提問作出選擇。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "post",
+        "comments": [
+          "製作組：本季完整陣容為六男六女。",
+          "觀眾：每一次「初次見面」都好像藏著一句沒說出口的話。"
+        ]
       },
       {
-        "id": "test-threads-message-1",
-        "title": "测试会话1",
-        "body": "这是一条测试消息。",
-        "sender": "测试联系人1",
-        "folder": "私信"
+        "id": "x-dinner-past",
+        "title": "DAY 1｜晚餐",
+        "body": "你把杯子排在餐桌一側，替那個熟悉的位置留了溫水。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "post"
       },
       {
-        "id": "test-threads-activity-1",
-        "title": "测试动态1",
-        "body": "这是一条测试回复动态。",
-        "sender": "测试用户1",
+        "id": "x-dinner-new",
+        "title": "DAY 1｜晚餐",
+        "body": "你向 {{other}} 問起拿手菜，兩人分工洗菜切菜，第一次笑得沒有那麼拘謹。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "post"
+      },
+      {
+        "id": "x-dinner-self",
+        "title": "DAY 1｜晚餐",
+        "body": "你和有真、恩彩一起擺餐具，知恩送來一小束花。這一晚先從認識自己以外的人開始。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "post"
+      },
+      {
+        "id": "x-letter-past",
+        "title": "DAY 1｜前任的信",
+        "body": "你讀完介紹信，承認思念並沒有因為分手消失。{{xScene}}",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "post"
+      },
+      {
+        "id": "x-letter-new",
+        "title": "DAY 1｜前任的信",
+        "body": "你把信摺好放回信封。那段關係有過珍貴的部分，但今晚你想多認識眼前的人。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "post"
+      },
+      {
+        "id": "x-letter-self",
+        "title": "DAY 1｜前任的信",
+        "body": "你告訴大家想慢慢整理情緒。夏琳點頭，書妍替你把湯重新熱了一次。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "post"
+      },
+      {
+        "id": "x-sms-past",
+        "title": "DAY 1｜匿名心意",
+        "body": "你寫下：「今天有一瞬間，我以為我們還在從前。」\n{{arrival}}\n若 X 是後期鯰魚，訊息由節目組保管至他入住；否則今晚匿名送達。內容不會在論壇公開。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "post"
+      },
+      {
+        "id": "x-sms-new",
+        "title": "DAY 1｜匿名心意",
+        "body": "你傳出：「謝謝你今天接過我的行李，也接住了我的緊張。」{{other}} 收到一封匿名心意訊息，低頭笑了一下。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "post"
+      },
+      {
+        "id": "x-sms-self",
+        "title": "DAY 1｜匿名心意",
+        "body": "你傳出：「今天辛苦了，明天也一起好好相處吧。」這是一句友善的晚安，你決定再給自己一些時間。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "post"
+      }
+    ],
+    "safari": [
+      {
+        "id": "forum-day1",
+        "title": "theqoo｜EP.01 即時討論串",
+        "body": "theqoo / 換乘戀愛 / 即時討論（遊戲內模擬）\n\n[16:03] 匿名01：{{player}} 進門時停了一秒，是緊張嗎？\n[16:05] 匿名02：{{other}} 接行李好自然。\n[16:08] 匿名03：本季完整陣容為六男六女，有沒有人後期才登場呢？\n[16:10] 匿名04：書妍跟知恩一起佈置客廳，這組室友好溫柔。\n[16:12] 匿名05：別把每個眼神都判成 X，首日還看不出來。\n\n後續討論會隨 KakaoTalk 的選擇更新書籤。論壇觀眾看不到你的私密名單與分手原因。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
         "meta": {
-          "activityType": "reply"
+          "url": "theqoo.net/transit/day1",
+          "category": "即時討論"
         }
       },
       {
-        "id": "test-threads-message-2",
-        "title": "测试会话2",
-        "body": "这是一条测试消息。",
-        "sender": "测试联系人2",
-        "folder": "私信"
-      },
-      {
-        "id": "test-threads-activity-2",
-        "title": "测试动态2",
-        "body": "这是一条测试回复动态。",
-        "sender": "测试用户2",
+        "id": "q-dinner-past",
+        "title": "theqoo｜晚餐後速報",
+        "body": "theqoo / EP.01 即時更新（遊戲內模擬）\n\n匿名11：她整理杯子的動作像是想起什麼。\n匿名：鏡頭只拍到片段，別把猜測當作事實。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
         "meta": {
-          "activityType": "reply"
+          "url": "theqoo.net/transit/dinner-past"
         }
       },
       {
-        "id": "test-threads-message-3",
-        "title": "测试会话3",
-        "body": "这是一条测试消息。",
-        "sender": "测试联系人3",
-        "folder": "私信"
+        "id": "q-dinner-new",
+        "title": "theqoo｜晚餐後速報",
+        "body": "theqoo / EP.01 即時更新（遊戲內模擬）\n\n匿名12：一起做飯的默契可以嗑嗎！\n匿名：鏡頭只拍到片段，別把猜測當作事實。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "meta": {
+          "url": "theqoo.net/transit/dinner-new"
+        }
       },
       {
-        "id": "test-threads-activity-3",
-        "title": "测试动态3",
-        "body": "这是一条测试回复动态。",
-        "sender": "测试用户3",
+        "id": "q-dinner-self",
+        "title": "theqoo｜晚餐後速報",
+        "body": "theqoo / EP.01 即時更新（遊戲內模擬）\n\n匿名13：女生們的相處也很好看。\n匿名：鏡頭只拍到片段，別把猜測當作事實。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
         "meta": {
-          "activityType": "reply"
+          "url": "theqoo.net/transit/dinner-self"
+        }
+      },
+      {
+        "id": "q-letter-past",
+        "title": "theqoo｜讀信後討論",
+        "body": "theqoo / EP.01 即時更新（遊戲內模擬）\n\n匿名21：她讀信時的停頓讓人很心疼。\n匿名：鏡頭只拍到片段，別把猜測當作事實。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "meta": {
+          "url": "theqoo.net/transit/letter-past"
+        }
+      },
+      {
+        "id": "q-letter-new",
+        "title": "theqoo｜讀信後討論",
+        "body": "theqoo / EP.01 即時更新（遊戲內模擬）\n\n匿名22：她把信收好的表情很堅定。\n匿名：鏡頭只拍到片段，別把猜測當作事實。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "meta": {
+          "url": "theqoo.net/transit/letter-new"
+        }
+      },
+      {
+        "id": "q-letter-self",
+        "title": "theqoo｜讀信後討論",
+        "body": "theqoo / EP.01 即時更新（遊戲內模擬）\n\n匿名23：不急著決定也很好。\n匿名：鏡頭只拍到片段，別把猜測當作事實。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "meta": {
+          "url": "theqoo.net/transit/letter-self"
+        }
+      },
+      {
+        "id": "q-sms-past",
+        "title": "theqoo｜睡前討論",
+        "body": "theqoo / EP.01 即時更新（遊戲內模擬）\n\n匿名31：晚安前她看著手機很久，或許還在等誰。\n匿名：鏡頭只拍到片段，別把猜測當作事實。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "meta": {
+          "url": "theqoo.net/transit/sms-past"
+        }
+      },
+      {
+        "id": "q-sms-new",
+        "title": "theqoo｜睡前討論",
+        "body": "theqoo / EP.01 即時更新（遊戲內模擬）\n\n匿名32：接行李那一對今晚有後續嗎？只看到他笑了！\n匿名：鏡頭只拍到片段，別把猜測當作事實。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "meta": {
+          "url": "theqoo.net/transit/sms-new"
+        }
+      },
+      {
+        "id": "q-sms-self",
+        "title": "theqoo｜睡前討論",
+        "body": "theqoo / EP.01 即時更新（遊戲內模擬）\n\n匿名33：第一天不用急著站隊，明天再看。\n匿名：鏡頭只拍到片段，別把猜測當作事實。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "meta": {
+          "url": "theqoo.net/transit/sms-self"
         }
       }
     ],
-    "appstore": [
+    "kakao": [
       {
-        "id": "test-appstore",
-        "title": "测试内容",
-        "body": "这是一条测试内容。"
+        "id": "dinner-prompt",
+        "title": "合宿節目組",
+        "body": "18:00｜今晚一起準備晚餐。你想先做什麼？點這則訊息選擇。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "time": "2026-10-25 18:00"
+      },
+      {
+        "id": "reply-dinner-past",
+        "title": "合宿節目組",
+        "body": "你把杯子排在餐桌一側，替那個熟悉的位置留了溫水。",
+        "hidden": true,
+        "sender": "{{player}}",
+        "kind": "text",
+        "outgoing": true,
+        "time": "2026-10-25 18:00"
+      },
+      {
+        "id": "reply-dinner-new",
+        "title": "合宿節目組",
+        "body": "你向 {{other}} 問起拿手菜，兩人分工洗菜切菜，第一次笑得沒有那麼拘謹。",
+        "hidden": true,
+        "sender": "{{player}}",
+        "kind": "text",
+        "outgoing": true,
+        "time": "2026-10-25 18:00"
+      },
+      {
+        "id": "reply-dinner-self",
+        "title": "合宿節目組",
+        "body": "你和有真、恩彩一起擺餐具，知恩送來一小束花。這一晚先從認識自己以外的人開始。",
+        "hidden": true,
+        "sender": "{{player}}",
+        "kind": "text",
+        "outgoing": true,
+        "time": "2026-10-25 18:00"
+      },
+      {
+        "id": "letter-prompt",
+        "title": "合宿節目組",
+        "body": "20:00｜晚餐後，大家收到一封前任介紹信。你會怎樣面對這段過去？點這則訊息選擇。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "time": "2026-10-25 20:00"
+      },
+      {
+        "id": "reply-letter-past",
+        "title": "合宿節目組",
+        "body": "你讀完介紹信，承認思念並沒有因為分手消失。{{xScene}}",
+        "hidden": true,
+        "sender": "{{player}}",
+        "kind": "text",
+        "outgoing": true,
+        "time": "2026-10-25 20:00"
+      },
+      {
+        "id": "reply-letter-new",
+        "title": "合宿節目組",
+        "body": "你把信摺好放回信封。那段關係有過珍貴的部分，但今晚你想多認識眼前的人。",
+        "hidden": true,
+        "sender": "{{player}}",
+        "kind": "text",
+        "outgoing": true,
+        "time": "2026-10-25 20:00"
+      },
+      {
+        "id": "reply-letter-self",
+        "title": "合宿節目組",
+        "body": "你告訴大家想慢慢整理情緒。夏琳點頭，書妍替你把湯重新熱了一次。",
+        "hidden": true,
+        "sender": "{{player}}",
+        "kind": "text",
+        "outgoing": true,
+        "time": "2026-10-25 20:00"
+      },
+      {
+        "id": "sms-prompt",
+        "title": "合宿節目組",
+        "body": "23:00｜今晚心動的人是誰？請選擇匿名訊息的方向。鯰魚尚未入住時，可把給 X 的訊息交節目組保管，今晚不會送達。點這則訊息選擇。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "time": "2026-10-25 23:00"
+      },
+      {
+        "id": "reply-sms-past",
+        "title": "合宿節目組",
+        "body": "你寫下：「今天有一瞬間，我以為我們還在從前。」\n{{arrival}}\n若 X 是後期鯰魚，訊息由節目組保管至他入住；否則今晚匿名送達。內容不會在論壇公開。",
+        "hidden": true,
+        "sender": "{{player}}",
+        "kind": "text",
+        "outgoing": true,
+        "time": "2026-10-25 23:00"
+      },
+      {
+        "id": "reply-sms-new",
+        "title": "合宿節目組",
+        "body": "你傳出：「謝謝你今天接過我的行李，也接住了我的緊張。」{{other}} 收到一封匿名心意訊息，低頭笑了一下。",
+        "hidden": true,
+        "sender": "{{player}}",
+        "kind": "text",
+        "outgoing": true,
+        "time": "2026-10-25 23:00"
+      },
+      {
+        "id": "reply-sms-self",
+        "title": "合宿節目組",
+        "body": "你傳出：「今天辛苦了，明天也一起好好相處吧。」這是一句友善的晚安，你決定再給自己一些時間。",
+        "hidden": true,
+        "sender": "{{player}}",
+        "kind": "text",
+        "outgoing": true,
+        "time": "2026-10-25 23:00"
+      },
+      {
+        "id": "finish-prompt",
+        "title": "合宿節目組",
+        "body": "第一天的記錄已保存。可先去 X、Safari 與備忘錄閱讀更新。點此結束第一天（之後可重新開始）。",
+        "hidden": true,
+        "sender": "換乘戀愛節目組",
+        "kind": "text",
+        "time": "2026-10-25 23:00"
       }
     ]
   },
-  "variables": {},
-  "events": [],
-  "tests": []
+  "variables": {
+    "ready": false,
+    "reunionDelta": 0,
+    "dinnerDelta": 0,
+    "messageDelta": 0
+  },
+  "events": [
+    {
+      "id": "welcome",
+      "label": "入住提醒",
+      "type": "start",
+      "actions": [
+        {
+          "type": "notification",
+          "key": "",
+          "value": "鎖屏密碼 0112。解鎖後，請開啟備忘錄「入住前的秘密備忘錄」。"
+        }
+      ]
+    },
+    {
+      "id": "profile-ready",
+      "label": "保存入住設定",
+      "event": "variable",
+      "target": "ui:notes:profile",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "ready",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "cast",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "tendency",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "day1",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "forum-day1",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "dinner-prompt",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "設定已保存：先到 X 閱讀第一天，再開啟 KakaoTalk。"
+        }
+      ]
+    },
+    {
+      "id": "dinner-choice",
+      "label": "回覆節目組",
+      "type": "choice",
+      "event": "read",
+      "target": "dinner-prompt",
+      "conditions": [
+        {
+          "key": "ready",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "next": [
+        "dinner-past",
+        "dinner-new",
+        "dinner-self"
+      ]
+    },
+    {
+      "id": "dinner-past",
+      "label": "留在廚房，守住熟悉的習慣",
+      "event": "choose",
+      "target": "dinner-past",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "dinnerDelta",
+          "value": 15
+        },
+        {
+          "type": "unlock",
+          "key": "x-dinner-past",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "q-dinner-past",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "reply-dinner-past",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "letter-prompt",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+        }
+      ]
+    },
+    {
+      "id": "dinner-new",
+      "label": "邀請 {{other}} 一起準備晚餐",
+      "event": "choose",
+      "target": "dinner-new",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "dinnerDelta",
+          "value": -15
+        },
+        {
+          "type": "unlock",
+          "key": "x-dinner-new",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "q-dinner-new",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "reply-dinner-new",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "letter-prompt",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+        }
+      ]
+    },
+    {
+      "id": "dinner-self",
+      "label": "先和女嘉賓們整理餐桌",
+      "event": "choose",
+      "target": "dinner-self",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "dinnerDelta",
+          "value": 0
+        },
+        {
+          "type": "unlock",
+          "key": "x-dinner-self",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "q-dinner-self",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "reply-dinner-self",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "letter-prompt",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+        }
+      ]
+    },
+    {
+      "id": "letter-choice",
+      "label": "回覆節目組",
+      "type": "choice",
+      "event": "read",
+      "target": "letter-prompt",
+      "conditions": [
+        {
+          "key": "ready",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "next": [
+        "letter-past",
+        "letter-new",
+        "letter-self"
+      ]
+    },
+    {
+      "id": "letter-past",
+      "label": "承認自己仍然想念 X",
+      "event": "choose",
+      "target": "letter-past",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "reunionDelta",
+          "value": 10
+        },
+        {
+          "type": "unlock",
+          "key": "x-letter-past",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "q-letter-past",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "reply-letter-past",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "sms-prompt",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+        }
+      ]
+    },
+    {
+      "id": "letter-new",
+      "label": "把介紹信收好，選擇向前看",
+      "event": "choose",
+      "target": "letter-new",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "reunionDelta",
+          "value": -10
+        },
+        {
+          "type": "unlock",
+          "key": "x-letter-new",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "q-letter-new",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "reply-letter-new",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "sms-prompt",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+        }
+      ]
+    },
+    {
+      "id": "letter-self",
+      "label": "暫時不替自己的心下定義",
+      "event": "choose",
+      "target": "letter-self",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "reunionDelta",
+          "value": 0
+        },
+        {
+          "type": "unlock",
+          "key": "x-letter-self",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "q-letter-self",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "reply-letter-self",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "sms-prompt",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+        }
+      ]
+    },
+    {
+      "id": "sms-choice",
+      "label": "回覆節目組",
+      "type": "choice",
+      "event": "read",
+      "target": "sms-prompt",
+      "conditions": [
+        {
+          "key": "ready",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "next": [
+        "sms-past",
+        "sms-new",
+        "sms-self"
+      ]
+    },
+    {
+      "id": "sms-past",
+      "label": "把今晚的心意寫給 X",
+      "event": "choose",
+      "target": "sms-past",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "messageDelta",
+          "value": 20
+        },
+        {
+          "type": "unlock",
+          "key": "x-sms-past",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "q-sms-past",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "reply-sms-past",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "recap",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "finish-prompt",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+        }
+      ]
+    },
+    {
+      "id": "sms-new",
+      "label": "向 {{other}} 表達今天的感謝",
+      "event": "choose",
+      "target": "sms-new",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "messageDelta",
+          "value": -20
+        },
+        {
+          "type": "unlock",
+          "key": "x-sms-new",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "q-sms-new",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "reply-sms-new",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "recap",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "finish-prompt",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+        }
+      ]
+    },
+    {
+      "id": "sms-self",
+      "label": "給 {{other}} 一句友善的晚安，先慢慢認識",
+      "event": "choose",
+      "target": "sms-self",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "messageDelta",
+          "value": 0
+        },
+        {
+          "type": "unlock",
+          "key": "x-sms-self",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "q-sms-self",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "reply-sms-self",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "recap",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "finish-prompt",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+        }
+      ]
+    },
+    {
+      "id": "day1-end",
+      "label": "第一天完成｜明天見",
+      "type": "ending",
+      "event": "read",
+      "target": "finish-prompt",
+      "conditions": [
+        {
+          "key": "unlocked:recap",
+          "op": "eq",
+          "value": true
+        }
+      ]
+    }
+  ],
+  "tests": [
+    {
+      "name": "第一天：past/past/past",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-past"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-past"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-past",
+        "x-letter-past",
+        "x-sms-past",
+        "q-dinner-past",
+        "q-letter-past",
+        "q-sms-past"
+      ]
+    },
+    {
+      "name": "第一天：past/past/new",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-past"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-new"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-past",
+        "x-letter-past",
+        "x-sms-new",
+        "q-dinner-past",
+        "q-letter-past",
+        "q-sms-new"
+      ]
+    },
+    {
+      "name": "第一天：past/past/self",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-past"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-self"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-past",
+        "x-letter-past",
+        "x-sms-self",
+        "q-dinner-past",
+        "q-letter-past",
+        "q-sms-self"
+      ]
+    },
+    {
+      "name": "第一天：past/new/past",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-past"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-past"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-past",
+        "x-letter-new",
+        "x-sms-past",
+        "q-dinner-past",
+        "q-letter-new",
+        "q-sms-past"
+      ]
+    },
+    {
+      "name": "第一天：past/new/new",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-past"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-new"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-past",
+        "x-letter-new",
+        "x-sms-new",
+        "q-dinner-past",
+        "q-letter-new",
+        "q-sms-new"
+      ]
+    },
+    {
+      "name": "第一天：past/new/self",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-past"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-self"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-past",
+        "x-letter-new",
+        "x-sms-self",
+        "q-dinner-past",
+        "q-letter-new",
+        "q-sms-self"
+      ]
+    },
+    {
+      "name": "第一天：past/self/past",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-past"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-past"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-past",
+        "x-letter-self",
+        "x-sms-past",
+        "q-dinner-past",
+        "q-letter-self",
+        "q-sms-past"
+      ]
+    },
+    {
+      "name": "第一天：past/self/new",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-past"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-new"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-past",
+        "x-letter-self",
+        "x-sms-new",
+        "q-dinner-past",
+        "q-letter-self",
+        "q-sms-new"
+      ]
+    },
+    {
+      "name": "第一天：past/self/self",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-past"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-self"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-past",
+        "x-letter-self",
+        "x-sms-self",
+        "q-dinner-past",
+        "q-letter-self",
+        "q-sms-self"
+      ]
+    },
+    {
+      "name": "第一天：new/past/past",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-new"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-past"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-new",
+        "x-letter-past",
+        "x-sms-past",
+        "q-dinner-new",
+        "q-letter-past",
+        "q-sms-past"
+      ]
+    },
+    {
+      "name": "第一天：new/past/new",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-new"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-new"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-new",
+        "x-letter-past",
+        "x-sms-new",
+        "q-dinner-new",
+        "q-letter-past",
+        "q-sms-new"
+      ]
+    },
+    {
+      "name": "第一天：new/past/self",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-new"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-self"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-new",
+        "x-letter-past",
+        "x-sms-self",
+        "q-dinner-new",
+        "q-letter-past",
+        "q-sms-self"
+      ]
+    },
+    {
+      "name": "第一天：new/new/past",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-new"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-past"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-new",
+        "x-letter-new",
+        "x-sms-past",
+        "q-dinner-new",
+        "q-letter-new",
+        "q-sms-past"
+      ]
+    },
+    {
+      "name": "第一天：new/new/new",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-new"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-new"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-new",
+        "x-letter-new",
+        "x-sms-new",
+        "q-dinner-new",
+        "q-letter-new",
+        "q-sms-new"
+      ]
+    },
+    {
+      "name": "第一天：new/new/self",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-new"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-self"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-new",
+        "x-letter-new",
+        "x-sms-self",
+        "q-dinner-new",
+        "q-letter-new",
+        "q-sms-self"
+      ]
+    },
+    {
+      "name": "第一天：new/self/past",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-new"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-past"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-new",
+        "x-letter-self",
+        "x-sms-past",
+        "q-dinner-new",
+        "q-letter-self",
+        "q-sms-past"
+      ]
+    },
+    {
+      "name": "第一天：new/self/new",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-new"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-new"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-new",
+        "x-letter-self",
+        "x-sms-new",
+        "q-dinner-new",
+        "q-letter-self",
+        "q-sms-new"
+      ]
+    },
+    {
+      "name": "第一天：new/self/self",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-new"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-self"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-new",
+        "x-letter-self",
+        "x-sms-self",
+        "q-dinner-new",
+        "q-letter-self",
+        "q-sms-self"
+      ]
+    },
+    {
+      "name": "第一天：self/past/past",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-self"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-past"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-self",
+        "x-letter-past",
+        "x-sms-past",
+        "q-dinner-self",
+        "q-letter-past",
+        "q-sms-past"
+      ]
+    },
+    {
+      "name": "第一天：self/past/new",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-self"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-new"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-self",
+        "x-letter-past",
+        "x-sms-new",
+        "q-dinner-self",
+        "q-letter-past",
+        "q-sms-new"
+      ]
+    },
+    {
+      "name": "第一天：self/past/self",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-self"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-self"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-self",
+        "x-letter-past",
+        "x-sms-self",
+        "q-dinner-self",
+        "q-letter-past",
+        "q-sms-self"
+      ]
+    },
+    {
+      "name": "第一天：self/new/past",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-self"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-past"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-self",
+        "x-letter-new",
+        "x-sms-past",
+        "q-dinner-self",
+        "q-letter-new",
+        "q-sms-past"
+      ]
+    },
+    {
+      "name": "第一天：self/new/new",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-self"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-new"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-self",
+        "x-letter-new",
+        "x-sms-new",
+        "q-dinner-self",
+        "q-letter-new",
+        "q-sms-new"
+      ]
+    },
+    {
+      "name": "第一天：self/new/self",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-self"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-self"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-self",
+        "x-letter-new",
+        "x-sms-self",
+        "q-dinner-self",
+        "q-letter-new",
+        "q-sms-self"
+      ]
+    },
+    {
+      "name": "第一天：self/self/past",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-self"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-past"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-self",
+        "x-letter-self",
+        "x-sms-past",
+        "q-dinner-self",
+        "q-letter-self",
+        "q-sms-past"
+      ]
+    },
+    {
+      "name": "第一天：self/self/new",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-self"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-new"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-self",
+        "x-letter-self",
+        "x-sms-new",
+        "q-dinner-self",
+        "q-letter-self",
+        "q-sms-new"
+      ]
+    },
+    {
+      "name": "第一天：self/self/self",
+      "steps": [
+        {
+          "event": "password",
+          "target": "0112"
+        },
+        {
+          "event": "variable",
+          "target": "ui:notes:profile"
+        },
+        {
+          "event": "read",
+          "target": "day1"
+        },
+        {
+          "event": "read",
+          "target": "dinner-prompt"
+        },
+        {
+          "choose": "dinner-self"
+        },
+        {
+          "event": "read",
+          "target": "letter-prompt"
+        },
+        {
+          "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "sms-prompt"
+        },
+        {
+          "choose": "sms-self"
+        },
+        {
+          "event": "read",
+          "target": "finish-prompt"
+        }
+      ],
+      "ending": "第一天完成｜明天見",
+      "expectUnlocked": [
+        "cast",
+        "recap",
+        "x-dinner-self",
+        "x-letter-self",
+        "x-sms-self",
+        "q-dinner-self",
+        "q-letter-self",
+        "q-sms-self"
+      ]
+    }
+  ]
 }

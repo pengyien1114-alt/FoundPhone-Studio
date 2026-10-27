@@ -1,3 +1,8 @@
+import {
+  renderStoryItem,
+  renderStoryText,
+  storyValues,
+} from "./story-forms/profile";
 import { StatusGlyph } from "./ios/StatusGlyph";
 import { SocialDetail, socialDetailApps } from "./skins/SocialDetails";
 import { NativeCalculator } from "./ios/Calculator";
@@ -449,7 +454,7 @@ function PhoneRuntime({
                   items={[
                     ...(work.data[app] ?? []),
                     ...(s.messages[app] ?? []),
-                  ]}
+                  ].map((item) => renderStoryItem(item, storyValues(work, s)))}
                   creator={creator}
                   state={s}
                   onRead={(id) => event("read", id)}
@@ -586,7 +591,7 @@ function PhoneRuntime({
                   key={c.target}
                   onClick={() => update(choose(work, s, c.target))}
                 >
-                  {c.label}
+                  {renderStoryText(c.label, storyValues(work, s))}
                   <ArrowUp size={15} />
                 </button>
               ))}
@@ -1016,7 +1021,13 @@ function AppContent({
             />
           ) : nativeDetailApps.has(app.id) &&
             (!detail.password || unlocks.includes(detail.id)) ? (
-            <NativeDetail app={app.id} item={detail} back={back} />
+            <NativeDetail
+              app={app.id}
+              item={items.find((i) => i.id === detail.id) || detail}
+              back={back}
+              ui={state.ui?.[app.id]}
+              onUi={onUi}
+            />
           ) : (
             <>
               <div className="app-nav">

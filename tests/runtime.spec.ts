@@ -165,12 +165,21 @@ test("production PWA cached story works after offline reload", async ({
   const context = await browser.newContext({ serviceWorkers: "allow" });
   try {
     const page = await context.newPage();
+    const productionWork = await context.request
+      .get("http://127.0.0.1:4173/work.json")
+      .then((r) => r.json());
     await page.goto("/");
     await page.getByRole("button", { name: "轻触解锁" }).waitFor();
     await page.waitForFunction(() => !!navigator.serviceWorker.controller);
     await context.setOffline(true);
     await page.reload();
     await page.getByRole("button", { name: "轻触解锁" }).click();
+    if (productionWork.phone.passcode) {
+      await page
+        .getByRole("textbox", { name: "锁屏密码" })
+        .fill(productionWork.phone.passcode);
+      await page.getByRole("textbox", { name: "锁屏密码" }).press("Enter");
+    }
     await open(page, "设置");
     await expect(page.getByRole("switch", { name: "飞行模式" })).toBeVisible();
     await page

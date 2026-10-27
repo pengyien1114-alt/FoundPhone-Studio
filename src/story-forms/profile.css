@@ -1,0 +1,43 @@
+.story-profile {
+  display: grid;
+  gap: 16px;
+  padding: 12px 0 32px;
+  line-height: 1.6;
+}
+.story-profile label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.story-profile input:not([type="checkbox"]),
+.story-profile select {
+  width: 100%;
+  font: inherit;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+}
+.story-profile fieldset {
+  display: grid;
+  gap: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+.story-profile input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: #c99400;
+}
+.story-profile button {
+  padding: 14px;
+  border-radius: 8px;
+  background: #ffcc00;
+  color: #222;
+  font: inherit;
+}
+.story-profile button:disabled {
+  opacity: 0.4;
+}

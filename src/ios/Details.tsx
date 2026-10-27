@@ -1,3 +1,6 @@
+import { ProfileForm } from "../story-forms/ProfileForm";
+import { profileConfig } from "../story-forms/profile";
+import type { UiValue } from "../schema";
 import { useState } from "react";
 import {
   ChevronLeft,
@@ -27,10 +30,14 @@ export function NativeDetail({
   app,
   item,
   back,
+  ui,
+  onUi,
 }: {
   app: string;
   item: Item;
   back: () => void;
+  ui?: Record<string, UiValue>;
+  onUi?: (key: string, value: UiValue) => void;
 }) {
   const [favorite, setFavorite] = useState(item.favorite),
     [copied, setCopied] = useState(false),
@@ -146,6 +153,9 @@ export function NativeDetail({
             <time>{item.time}</time>
             <h1>{item.title}</h1>
             <RichText value={item.richText} fallback={item.body} />
+            {profileConfig(item) && (
+              <ProfileForm config={profileConfig(item)!} ui={ui} onUi={onUi} />
+            )}
           </div>
           <footer className="native-detail-toolbar">
             <button aria-label="返回文件夹" onClick={back}>
