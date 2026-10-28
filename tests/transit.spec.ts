@@ -25,6 +25,10 @@ for (const late of [false, true])
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto("/");
     await unlock(page);
+    await open(page, "X");
+    await expect(page.locator(".kzxt")).toHaveCount(9);
+    await expect(page.getByLabel("置頂推文")).toBeVisible();
+    await home(page);
     await open(page, "备忘录");
     await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
     await expect(page.locator(".story-profile img")).toHaveCount(0);
@@ -58,7 +62,13 @@ for (const late of [false, true])
     ).toBeVisible();
     await page.screenshot({ path: `outputs/transit/setup-${late}.png` });
     await home(page);
-    // Use the original app search to reach apps on later home pages.
+    // Opening X uses its existing tweet detail to introduce the official story.
+    await open(page, "X");
+    await expect(page.locator(".app-post-detail").first()).toBeVisible();
+    await expect(
+      page.locator(".post-detail-body").getByText(/DAY 1 入住直播/),
+    ).toBeVisible();
+    await home(page);
     await open(page, "KakaoTalk");
     await page
       .locator(".mymy-kakao button")
@@ -75,6 +85,20 @@ for (const late of [false, true])
         .locator(".story-overlay")
         .getByRole("button", { name: option })
         .click();
+      await home(page);
+      await open(page, "X");
+      await expect(
+        page
+          .locator(".post-detail-author")
+          .getByText("換乘戀愛官方", { exact: true }),
+      ).toBeVisible();
+      await home(page);
+      await open(page, "KakaoTalk");
+      await page
+        .locator(".mymy-kakao button")
+        .filter({ hasText: "合宿節目組" })
+        .first()
+        .click();
     }
     await page.screenshot({ path: `outputs/transit/kakao-${late}.png` });
     await home(page);
@@ -88,9 +112,9 @@ for (const late of [false, true])
     await page.screenshot({ path: `outputs/transit/theqoo-${late}.png` });
     await home(page);
     await open(page, "X");
-    await expect(
-      page.getByText(/謝謝你今天接過我的行李/).first(),
-    ).toBeVisible();
+    await expect(page.locator(".mymy-x")).toContainText(
+      "謝謝你今天接過我的行李",
+    );
     await expect(page.locator(".mymy-x")).not.toContainText("{{");
     await page.screenshot({ path: `outputs/transit/x-${late}.png` });
     expect(errors).toEqual([]);

@@ -68,7 +68,53 @@ export function storyValues(
         Number(state.variables.messageDelta || 0),
     ),
   );
-  return {
+  const setup = work.data.notes?.find((i) => i.meta.profileForm);
+  const index = config?.reasons.indexOf(p.reason) ?? -1;
+  let backstory: Record<string, string> = {};
+  try {
+    backstory = JSON.parse(setup?.meta["backstory" + index] || "{}");
+  } catch {
+    /* Older stories have no authored backstory. */
+  }
+  const route = (stage: string) =>
+    ["past", "new", "self"].find((r) =>
+      state.completed.includes(stage + "-" + r),
+    ) || "self";
+  const feeling = (stage: string) =>
+    backstory[route(stage)] || "你決定給自己多一些時間，慢慢理解現在的心意。";
+  const values: Record<string, string> = {
+    ...backstory,
+    history: backstory.history || p.reason,
+    opening: backstory.opening || "你想起那段沒有說完的過去。",
+    letter:
+      backstory.letter || "有些話當時沒有說清楚，希望這次能更誠實地認識彼此。",
+    dinnerFeeling:
+      backstory[
+        "dinner" +
+          { past: "Past", new: "New", self: "Self" }[
+            route("dinner") as "past" | "new" | "self"
+          ]
+      ] || feeling("dinner"),
+    letterFeeling: feeling("letter"),
+    smsFeeling:
+      route("sms") === "past"
+        ? "這則訊息只是一次重新開口，不是要求 X 立刻回頭；你也保留了改變決定的自由。"
+        : route("sms") === "new"
+          ? "你把今晚的感謝交給眼前的人，沒有把他當成忘掉過去的工具。"
+          : "你沒有把一句晚安說成愛情，先用友善替明天留下一點空間。",
+    reflection:
+      backstory.next || "改變需要時間和行動，今晚不急著替明天下結論。",
+    xResponse: p.late
+      ? "X 尚未入住。你不知道他會如何回應；節目組沒有替他作出任何承諾。"
+      : route("dinner") === "past"
+        ? backstory.response || "他看了過來，沒有急著替你回答。"
+        : route("dinner") === "new"
+          ? "X 看見你和別人一起做飯，停了一下，仍把你認識新朋友的空間留給你。"
+          : "X 沒有打斷你與女嘉賓的交談，這一次，沉默沒有被當作任何人的承諾。",
+    letterArrival: p.late
+      ? "X 尚未登場；節目組交來他事先留下的介紹信，他並不在合宿現場。"
+      : "大家依次讀起前任介紹信。輪到你時，他低下頭，沒有替你接過話。",
+    heartMessage: backstory.message || "希望我們能更誠實地理解彼此。",
     player: p.name,
     ex: p.ex,
     men: p.men.join("、"),
@@ -88,6 +134,13 @@ export function storyValues(
       ? "空著的第六個男嘉賓座位讓你想起那個尚未抵達的人。"
       : `${p.ex} 下意識把溫水放到你手邊，又輕聲問了一句：「你也習慣喝溫的嗎？」`,
   };
+  // Authored backstory text may reference the player's cast, rendered as plain text.
+  return Object.fromEntries(
+    Object.entries(values).map(([key, value]) => [
+      key,
+      renderStoryText(value, { player: p.name, ex: p.ex, other: others[0] }),
+    ]),
+  );
 }
 export function renderStoryText(
   text: string,

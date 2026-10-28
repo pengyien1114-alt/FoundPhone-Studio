@@ -22,7 +22,7 @@ describe("transit profile and cross-app story", () => {
       men: [],
       ex: "",
       late: false,
-      reason: "信任破裂",
+      reason: JSON.parse(work.data.notes[0].meta.profileForm).reasons[0],
       reunion: 50,
     };
     expect(parseProfile(JSON.stringify(p), true)).toEqual(p);
@@ -42,7 +42,8 @@ describe("transit profile and cross-app story", () => {
                 men: selected,
                 ex,
                 late,
-                reason: "信任破裂",
+                reason: JSON.parse(work.data.notes[0].meta.profileForm)
+                  .reasons[0],
                 reunion: 50,
               }),
             },
@@ -54,6 +55,7 @@ describe("transit profile and cross-app story", () => {
           expect(values.present.includes(ex)).toBe(!late);
           expect(values.present.split("、")).toHaveLength(late ? 5 : 6);
           expect(values.men).not.toContain(men[omit]);
+          state = dispatch(work, state, "read", "day1");
           state = dispatch(work, state, "read", "dinner-prompt");
           state = choose(work, state, "dinner-new");
           expect(state.unlocked).toContain("x-dinner-new");
@@ -65,8 +67,10 @@ describe("transit profile and cross-app story", () => {
             ),
           ).toBe(false);
           expect(storyValues(work, state).reunion).toBe("35");
+          state = dispatch(work, state, "read", "x-dinner-new");
           state = dispatch(work, state, "read", "letter-prompt");
           state = choose(work, state, "letter-new");
+          state = dispatch(work, state, "read", "x-letter-new");
           state = dispatch(work, state, "read", "sms-prompt");
           state = choose(work, state, "sms-new");
           expect(storyValues(work, state).reunion).toBe("5");
@@ -95,7 +99,7 @@ describe("transit profile and cross-app story", () => {
             men: men.slice(0, 6),
             ex: men[0],
             late: false,
-            reason: "信任破裂",
+            reason: JSON.parse(work.data.notes[0].meta.profileForm).reasons[0],
             reunion: initial,
           }),
         },
@@ -107,3 +111,65 @@ describe("transit profile and cross-app story", () => {
     }
   });
 });
+
+const reasonConfig = JSON.parse(work.data.notes[0].meta.profileForm);
+for (const [reasonIndex, reason] of reasonConfig.reasons.entries()) {
+  for (const late of [false, true]) {
+    for (const direction of ["past", "new", "self"]) {
+      it(`reason ${reasonIndex + 1}, late ${late}, ${direction}: staged narration and history`, () => {
+        let state = initialRuntime(work);
+        state.ui = {
+          notes: {
+            profile: JSON.stringify({
+              name: "小雨",
+              men: men.slice(0, 6),
+              ex: men[0],
+              late,
+              reason,
+              reunion: 50,
+            }),
+          },
+        };
+        state = dispatch(work, state, "variable", "ui:notes:profile");
+        const item = (id: string) =>
+          Object.values(work.data)
+            .flat()
+            .find((i) => i.id === id)!;
+        expect(visible(item("dinner-prompt"), state)).toBe(false);
+        state = dispatch(work, state, "read", "day1");
+        expect(visible(item("dinner-prompt"), state)).toBe(true);
+        for (const stage of ["dinner", "letter", "sms"]) {
+          state = dispatch(work, state, "read", stage + "-prompt");
+          state = choose(work, state, stage + "-" + direction);
+          const next =
+            stage === "dinner"
+              ? "letter-prompt"
+              : stage === "letter"
+                ? "sms-prompt"
+                : null;
+          if (next) expect(visible(item(next), state)).toBe(false);
+          state = dispatch(work, state, "read", "x-" + stage + "-" + direction);
+          if (next) expect(visible(item(next), state)).toBe(true);
+          const values = storyValues(work, state);
+          const rendered = renderStoryItem(
+            item("x-" + stage + "-" + direction),
+            values,
+          );
+          expect(rendered.body).not.toContain("{{");
+          const background = JSON.parse(
+            work.data.notes[0].meta["backstory" + reasonIndex],
+          );
+          expect(rendered.body).toContain(values[stage + "Feeling"]);
+          if (late) expect(values.xResponse).toContain("尚未入住");
+          if (stage === "dinner")
+            expect(rendered.body).toContain(background.letter);
+        }
+        expect(storyValues(work, state).history).toContain(men[0]);
+        if (reasonIndex === 2)
+          expect(storyValues(work, state).history).toContain("離婚半年");
+        if (reasonIndex === 4)
+          expect(storyValues(work, state).history).toContain("都已成年");
+      });
+    }
+  }
+}

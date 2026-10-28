@@ -644,6 +644,24 @@ export function MymyX(p: SkinProps) {
     [reposts, setReposts] = useSkinState<string[]>(p, "mymyXReposts", []),
     [marks, setMarks] = useSkinState<string[]>(p, "mymyXMarks", []),
     [query, setQuery] = useState("");
+  const pinned = p.items
+    .filter((i) => i.meta.pinned === "true")
+    .sort((a, b) => Number(b.meta.stage || 0) - Number(a.meta.stage || 0))[0];
+  useEffect(() => {
+    if (
+      !p.creator &&
+      pinned?.meta.autoOpen === "true" &&
+      p.ui?.["opened-" + pinned.id] !== true
+    ) {
+      p.onUi?.("opened-" + pinned.id, true);
+      p.onItem(pinned);
+    }
+  }, [p, pinned]);
+  const timeline = [...p.items].sort((a, b) => {
+    if (a.id === pinned?.id) return -1;
+    if (b.id === pinned?.id) return 1;
+    return b.time.localeCompare(a.time);
+  });
   const isLiked = (id: string) =>
     typeof p.ui?.["liked-" + id] === "boolean"
       ? Boolean(p.ui["liked-" + id])
@@ -690,12 +708,15 @@ export function MymyX(p: SkinProps) {
           />
         )}
         <div className="kzxfd">
-          {p.items
+          {timeline
             .filter((i) => (i.title + i.body).includes(query))
             .map((i) => (
               <article className="kzxt" key={i.id}>
                 <Avatar name={i.sender} src={i.avatar} />
                 <div className="kzxb">
+                  {i.id === pinned?.id && (
+                    <small aria-label="置頂推文">置頂 · 換乘戀愛官方</small>
+                  )}
                   <div className="kzxn">
                     <b>{i.sender}</b>
                     <small>

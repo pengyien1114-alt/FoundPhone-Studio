@@ -3,7 +3,7 @@
   "id": "transit-love-phone",
   "title": "換乘戀愛｜第一天",
   "description": "在原有手機中體驗六男六女的虛構互動戀愛節目。姓名僅用於虛構角色，內容不代表同名人物的真實經歷。先開備忘錄完成設定。",
-  "revision": 3,
+  "revision": 4,
   "phone": {
     "owner": "你",
     "date": "2026-10-25",
@@ -106,13 +106,19 @@
         "sender": "換乘戀愛節目組",
         "kind": "text",
         "meta": {
-          "profileForm": "{\"men\":[\"金俊抒\",\"張家豪\",\"李理悟\",\"李相沅\",\"賀鑫隆\",\"周安信\",\"鄭相炫\"],\"women\":[\"尹書妍\",\"韓知恩\",\"宋夏琳\",\"崔有真\",\"白恩彩\"],\"reasons\":[\"遠距離與疏於聯絡\",\"工作與陪伴失衡\",\"信任破裂\",\"未來規劃不同\",\"爭執後缺少溝通\",\"和平分手但仍有遺憾\"]}"
+          "profileForm": "{\"men\":[\"金俊抒\",\"張家豪\",\"李理悟\",\"李相沅\",\"賀鑫隆\",\"周安信\",\"鄭相炫\"],\"women\":[\"尹書妍\",\"韓知恩\",\"宋夏琳\",\"崔有真\",\"白恩彩\"],\"reasons\":[\"分手一年｜我先放手：他的溫柔屬於所有人，我想要的卻是一份偏愛。\",\"分手兩年｜他先結束：在韓國相愛，卻敗給語言與文化隔閡；分開後他開始學中文。\",\"離婚半年｜交往三年、結婚半年：他用物質表達愛，我們卻在情緒需求與逃避裡耗盡彼此。\",\"分手半年｜他先提出、又邀我上節目：我沉迷曖昧的新鮮感，他在深愛與佔有之間疲憊。\",\"我先道別｜從小被約定的關係：沒有正式告白，我始終分不清他的照顧是責任還是愛。\",\"為了保護而分開｜犧牲與愧疚：我不願他為愛放棄重要的人生，卻也因此推開了他。\"]}",
+          "backstory0": "{\"summary\":\"分手一年｜我先放手：他的溫柔屬於所有人，我想要的卻是一份偏愛。\",\"history\":\"一年前是你先提分手。{{ex}} 對每個人都友善，你卻在長期的「被分享感」裡反覆猜測自己是否被愛；你想要只為你燃燒的燭火，最後先放了手。\",\"opening\":\"他替大家拉開椅子時，你又想起那個問題：他只是對誰都很好，還是也曾把你放在特別的位置？\",\"letter\":\"「她不是要求太多，只是我讓她一直猜自己是否特別。她離開一年，我才明白，對所有人友善和讓愛人安心，是兩件不同的事。」\",\"past\":\"你沒有再替他找藉口，而是在便箋寫下：如果還要靠近，請讓我知道哪些溫柔是只留給我的。\",\"new\":\"你不再急著把別人的友善讀成愛，決定慢慢看一份關心能否持續落在自己身上。\",\"self\":\"你先把「我值得被明確選擇」寫下，今天不替他的每一個眼神尋找答案。\",\"response\":\"他沒有再用照顧全桌人掩飾目光，想問你要不要熱水，又停下來等你自己回答。\",\"message\":\"如果還想靠近，這次請讓我知道，我是你明確選擇的人。\",\"dinnerPast\":\"留一杯水並不難，難的是再相信自己值得被特別對待。\",\"dinnerNew\":\"這次你沒有盯著 X 是否也在照顧別人，而是認真聽 {{other}} 說話。\",\"dinnerSelf\":\"和女生們擺好餐具後，你發現不用猜測任何人的心意，也能自在地笑。\",\"next\":\"你想再看見一次明確的選擇，而不是只憑一個體貼的動作就替彼此下結論。\"}",
+          "backstory1": "{\"summary\":\"分手兩年｜他先結束：在韓國相愛，卻敗給語言與文化隔閡；分開後他開始學中文。\",\"history\":\"你是赴韓讀研、繼續攻讀博士的中國人，{{ex}} 是在韓國與你相遇的韓國人。兩年前由他提出分手。當年只能用韓語、翻譯與手勢溝通，細膩的委屈與文化差異不斷累積；在陌生的首爾，他曾是你唯一的愛人，卻始終讀不懂你的眼淚。分開後，他開始學中文。\",\"opening\":\"客廳裡的韓語交談一快起來，你仍習慣先把想說的話翻譯一次。那句「聽不懂我的語言，還看不懂我的眼淚嗎」忽然浮上心頭。\",\"letter\":\"「當年我說分開，以為沉默就是我們不合適。後來開始學中文，才知道一句『沒事』可能藏著多少沒能說出的委屈。我學得還慢，不能拿幾句中文要求她原諒我。」\",\"past\":\"你想再給理解一次機會，先寫下一句中文：「這次不懂的時候，可以請你問我嗎？」\",\"new\":\"你把信收好；學習你的語言有意義，卻不能自動抵消那兩年的孤單。你想從可以自在表達自己的人開始。\",\"self\":\"你決定先按自己的速度說話，不再因為怕翻譯太久，就把情緒省略掉。\",\"response\":\"他看向你時放慢了語速；那句生澀的「你可以慢慢說」沒有換來立刻的和解，卻讓沉默有了不同的重量。\",\"message\":\"這次不懂的時候，可以請你問我嗎？我也想把話好好說完。\",\"dinnerPast\":\"熟悉的餐桌讓你想起那些翻譯到一半、最後只能說「沒事」的夜晚。\",\"dinnerNew\":\"你慢慢說完想法；{{other}} 沒有催促，等你把整句話講完。\",\"dinnerSelf\":\"你不再急著替每個沉默找翻譯，先把今天喜歡的味道記下來。\",\"next\":\"學會一種語言只是開始，真正要學的是在不懂的時候願意繼續聽。\"}",
+          "backstory2": "{\"summary\":\"離婚半年｜交往三年、結婚半年：他用物質表達愛，我們卻在情緒需求與逃避裡耗盡彼此。\",\"history\":\"你與 {{ex}} 交往三年、結婚半年，如今離婚半年。他忙於賺錢，想給你最好的物質生活，卻習慣迴避高強度的情緒需求；你越想確認愛，他越覺得喘不過氣。他曾對朋友說不愛了，但結婚時就想把財產分你一半，離婚後又借五百萬、湊成一千萬給你。錢沒有補上精神上的缺席；他哭著說「真的很痛苦」，你選擇放過彼此。\",\"opening\":\"你看見餐桌上成雙的杯子，想起離婚半年來不再使用的那只。你並不是不知道他付出過，只是不想再用金額翻譯愛。\",\"letter\":\"「我以為把能給的都給她，就能證明她重要。說不愛了比較容易，承認我不知道怎麼陪她比較難。那筆錢不是要她回來的條件，她不欠我第二次機會。」\",\"past\":\"你仍想靠近，但先替自己立下一個條件：這次要能談感受，不能再讓物質代替擁抱與回應。\",\"new\":\"你承認那份付出曾經真實，也承認自己需要的陪伴沒有因此被滿足；往前走不等於否認曾經。\",\"self\":\"你把「我不欠任何人用感情償還付出」寫進便箋，今晚先讓自己安靜地呼吸。\",\"response\":\"他把手機反扣在桌上，沒有忙著解決你的問題；只是坐在能聽見你說話的位置，仍不確定該如何開口。\",\"message\":\"我仍有想說的話。這次能不能先談感受，不急著替彼此解決問題？\",\"dinnerPast\":\"你想留下的不是昂貴的禮物，只是兩個人能安心坐下吃一頓飯的時間。\",\"dinnerNew\":\"{{other}} 問你要不要一起試味道，那份小小的陪伴讓你放鬆了一點。\",\"dinnerSelf\":\"你和女生們分工，不必證明自己值得誰的付出，也不用回報誰。\",\"next\":\"你需要的是能持續出現的精神陪伴，過去的金額不會替任何人決定未來。\"}",
+          "backstory3": "{\"summary\":\"分手半年｜他先提出、又邀我上節目：我沉迷曖昧的新鮮感，他在深愛與佔有之間疲憊。\",\"history\":\"你喜歡新鮮感與曖昧的遊戲感，享受被追逐，真正走進心裡的卻只有 {{ex}}。他的溫柔之下藏著強烈的佔有欲，幾次撞見你與他人曖昧後，他主動提出分手，既疲憊也帶著賭氣式的警醒；你爽快答應。半年沒有聯絡後，是他忍不住邀你來參加節目。\",\"opening\":\"新的目光讓你本能地想微笑，你忽然想起：半年以前，你也以為自己能輕鬆答應離開。這次是他先發來節目邀請。\",\"letter\":\"「是我先提分開，也是我先聯絡她來這裡。我不能把分手當試探，也不能用愛當作控制她的理由。但如果她還想靠近，我需要誠實，也需要清楚的界線。」\",\"past\":\"你決定先停止試探，不再用別人的追逐確認自己的魅力；若想回頭，就要把心意說明白。\",\"new\":\"你願意認識新的人，但提醒自己別把 {{other}} 當成刺激 X 的工具，也不再把曖昧當作沒有後果的遊戲。\",\"self\":\"你第一次不急著接住每一道目光，想先分清自己要的是新鮮感，還是一段可以負責的關係。\",\"response\":\"他看見你和別人交談時握緊了杯子，又慢慢鬆手；這次他沒有用冷臉替你做決定。\",\"message\":\"這次我不想再試探你；如果靠近，我會誠實地把心意說清楚。\",\"dinnerPast\":\"你收起想用曖昧試探他的念頭，這一次，靠近不該是一場勝負。\",\"dinnerNew\":\"你邀請 {{other}} 時提醒自己：不要回頭看 X 的表情，眼前的人也值得被認真對待。\",\"dinnerSelf\":\"你沒有用一句玩笑把話題變成曖昧，只和大家把晚餐準備好。\",\"next\":\"誠實與界線仍要在明天的相處裡被實踐，深愛不會自動合理化試探或控制。\"}",
+          "backstory4": "{\"summary\":\"我先道別｜從小被約定的關係：沒有正式告白，我始終分不清他的照顧是責任還是愛。\",\"history\":\"你與 {{ex}} 的父母相識，兒時曾玩笑約定娃娃親。認識時你尚未成年、他已成年；他一直照顧你，互動停在牽手與擁抱，從未正式告白。你聽得最多的是「等你長大些」，也一直分不清他是因為責任還是愛。後來由你提出分開。如今你們都已成年，這次是否建立戀愛關係，必須由你們自己明確選擇。\",\"opening\":\"別人問你想坐哪裡，你下意識差點看向那個總替你拿主意的方向；然後提醒自己，如今你可以自己回答。\",\"letter\":\"「我一直說等她長大，卻沒問她想要什麼。父母的玩笑不是她必須接受的承諾。她已經可以為自己做選擇，我也不能再躲在照顧者的身分後面，不說清楚自己的心意。」\",\"past\":\"你願意聽他說，但要的是兩個成年人之間清楚的告白，不是又一句「等你長大些」。\",\"new\":\"你想試著被當成平等的戀愛對象，而不是誰應該照顧的小孩。\",\"self\":\"你替自己倒水，決定今晚先回答「我想要什麼」，不再等待別人的允許。\",\"response\":\"他伸手想替你拿杯子，又停住了，先問：「你需要我幫忙嗎？」把選擇留回你手裡。\",\"message\":\"我想聽見的是你自己的心意，不是因為你一直應該照顧我。\",\"dinnerPast\":\"你想確認的不是他會不會照顧你，而是他願不願意清楚說出自己的選擇。\",\"dinnerNew\":\"你自己選擇搭檔，也自己說出想做的菜；這不是需要向誰報備的事。\",\"dinnerSelf\":\"你替大家分好餐具，第一次留意到自己也能照顧別人，而不只是被照顧。\",\"next\":\"你等的不是再次被照顧，而是被平等地詢問、明確地選擇。\"}",
+          "backstory5": "{\"summary\":\"為了保護而分開｜犧牲與愧疚：我不願他為愛放棄重要的人生，卻也因此推開了他。\",\"history\":\"{{ex}} 曾為你犧牲很多，你愧疚於無法等量回報，也害怕他為了過度在乎你，放棄重要的人生選擇、日後後悔。你以為離開能保護他，於是忍痛提出分手；這份保護卻也替他作了決定。\",\"opening\":\"有人說要為了另一半調整人生規劃，你的第一個反應仍是害怕：如果他再為你放棄什麼，你承受得起嗎？\",\"letter\":\"「我做過的選擇，不該變成她必須留下的債。我也要學著珍惜自己的生活；但我希望下一次，她能先問我的想法，而不是為了保護我，一個人決定離開。」\",\"past\":\"你想重新靠近，先把條件寫清楚：彼此都保留重要的人生，不再把犧牲當愛的證明。\",\"new\":\"你不再把愧疚當作必須回頭的理由，也不再承諾自己無法負擔的回報。\",\"self\":\"你想先學著接受別人的好而不立刻算成債，也學著不替對方作所有決定。\",\"response\":\"他沒有說要為你改變一切，只提起自己仍在繼續的計畫，然後認真問起你想走的路。\",\"message\":\"如果再靠近，希望我們都不用放棄重要的人生，也不用拿犧牲證明愛。\",\"dinnerPast\":\"你想靠近熟悉的位置，又擔心一個動作會被讀成需要他放下一切。\",\"dinnerNew\":\"和 {{other}} 合作時，你練習把一份幫忙當作好意，而不是必須償還的人情。\",\"dinnerSelf\":\"大家各自做能做的事，你看見關係也可以不靠一方的犧牲維持。\",\"next\":\"你想學著讓關心與各自的人生並存，不再讓愧疚替你決定去留。\"}"
         }
       },
       {
         "id": "cast",
         "title": "02｜製作組私密名單",
-        "body": "玩家：{{player}}\n男嘉賓：{{men}}\n\n前任配對（玩家視角的秘密資料，不會公開給合宿成員）：\n{{pairs}}\n\n你的分手原因：{{reason}}\n{{arrival}}\n\n尹書妍｜27 歲｜出版社編輯\n說話慢、記得每個人的飲食習慣\n與 X 的分手原因：長期遠距離，兩人逐漸不再分享日常。\n\n韓知恩｜26 歲｜花藝師\n擅長緩和氣氛，但不願再委屈自己\n與 X 的分手原因：為了配合對方忽略自己的生活。\n\n宋夏琳｜28 歲｜紀錄片剪輯師\n觀察敏銳，習慣先聽再說\n與 X 的分手原因：雙方忙於工作，承諾一再延期。\n\n崔有真｜25 歲｜咖啡師\n開朗直率，不把眼淚當作丟臉\n與 X 的分手原因：面對衝突的方式不同，爭執後缺少溝通。\n\n白恩彩｜27 歲｜建築設計師\n重視界線，會用行動照顧朋友\n與 X 的分手原因：對未來定居城市有不同期待。",
+        "body": "玩家：{{player}}\n男嘉賓：{{men}}\n\n前任配對（玩家視角的秘密資料，不會公開給合宿成員）：\n{{pairs}}\n\n你的分手原因：{{reason}}\n{{arrival}}\n\n尹書妍｜27 歲｜出版社編輯\n說話慢、記得每個人的飲食習慣\n與 X 的分手原因：長期遠距離，兩人逐漸不再分享日常。\n\n韓知恩｜26 歲｜花藝師\n擅長緩和氣氛，但不願再委屈自己\n與 X 的分手原因：為了配合對方忽略自己的生活。\n\n宋夏琳｜28 歲｜紀錄片剪輯師\n觀察敏銳，習慣先聽再說\n與 X 的分手原因：雙方忙於工作，承諾一再延期。\n\n崔有真｜25 歲｜咖啡師\n開朗直率，不把眼淚當作丟臉\n與 X 的分手原因：面對衝突的方式不同，爭執後缺少溝通。\n\n白恩彩｜27 歲｜建築設計師\n重視界線，會用行動照顧朋友\n與 X 的分手原因：對未來定居城市有不同期待。\n\n你的關係背景：\n{{history}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text"
@@ -128,7 +134,7 @@
       {
         "id": "recap",
         "title": "04｜第一天結束，寫給明天的自己",
-        "body": "{{player}}，你已度過入住的第一晚。\n\n{{arrival}}\n當初分開是因為：{{reason}}。\n現在的你：復合 {{reunion}}% ／換乘 {{transfer}}%。\n\n今晚的選擇已留在 KakaoTalk；X 與 Safari 的 theqoo 有完整後續。\n這些百分比不是結局。你的 X 仍是 {{ex}}，新認識的人也有自己的過去。\n第二天將從早餐與第一次約會邀請開始。\n\n閱讀完所有更新後，可點開 KakaoTalk 的「結束第一天」訊息。",
+        "body": "{{player}}，你已度過入住的第一晚。\n\n{{arrival}}\n當初分開是因為：{{reason}}。\n現在的你：復合 {{reunion}}% ／換乘 {{transfer}}%。\n\n今晚的選擇已留在 KakaoTalk；X 與 Safari 的 theqoo 有完整後續。\n這些百分比不是結局。你的 X 仍是 {{ex}}，新認識的人也有自己的過去。\n第二天將從早餐與第一次約會邀請開始。\n\n閱讀完所有更新後，可點開 KakaoTalk 的「結束第一天」訊息。\n\n{{reflection}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text"
@@ -138,86 +144,289 @@
       {
         "id": "day1",
         "title": "DAY 1｜同一屋簷下",
-        "body": "《換乘戀愛》EP.01 直播文字紀錄\n\n16:00 {{player}} 拎著行李站在玄關。第一位向你走來的人是 {{other}}：「鞋櫃還有空位，我幫你拿吧。」\n\n今日入住男嘉賓：{{present}}。\n女嘉賓：{{player}}、尹書妍、韓知恩、宋夏琳、崔有真、白恩彩。\n{{arrival}}\n\n書妍分好了房間鑰匙，知恩把花放到桌上；夏琳默默觀察座位，有真提議大家一起做飯，恩彩開始整理廚房。\n\n{{xScene}}\n\n規則：不得透露前任身分。每晚發送一則匿名心意訊息。\n請前往 KakaoTalk，點開「合宿節目組」的晚餐提問作出選擇。",
+        "body": "【置頂】換乘戀愛官方｜DAY 1 入住直播 ①\n\n16:00 {{player}} 拎著行李站在玄關。第一位向你走來的人是 {{other}}：「鞋櫃還有空位，我幫你拿吧。」\n\n今日入住男嘉賓：{{present}}。\n女嘉賓：{{player}}、尹書妍、韓知恩、宋夏琳、崔有真、白恩彩。\n{{arrival}}\n\n書妍分好了房間鑰匙，知恩把花放到桌上；夏琳默默觀察座位，有真提議大家一起做飯，恩彩開始整理廚房。\n\n{{opening}}\n{{xScene}}\n\n規則：不得透露前任身分。每晚發送一則匿名心意訊息。\n18:00｜晚餐準備開始。故事停在這裡，下一步由你決定。\n請前往 KakaoTalk（KKT）→「合宿節目組」，點開晚餐提問。選擇後再回到本官方帳號，閱讀下一則置頂推文。",
         "hidden": true,
-        "sender": "換乘戀愛節目組",
+        "sender": "換乘戀愛官方",
         "kind": "post",
         "comments": [
           "製作組：本季完整陣容為六男六女。",
           "觀眾：每一次「初次見面」都好像藏著一句沒說出口的話。"
-        ]
+        ],
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "autoOpen": "true",
+          "stage": "1"
+        },
+        "time": "2026-10-25 18:00"
       },
       {
         "id": "x-dinner-past",
         "title": "DAY 1｜晚餐",
-        "body": "你把杯子排在餐桌一側，替那個熟悉的位置留了溫水。",
+        "body": "你把杯子排在餐桌一側，替那個熟悉的位置留了溫水。\n\n{{dinnerFeeling}}\n{{xResponse}}\n\n20:00｜前任介紹信抵達。\n{{letterArrival}}\n信裡寫著：\n{{letter}}\n\n你會怎樣面對這段過去？文字直播暫停，請前往 KKT「合宿節目組」點開讀信提問作決定。",
         "hidden": true,
-        "sender": "換乘戀愛節目組",
-        "kind": "post"
+        "sender": "換乘戀愛官方",
+        "kind": "post",
+        "time": "2026-10-25 20:00",
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "autoOpen": "true",
+          "stage": "2"
+        }
       },
       {
         "id": "x-dinner-new",
         "title": "DAY 1｜晚餐",
-        "body": "你向 {{other}} 問起拿手菜，兩人分工洗菜切菜，第一次笑得沒有那麼拘謹。",
+        "body": "你向 {{other}} 問起拿手菜，兩人分工洗菜切菜，第一次笑得沒有那麼拘謹。\n\n{{dinnerFeeling}}\n{{xResponse}}\n\n20:00｜前任介紹信抵達。\n{{letterArrival}}\n信裡寫著：\n{{letter}}\n\n你會怎樣面對這段過去？文字直播暫停，請前往 KKT「合宿節目組」點開讀信提問作決定。",
         "hidden": true,
-        "sender": "換乘戀愛節目組",
-        "kind": "post"
+        "sender": "換乘戀愛官方",
+        "kind": "post",
+        "time": "2026-10-25 20:00",
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "autoOpen": "true",
+          "stage": "2"
+        }
       },
       {
         "id": "x-dinner-self",
         "title": "DAY 1｜晚餐",
-        "body": "你和有真、恩彩一起擺餐具，知恩送來一小束花。這一晚先從認識自己以外的人開始。",
+        "body": "你和有真、恩彩一起擺餐具，知恩送來一小束花。這一晚先從認識自己以外的人開始。\n\n{{dinnerFeeling}}\n{{xResponse}}\n\n20:00｜前任介紹信抵達。\n{{letterArrival}}\n信裡寫著：\n{{letter}}\n\n你會怎樣面對這段過去？文字直播暫停，請前往 KKT「合宿節目組」點開讀信提問作決定。",
         "hidden": true,
-        "sender": "換乘戀愛節目組",
-        "kind": "post"
+        "sender": "換乘戀愛官方",
+        "kind": "post",
+        "time": "2026-10-25 20:00",
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "autoOpen": "true",
+          "stage": "2"
+        }
       },
       {
         "id": "x-letter-past",
         "title": "DAY 1｜前任的信",
-        "body": "你讀完介紹信，承認思念並沒有因為分手消失。{{xScene}}",
+        "body": "你讀完介紹信，承認思念並沒有因為分手消失。{{xScene}}\n\n{{letterFeeling}}\n\n23:00｜匿名心意訊息的提示音響起。今晚你想把心意留給誰？直播暫停，請前往 KKT「合宿節目組」點開睡前提問作決定。",
         "hidden": true,
-        "sender": "換乘戀愛節目組",
-        "kind": "post"
+        "sender": "換乘戀愛官方",
+        "kind": "post",
+        "time": "2026-10-25 23:00",
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "autoOpen": "true",
+          "stage": "3"
+        }
       },
       {
         "id": "x-letter-new",
         "title": "DAY 1｜前任的信",
-        "body": "你把信摺好放回信封。那段關係有過珍貴的部分，但今晚你想多認識眼前的人。",
+        "body": "你把信摺好放回信封。那段關係有過珍貴的部分，但今晚你想多認識眼前的人。\n\n{{letterFeeling}}\n\n23:00｜匿名心意訊息的提示音響起。今晚你想把心意留給誰？直播暫停，請前往 KKT「合宿節目組」點開睡前提問作決定。",
         "hidden": true,
-        "sender": "換乘戀愛節目組",
-        "kind": "post"
+        "sender": "換乘戀愛官方",
+        "kind": "post",
+        "time": "2026-10-25 23:00",
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "autoOpen": "true",
+          "stage": "3"
+        }
       },
       {
         "id": "x-letter-self",
         "title": "DAY 1｜前任的信",
-        "body": "你告訴大家想慢慢整理情緒。夏琳點頭，書妍替你把湯重新熱了一次。",
+        "body": "你告訴大家想慢慢整理情緒。夏琳點頭，書妍替你把湯重新熱了一次。\n\n{{letterFeeling}}\n\n23:00｜匿名心意訊息的提示音響起。今晚你想把心意留給誰？直播暫停，請前往 KKT「合宿節目組」點開睡前提問作決定。",
         "hidden": true,
-        "sender": "換乘戀愛節目組",
-        "kind": "post"
+        "sender": "換乘戀愛官方",
+        "kind": "post",
+        "time": "2026-10-25 23:00",
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "autoOpen": "true",
+          "stage": "3"
+        }
       },
       {
         "id": "x-sms-past",
         "title": "DAY 1｜匿名心意",
-        "body": "你寫下：「今天有一瞬間，我以為我們還在從前。」\n{{arrival}}\n若 X 是後期鯰魚，訊息由節目組保管至他入住；否則今晚匿名送達。內容不會在論壇公開。",
+        "body": "你寫下：「{{heartMessage}}」\n{{arrival}}\n若 X 是後期鯰魚，訊息由節目組保管至他入住；否則今晚匿名送達。內容不會在論壇公開。\n\n{{smsFeeling}}\n{{reflection}}\n\nDAY 1 文字直播結束。可在 Safari 查看 theqoo 後續，或到備忘錄整理心意；KKT 可結束第一天。",
         "hidden": true,
-        "sender": "換乘戀愛節目組",
-        "kind": "post"
+        "sender": "換乘戀愛官方",
+        "kind": "post",
+        "time": "2026-10-25 23:30",
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "autoOpen": "true",
+          "stage": "4"
+        }
       },
       {
         "id": "x-sms-new",
         "title": "DAY 1｜匿名心意",
-        "body": "你傳出：「謝謝你今天接過我的行李，也接住了我的緊張。」{{other}} 收到一封匿名心意訊息，低頭笑了一下。",
+        "body": "你傳出：「謝謝你今天接過我的行李，也接住了我的緊張。」{{other}} 收到一封匿名心意訊息，低頭笑了一下。\n\n{{smsFeeling}}\n{{reflection}}\n\nDAY 1 文字直播結束。可在 Safari 查看 theqoo 後續，或到備忘錄整理心意；KKT 可結束第一天。",
         "hidden": true,
-        "sender": "換乘戀愛節目組",
-        "kind": "post"
+        "sender": "換乘戀愛官方",
+        "kind": "post",
+        "time": "2026-10-25 23:30",
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "autoOpen": "true",
+          "stage": "4"
+        }
       },
       {
         "id": "x-sms-self",
         "title": "DAY 1｜匿名心意",
-        "body": "你傳出：「今天辛苦了，明天也一起好好相處吧。」這是一句友善的晚安，你決定再給自己一些時間。",
+        "body": "你傳出：「今天辛苦了，明天也一起好好相處吧。」這是一句友善的晚安，你決定再給自己一些時間。\n\n{{smsFeeling}}\n{{reflection}}\n\nDAY 1 文字直播結束。可在 Safari 查看 theqoo 後續，或到備忘錄整理心意；KKT 可結束第一天。",
         "hidden": true,
-        "sender": "換乘戀愛節目組",
-        "kind": "post"
+        "sender": "換乘戀愛官方",
+        "kind": "post",
+        "time": "2026-10-25 23:30",
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "autoOpen": "true",
+          "stage": "4"
+        }
+      },
+      {
+        "id": "ambient-0",
+        "sender": "首爾散步日記",
+        "title": "日常動態 1",
+        "body": "下班繞了遠路，剛好遇見河邊的晚霞。今天也辛苦了。",
+        "kind": "post",
+        "time": "2026-10-25 15:20",
+        "likes": 13,
+        "comments": [
+          "今天也辛苦了。"
+        ],
+        "meta": {
+          "handle": "seoul_walk",
+          "views": "120"
+        }
+      },
+      {
+        "id": "ambient-1",
+        "sender": "咖啡還沒涼",
+        "title": "日常動態 2",
+        "body": "新買的杯子太大了，結果今天的拿鐵喝到下午。",
+        "kind": "post",
+        "time": "2026-10-25 14:20",
+        "likes": 42,
+        "comments": [],
+        "meta": {
+          "handle": "coffee_notes",
+          "views": "431"
+        }
+      },
+      {
+        "id": "ambient-2",
+        "sender": "週三的播放清單",
+        "title": "日常動態 3",
+        "body": "有些歌第一次聽只覺得好聽，隔了幾年才突然聽懂。",
+        "kind": "post",
+        "time": "2026-10-25 13:20",
+        "likes": 71,
+        "comments": [
+          "今天也辛苦了。"
+        ],
+        "meta": {
+          "handle": "midweek_radio",
+          "views": "742"
+        }
+      },
+      {
+        "id": "ambient-3",
+        "sender": "追綜藝的栗子",
+        "title": "日常動態 4",
+        "body": "換乘戀愛今天開播！先把晚餐準備好，拒絕邊做飯邊錯過眼神戲。",
+        "kind": "post",
+        "time": "2026-10-25 12:20",
+        "likes": 100,
+        "comments": [],
+        "meta": {
+          "handle": "chestnut_tv",
+          "views": "1053"
+        }
+      },
+      {
+        "id": "ambient-4",
+        "sender": "小島書店",
+        "title": "日常動態 5",
+        "body": "今日書摘筆記：慢慢說話，慢慢認識一個人。",
+        "kind": "post",
+        "time": "2026-10-25 11:20",
+        "likes": 129,
+        "comments": [
+          "今天也辛苦了。"
+        ],
+        "meta": {
+          "handle": "island_books",
+          "views": "1364"
+        }
+      },
+      {
+        "id": "ambient-5",
+        "sender": "雨天的貓",
+        "title": "日常動態 6",
+        "body": "貓把我剛摺好的衣服當床了。好吧，你睡。",
+        "kind": "post",
+        "time": "2026-10-25 10:20",
+        "likes": 158,
+        "comments": [],
+        "meta": {
+          "handle": "rain_cat",
+          "views": "1675"
+        }
+      },
+      {
+        "id": "ambient-6",
+        "sender": "今天吃什麼",
+        "title": "日常動態 7",
+        "body": "冰箱剩半顆洋蔥也能煮出一鍋湯，對自己好一點從吃飯開始。",
+        "kind": "post",
+        "time": "2026-10-25 09:20",
+        "likes": 187,
+        "comments": [
+          "今天也辛苦了。"
+        ],
+        "meta": {
+          "handle": "dinner_log",
+          "views": "1986"
+        }
+      },
+      {
+        "id": "ambient-7",
+        "sender": "不負責任觀察員",
+        "title": "日常動態 8",
+        "body": "先提醒自己：剪輯裡的一個停頓不等於全部故事，今晚先不站隊。",
+        "kind": "post",
+        "time": "2026-10-25 08:20",
+        "likes": 216,
+        "comments": [],
+        "meta": {
+          "handle": "tv_observer",
+          "views": "2297"
+        }
+      },
+      {
+        "id": "official-welcome",
+        "sender": "換乘戀愛官方",
+        "title": "節目預告｜第一天即將開始",
+        "body": "【換乘戀愛】新的合宿，即將開始。\n\n十二位嘉賓，帶著各自沒能說完的故事入住。這一次，你想重逢，還是往前走？\n\n請先到手機備忘錄完成入住設定，再回到 X，開啟本官方帳號的置頂文字直播。每到決策點，請前往 KakaoTalk（KKT）回覆節目組。\n#換乘戀愛 #DAY1",
+        "kind": "post",
+        "time": "2026-10-25 15:59",
+        "meta": {
+          "handle": "transitlove_official",
+          "pinned": "true",
+          "stage": "0"
+        }
       }
     ],
     "safari": [
@@ -346,7 +555,7 @@
       {
         "id": "reply-dinner-past",
         "title": "合宿節目組",
-        "body": "你把杯子排在餐桌一側，替那個熟悉的位置留了溫水。",
+        "body": "你把杯子排在餐桌一側，替那個熟悉的位置留了溫水。\n\n{{dinnerFeeling}}\n\n已記錄，請回 X 閱讀官方帳號的下一則置頂推文。",
         "hidden": true,
         "sender": "{{player}}",
         "kind": "text",
@@ -356,7 +565,7 @@
       {
         "id": "reply-dinner-new",
         "title": "合宿節目組",
-        "body": "你向 {{other}} 問起拿手菜，兩人分工洗菜切菜，第一次笑得沒有那麼拘謹。",
+        "body": "你向 {{other}} 問起拿手菜，兩人分工洗菜切菜，第一次笑得沒有那麼拘謹。\n\n{{dinnerFeeling}}\n\n已記錄，請回 X 閱讀官方帳號的下一則置頂推文。",
         "hidden": true,
         "sender": "{{player}}",
         "kind": "text",
@@ -366,7 +575,7 @@
       {
         "id": "reply-dinner-self",
         "title": "合宿節目組",
-        "body": "你和有真、恩彩一起擺餐具，知恩送來一小束花。這一晚先從認識自己以外的人開始。",
+        "body": "你和有真、恩彩一起擺餐具，知恩送來一小束花。這一晚先從認識自己以外的人開始。\n\n{{dinnerFeeling}}\n\n已記錄，請回 X 閱讀官方帳號的下一則置頂推文。",
         "hidden": true,
         "sender": "{{player}}",
         "kind": "text",
@@ -376,7 +585,7 @@
       {
         "id": "letter-prompt",
         "title": "合宿節目組",
-        "body": "20:00｜晚餐後，大家收到一封前任介紹信。你會怎樣面對這段過去？點這則訊息選擇。",
+        "body": "20:00｜{{letterArrival}}\n{{letter}}\n\n你會怎樣面對這段過去？點這則訊息選擇。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -385,7 +594,7 @@
       {
         "id": "reply-letter-past",
         "title": "合宿節目組",
-        "body": "你讀完介紹信，承認思念並沒有因為分手消失。{{xScene}}",
+        "body": "你讀完介紹信，承認思念並沒有因為分手消失。{{xScene}}\n\n{{letterFeeling}}\n\n已記錄，請回 X 閱讀官方帳號的下一則置頂推文。",
         "hidden": true,
         "sender": "{{player}}",
         "kind": "text",
@@ -395,7 +604,7 @@
       {
         "id": "reply-letter-new",
         "title": "合宿節目組",
-        "body": "你把信摺好放回信封。那段關係有過珍貴的部分，但今晚你想多認識眼前的人。",
+        "body": "你把信摺好放回信封。那段關係有過珍貴的部分，但今晚你想多認識眼前的人。\n\n{{letterFeeling}}\n\n已記錄，請回 X 閱讀官方帳號的下一則置頂推文。",
         "hidden": true,
         "sender": "{{player}}",
         "kind": "text",
@@ -405,7 +614,7 @@
       {
         "id": "reply-letter-self",
         "title": "合宿節目組",
-        "body": "你告訴大家想慢慢整理情緒。夏琳點頭，書妍替你把湯重新熱了一次。",
+        "body": "你告訴大家想慢慢整理情緒。夏琳點頭，書妍替你把湯重新熱了一次。\n\n{{letterFeeling}}\n\n已記錄，請回 X 閱讀官方帳號的下一則置頂推文。",
         "hidden": true,
         "sender": "{{player}}",
         "kind": "text",
@@ -424,7 +633,7 @@
       {
         "id": "reply-sms-past",
         "title": "合宿節目組",
-        "body": "你寫下：「今天有一瞬間，我以為我們還在從前。」\n{{arrival}}\n若 X 是後期鯰魚，訊息由節目組保管至他入住；否則今晚匿名送達。內容不會在論壇公開。",
+        "body": "你寫下：「{{heartMessage}}」\n{{arrival}}\n若 X 是後期鯰魚，訊息由節目組保管至他入住；否則今晚匿名送達。內容不會在論壇公開。\n\n{{smsFeeling}}\n\n已記錄，請回 X 閱讀官方帳號的下一則置頂推文。",
         "hidden": true,
         "sender": "{{player}}",
         "kind": "text",
@@ -434,7 +643,7 @@
       {
         "id": "reply-sms-new",
         "title": "合宿節目組",
-        "body": "你傳出：「謝謝你今天接過我的行李，也接住了我的緊張。」{{other}} 收到一封匿名心意訊息，低頭笑了一下。",
+        "body": "你傳出：「謝謝你今天接過我的行李，也接住了我的緊張。」{{other}} 收到一封匿名心意訊息，低頭笑了一下。\n\n{{smsFeeling}}\n\n已記錄，請回 X 閱讀官方帳號的下一則置頂推文。",
         "hidden": true,
         "sender": "{{player}}",
         "kind": "text",
@@ -444,7 +653,7 @@
       {
         "id": "reply-sms-self",
         "title": "合宿節目組",
-        "body": "你傳出：「今天辛苦了，明天也一起好好相處吧。」這是一句友善的晚安，你決定再給自己一些時間。",
+        "body": "你傳出：「今天辛苦了，明天也一起好好相處吧。」這是一句友善的晚安，你決定再給自己一些時間。\n\n{{smsFeeling}}\n\n已記錄，請回 X 閱讀官方帳號的下一則置頂推文。",
         "hidden": true,
         "sender": "{{player}}",
         "kind": "text",
@@ -513,11 +722,6 @@
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "dinner-prompt",
-          "value": true
-        },
-        {
           "type": "notification",
           "key": "",
           "value": "設定已保存：先到 X 閱讀第一天，再開啟 KakaoTalk。"
@@ -570,14 +774,9 @@
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "letter-prompt",
-          "value": true
-        },
-        {
           "type": "notification",
           "key": "",
-          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+          "value": "官方帳號與 theqoo 已更新。請先回 X 閱讀置頂推文，再到 KKT 作下一個決定。"
         }
       ]
     },
@@ -608,14 +807,9 @@
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "letter-prompt",
-          "value": true
-        },
-        {
           "type": "notification",
           "key": "",
-          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+          "value": "官方帳號與 theqoo 已更新。請先回 X 閱讀置頂推文，再到 KKT 作下一個決定。"
         }
       ]
     },
@@ -646,14 +840,9 @@
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "letter-prompt",
-          "value": true
-        },
-        {
           "type": "notification",
           "key": "",
-          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+          "value": "官方帳號與 theqoo 已更新。請先回 X 閱讀置頂推文，再到 KKT 作下一個決定。"
         }
       ]
     },
@@ -703,14 +892,9 @@
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "sms-prompt",
-          "value": true
-        },
-        {
           "type": "notification",
           "key": "",
-          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+          "value": "官方帳號與 theqoo 已更新。請先回 X 閱讀置頂推文，再到 KKT 作下一個決定。"
         }
       ]
     },
@@ -741,14 +925,9 @@
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "sms-prompt",
-          "value": true
-        },
-        {
           "type": "notification",
           "key": "",
-          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+          "value": "官方帳號與 theqoo 已更新。請先回 X 閱讀置頂推文，再到 KKT 作下一個決定。"
         }
       ]
     },
@@ -779,14 +958,9 @@
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "sms-prompt",
-          "value": true
-        },
-        {
           "type": "notification",
           "key": "",
-          "value": "X 與 theqoo 已更新；請在 KakaoTalk 查看下一則節目組訊息。"
+          "value": "官方帳號與 theqoo 已更新。請先回 X 閱讀置頂推文，再到 KKT 作下一個決定。"
         }
       ]
     },
@@ -951,6 +1125,97 @@
           "value": true
         }
       ]
+    },
+    {
+      "id": "read-day1",
+      "label": "讀完官方入住推文，開放晚餐決定",
+      "event": "read",
+      "target": "day1",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "dinner-prompt",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "read-dinner-past",
+      "label": "官方文字直播開放下一個決定",
+      "event": "read",
+      "target": "x-dinner-past",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "letter-prompt",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "read-dinner-new",
+      "label": "官方文字直播開放下一個決定",
+      "event": "read",
+      "target": "x-dinner-new",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "letter-prompt",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "read-dinner-self",
+      "label": "官方文字直播開放下一個決定",
+      "event": "read",
+      "target": "x-dinner-self",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "letter-prompt",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "read-letter-past",
+      "label": "官方文字直播開放下一個決定",
+      "event": "read",
+      "target": "x-letter-past",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "sms-prompt",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "read-letter-new",
+      "label": "官方文字直播開放下一個決定",
+      "event": "read",
+      "target": "x-letter-new",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "sms-prompt",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "read-letter-self",
+      "label": "官方文字直播開放下一個決定",
+      "event": "read",
+      "target": "x-letter-self",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "sms-prompt",
+          "value": true
+        }
+      ]
     }
   ],
   "tests": [
@@ -978,10 +1243,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-past"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-past"
         },
         {
           "event": "read",
@@ -1031,10 +1304,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-past"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-past"
         },
         {
           "event": "read",
@@ -1084,10 +1365,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-past"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-past"
         },
         {
           "event": "read",
@@ -1137,10 +1426,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-past"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-new"
         },
         {
           "event": "read",
@@ -1190,10 +1487,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-past"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-new"
         },
         {
           "event": "read",
@@ -1243,10 +1548,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-past"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-new"
         },
         {
           "event": "read",
@@ -1296,10 +1609,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-past"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-self"
         },
         {
           "event": "read",
@@ -1349,10 +1670,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-past"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-self"
         },
         {
           "event": "read",
@@ -1402,10 +1731,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-past"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-self"
         },
         {
           "event": "read",
@@ -1455,10 +1792,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-new"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-past"
         },
         {
           "event": "read",
@@ -1508,10 +1853,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-new"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-past"
         },
         {
           "event": "read",
@@ -1561,10 +1914,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-new"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-past"
         },
         {
           "event": "read",
@@ -1614,10 +1975,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-new"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-new"
         },
         {
           "event": "read",
@@ -1667,10 +2036,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-new"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-new"
         },
         {
           "event": "read",
@@ -1720,10 +2097,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-new"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-new"
         },
         {
           "event": "read",
@@ -1773,10 +2158,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-new"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-self"
         },
         {
           "event": "read",
@@ -1826,10 +2219,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-new"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-self"
         },
         {
           "event": "read",
@@ -1879,10 +2280,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-new"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-self"
         },
         {
           "event": "read",
@@ -1932,10 +2341,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-self"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-past"
         },
         {
           "event": "read",
@@ -1985,10 +2402,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-self"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-past"
         },
         {
           "event": "read",
@@ -2038,10 +2463,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-self"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-past"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-past"
         },
         {
           "event": "read",
@@ -2091,10 +2524,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-self"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-new"
         },
         {
           "event": "read",
@@ -2144,10 +2585,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-self"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-new"
         },
         {
           "event": "read",
@@ -2197,10 +2646,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-self"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-new"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-new"
         },
         {
           "event": "read",
@@ -2250,10 +2707,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-self"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-self"
         },
         {
           "event": "read",
@@ -2303,10 +2768,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-self"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-self"
         },
         {
           "event": "read",
@@ -2356,10 +2829,18 @@
         },
         {
           "event": "read",
+          "target": "x-dinner-self"
+        },
+        {
+          "event": "read",
           "target": "letter-prompt"
         },
         {
           "choose": "letter-self"
+        },
+        {
+          "event": "read",
+          "target": "x-letter-self"
         },
         {
           "event": "read",
