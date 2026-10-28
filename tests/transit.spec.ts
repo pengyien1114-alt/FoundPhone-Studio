@@ -65,9 +65,8 @@ for (const late of [false, true])
     // Opening X uses its existing tweet detail to introduce the official story.
     await open(page, "X");
     await expect(page.locator(".app-post-detail").first()).toBeVisible();
-    await expect(
-      page.locator(".post-detail-body").getByText(/DAY 1 入住直播/),
-    ).toBeVisible();
+    await expect(page.locator(".post-detail-body")).toContainText("五男五女");
+    await expect(page.locator(".post-detail-comment")).toHaveCount(6);
     await home(page);
     await open(page, "KakaoTalk");
     await page
@@ -75,15 +74,22 @@ for (const late of [false, true])
       .filter({ hasText: "合宿節目組" })
       .first()
       .click();
-    for (const [prompt, option] of [
-      ["18:00｜", "邀請 張家豪 一起準備晚餐"],
-      ["20:00｜", "把介紹信收好，選擇向前看"],
-      ["23:00｜", "向 張家豪 表達今天的感謝"],
-    ]) {
+    for (const [stageIndex, [prompt, option]] of [
+      ["18:00｜", "邀請 .+ 一起準備晚餐"],
+      ["20:00｜", "我想試著往前看，也想認識現在身邊的人。"],
+      ["23:00｜", "給 .+：「謝謝你今天接過我的行李，也接住了我的緊張。」"],
+    ].entries()) {
       await page.locator(".kzbub").filter({ hasText: prompt }).click();
+      if (stageIndex > 0) {
+        await expect(page.locator(".story-overlay")).toHaveCount(0);
+        await expect(
+          page.getByRole("textbox", { name: "KKT消息" }),
+        ).toHaveAttribute("readonly", "");
+        await page.getByRole("textbox", { name: "KKT消息" }).click();
+      }
       await page
         .locator(".story-overlay")
-        .getByRole("button", { name: option })
+        .getByRole("button", { name: new RegExp(option) })
         .click();
       await home(page);
       await open(page, "X");
@@ -107,8 +113,12 @@ for (const late of [false, true])
     await expect(page.getByText(/目前復合 5% ／換乘 95%/)).toBeVisible();
     await home(page);
     await open(page, "浏览器");
-    await page.getByRole("button", { name: /theqoo｜睡前討論/ }).click();
-    await expect(page.getByText(/接行李那一對今晚有後續嗎/)).toBeVisible();
+    await expect(page.locator(".safari-favorites > button")).toHaveCount(2);
+    await page.getByRole("button", { name: /theqoo｜EP.1 第一集/ }).click();
+    await expect(page.locator(".native-reader")).toContainText("60樓");
+    await expect(
+      page.locator(".native-reader").getByText(/接行李那一對今晚有後續嗎/),
+    ).toBeVisible();
     await page.screenshot({ path: `outputs/transit/theqoo-${late}.png` });
     await home(page);
     await open(page, "X");

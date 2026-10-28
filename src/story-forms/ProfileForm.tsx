@@ -1,6 +1,11 @@
 import { useState } from "react";
 import type { UiValue } from "../schema";
-import { parseProfile, type Profile, type ProfileConfig } from "./profile";
+import {
+  saveProfile,
+  parseProfile,
+  type Profile,
+  type ProfileConfig,
+} from "./profile";
 import "./profile.css";
 
 export function ProfileForm({
@@ -57,8 +62,7 @@ export function ProfileForm({
       className="story-profile"
       onSubmit={(e) => {
         e.preventDefault();
-        if (valid)
-          onUi?.("profile", JSON.stringify({ ...p, name: p.name.trim() }));
+        if (valid) onUi?.("profile", JSON.stringify(saveProfile(p, config)));
       }}
     >
       <label>
@@ -110,6 +114,10 @@ export function ProfileForm({
         />
         X 是後期登場的鯰魚
       </label>
+      <p>
+        首日五男五女；中期再加入一男一女鯰魚。未指定 X
+        為鯰魚時，將從其餘男嘉賓與五位固定女嘉賓中抽選，保存後不會因刷新而改變。
+      </p>
       <label>
         分手原因
         <select

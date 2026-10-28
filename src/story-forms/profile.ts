@@ -7,6 +7,8 @@ export type Profile = {
   late: boolean;
   reason: string;
   reunion: number;
+  maleCatfish?: string;
+  femaleCatfish?: string;
 };
 export type ProfileConfig = {
   men: string[];
@@ -50,6 +52,58 @@ export function profileConfig(item: Item): ProfileConfig | null {
     return null;
   }
 }
+export function castFor(p: Profile, config: ProfileConfig) {
+  const candidates = p.men.filter((m) => m !== p.ex);
+  const male = p.late
+    ? p.ex
+    : candidates.includes(p.maleCatfish || "")
+      ? p.maleCatfish!
+      : candidates.at(-1)!;
+  const female = config.women.includes(p.femaleCatfish || "")
+    ? p.femaleCatfish!
+    : config.women.at(-1)!;
+  return {
+    male,
+    female,
+    presentMen: p.men.filter((m) => m !== male),
+    presentWomen: config.women.filter((w) => w !== female),
+  };
+}
+export function saveProfile(
+  p: Profile,
+  config: ProfileConfig,
+  random = Math.random,
+): Profile {
+  const pick = (list: string[]) =>
+    list[
+      Math.min(list.length - 1, Math.max(0, Math.floor(random() * list.length)))
+    ];
+  return {
+    ...p,
+    name: p.name.trim(),
+    maleCatfish: p.late ? p.ex : pick(p.men.filter((m) => m !== p.ex)),
+    femaleCatfish: pick(config.women),
+  };
+}
+export function groupEpisodeItems(items: Item[]): Item[] {
+  return items
+    .filter((i) => i.meta.episodePart !== "true")
+    .map((root) => {
+      if (root.meta.episodeRoot !== "true") return root;
+      const parts = items
+        .filter(
+          (i) =>
+            i.meta.episodePart === "true" &&
+            i.meta.episode === root.meta.episode,
+        )
+        .sort((a, b) => a.time.localeCompare(b.time));
+      return {
+        ...root,
+        body: [root.body, ...parts.map((i) => i.body)].join("\n\n"),
+        meta: { ...root.meta, updates: String(parts.length) },
+      };
+    });
+}
 export function storyValues(
   work: Work,
   state: Runtime,
@@ -58,6 +112,16 @@ export function storyValues(
   if (!p) return {};
   const config = (work.data.notes || []).map(profileConfig).find(Boolean);
   const others = p.men.filter((m) => m !== p.ex);
+  const cast = castFor(
+    p,
+    config || {
+      men: p.men,
+      women: ["尹書妍", "韓知恩", "宋夏琳", "崔有真", "白恩彩"],
+      reasons: [],
+    },
+  );
+  const other = cast.presentMen.find((m) => m !== p.ex)!;
+  const [woman1, woman2, woman3, woman4] = cast.presentWomen;
   const reunion = Math.max(
     0,
     Math.min(
@@ -85,7 +149,10 @@ export function storyValues(
   const values: Record<string, string> = {
     ...backstory,
     history: backstory.history || p.reason,
-    opening: backstory.opening || "你想起那段沒有說完的過去。",
+    opening: p.late
+      ? "X 還沒有到，你回想起以前相處時的片段：" +
+        (backstory.opening || "那段沒有說完的過去，仍然留在心裡。")
+      : backstory.opening || "你想起那段沒有說完的過去。",
     letter:
       backstory.letter || "有些話當時沒有說清楚，希望這次能更誠實地認識彼此。",
     dinnerFeeling:
@@ -118,12 +185,20 @@ export function storyValues(
     player: p.name,
     ex: p.ex,
     men: p.men.join("、"),
-    other: others[0],
+    other,
+    woman1,
+    woman2,
+    woman3,
+    woman4,
+    presentWomen: [p.name, ...cast.presentWomen].join("、"),
+    maleCatfish: cast.male,
+    femaleCatfish: cast.female,
+    catfishPlan: `首日五男五女；中期預定由 ${cast.male}、${cast.female} 以一男一女鯰魚身分加入，最終六男六女。`,
     reason: p.reason,
     arrival: p.late
-      ? "X 是後期登場的鯰魚，第一天尚未入住；現場五男六女，完整陣容六男六女。"
-      : "六男六女全員入住。X 與你隔著餐桌坐下，默契地裝作初次見面。",
-    present: p.men.filter((m) => !p.late || m !== p.ex).join("、"),
+      ? "X 是後期登場的鯰魚，第一天尚未入住；現場五男五女，一男一女鯰魚預定中期加入，完整陣容六男六女。"
+      : "首日五男五女入住，一男一女鯰魚預定中期加入。X 與你隔著餐桌坐下，默契地裝作初次見面。",
+    present: cast.presentMen.join("、"),
     pairs: [
       p.name + " ↔ " + p.ex,
       ...others.map((m, i) => `${config?.women[i] || "女嘉賓"} ↔ ${m}`),
@@ -131,14 +206,14 @@ export function storyValues(
     reunion: String(reunion),
     transfer: String(100 - reunion),
     xScene: p.late
-      ? "空著的第六個男嘉賓座位讓你想起那個尚未抵達的人。"
+      ? "大家只擺了十份餐具，你想起那個尚未抵達的人；他的時間還沒有到。"
       : `${p.ex} 下意識把溫水放到你手邊，又輕聲問了一句：「你也習慣喝溫的嗎？」`,
   };
   // Authored backstory text may reference the player's cast, rendered as plain text.
   return Object.fromEntries(
     Object.entries(values).map(([key, value]) => [
       key,
-      renderStoryText(value, { player: p.name, ex: p.ex, other: others[0] }),
+      renderStoryText(value, { player: p.name, ex: p.ex, other }),
     ]),
   );
 }

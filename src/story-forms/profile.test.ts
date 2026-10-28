@@ -3,7 +3,14 @@ import { compileStory } from "../story-engine/compiler";
 import { initialRuntime } from "../schema";
 import { choose, dispatch, visible } from "../engine";
 import story from "../../stories/template/story.json";
-import { parseProfile, renderStoryItem, storyValues } from "./profile";
+import {
+  castFor,
+  saveProfile,
+  groupEpisodeItems,
+  parseProfile,
+  renderStoryItem,
+  storyValues,
+} from "./profile";
 
 const { work } = compileStory(story);
 const men = [
@@ -53,7 +60,7 @@ describe("transit profile and cross-app story", () => {
           expect(values.pairs.split("\n")).toHaveLength(6);
           expect(values.pairs).toContain("小雨 ↔ " + ex);
           expect(values.present.includes(ex)).toBe(!late);
-          expect(values.present.split("、")).toHaveLength(late ? 5 : 6);
+          expect(values.present.split("、")).toHaveLength(5);
           expect(values.men).not.toContain(men[omit]);
           state = dispatch(work, state, "read", "day1");
           state = dispatch(work, state, "read", "dinner-prompt");
@@ -173,3 +180,73 @@ for (const [reasonIndex, reason] of reasonConfig.reasons.entries()) {
     }
   }
 }
+
+it("saves one male and one female catfish once and keeps their first-day scenes absent", () => {
+  const config = reasonConfig;
+  for (const late of [false, true]) {
+    for (let maleIndex = 0; maleIndex < 5; maleIndex++) {
+      for (let femaleIndex = 0; femaleIndex < 5; femaleIndex++) {
+        const draws = [maleIndex / 5, femaleIndex / 5];
+        if (late) draws.shift();
+        const profile = saveProfile(
+          {
+            name: "小雨",
+            men: men.slice(0, 6),
+            ex: men[0],
+            late,
+            reason: config.reasons[0],
+            reunion: 50,
+          },
+          config,
+          () => draws.shift()!,
+        );
+        const restored = parseProfile(JSON.stringify(profile))!;
+        const cast = castFor(restored, config);
+        expect(castFor(profile, config)).toEqual(cast);
+        expect(cast.male === profile.ex).toBe(late);
+        expect(cast.presentMen).toHaveLength(5);
+        expect(cast.presentWomen).toHaveLength(4);
+        expect(cast.presentMen).not.toContain(cast.male);
+        expect(cast.presentWomen).not.toContain(cast.female);
+        expect(cast.presentMen).toContain(late ? men[1] : profile.ex);
+        const state = initialRuntime(work);
+        state.ui = { notes: { profile: JSON.stringify(restored) } };
+        const values = storyValues(work, state);
+        expect(values.presentWomen.split("、")).toHaveLength(5);
+        expect(cast.presentMen).toContain(values.other);
+        for (const post of work.data.twitter) {
+          const rendered = renderStoryItem(post, values);
+          expect(rendered.body).not.toContain(cast.male);
+          expect(rendered.body).not.toContain(cast.female);
+          expect(rendered.body).not.toContain("{{");
+        }
+      }
+    }
+  }
+});
+
+it("keeps all X posts above five comments and EP.1 in one growing discussion with no future leaks", () => {
+  for (const post of work.data.twitter)
+    expect(post.comments.length).toBeGreaterThanOrEqual(5);
+  let state = initialRuntime(work);
+  state = dispatch(work, state, "variable", "ui:notes:profile");
+  const episodes = () =>
+    groupEpisodeItems(work.data.safari.filter((i) => visible(i, state)));
+  expect(episodes()).toHaveLength(2);
+  const ep1 = () => episodes().find((i) => i.id === "forum-day1")!;
+  expect(ep1().body.match(/^\d+樓/gm)).toHaveLength(30);
+  expect(ep1().body).not.toContain("接行李那一對今晚有後續嗎");
+  state = dispatch(work, state, "read", "day1");
+  for (const stage of ["dinner", "letter", "sms"]) {
+    state = dispatch(work, state, "read", stage + "-prompt");
+    state = choose(work, state, stage + "-new");
+    state = dispatch(work, state, "read", "x-" + stage + "-new");
+  }
+  expect(episodes()).toHaveLength(2);
+  expect(ep1().body.match(/^\d+樓/gm)).toHaveLength(60);
+  expect(ep1().body).toContain("接行李那一對今晚有後續嗎");
+  expect(ep1().body).not.toContain("她先和女嘉賓們整理餐桌");
+  expect(episodes().find((i) => i.id === "forum-ep2")!.body).toContain(
+    "本集尚未播出",
+  );
+});

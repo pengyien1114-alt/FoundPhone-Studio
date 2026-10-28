@@ -101,6 +101,16 @@ export function MymyKakao(p: SkinProps) {
     const node = scroll.current;
     if (node) node.scrollTop = node.scrollHeight;
   }, [p.thread, messages.length]);
+  const scripted = messages.some((m) => m.meta.selectionMode);
+  const pending = [...messages]
+    .reverse()
+    .find(
+      (m) => m.meta.choiceNode && !p.completed?.includes(m.meta.choiceNode),
+    );
+  const speech = pending?.meta.selectionMode === "speech" ? pending : undefined;
+  const openSpeech = () => {
+    if (speech) p.onRead(speech.id);
+  };
   return (
     <div className="mymy-ui mymy-kakao" data-mymy="kakao">
       {p.thread ? (
@@ -143,7 +153,11 @@ export function MymyKakao(p: SkinProps) {
                   )}
                   <button
                     className={"kzbub" + (m.media ? " kzimg" : "")}
-                    onClick={() => m.meta.local !== "true" && read(p, m)}
+                    onClick={() =>
+                      m.meta.local !== "true" &&
+                      (p.creator || m.meta.selectionMode !== "speech") &&
+                      read(p, m)
+                    }
                   >
                     {m.media ? <Media item={m} /> : m.body}
                   </button>
@@ -159,7 +173,7 @@ export function MymyKakao(p: SkinProps) {
             className="kzinp"
             onSubmit={(e) => {
               e.preventDefault();
-              if (draft.trim()) {
+              if (!scripted && draft.trim()) {
                 setSent([
                   ...sent,
                   JSON.stringify([
@@ -181,16 +195,32 @@ export function MymyKakao(p: SkinProps) {
             </button>
             <input
               aria-label="KKT消息"
-              placeholder="输入消息"
+              placeholder={
+                scripted
+                  ? speech
+                    ? "输入消息 · 點此選擇台詞"
+                    : pending
+                      ? "請點上方對話框選擇動作"
+                      : "等待節目組下一則訊息"
+                  : "输入消息"
+              }
+              readOnly={scripted}
+              onClick={openSpeech}
+              onKeyDown={(e) => {
+                if (scripted && (e.key === "Enter" || e.key === " ")) {
+                  e.preventDefault();
+                  openSpeech();
+                }
+              }}
               value={draft}
               maxLength={2000}
-              onChange={(e) => setDraft(e.target.value)}
+              onChange={(e) => !scripted && setDraft(e.target.value)}
             />
             <Smile size={22} />
             <button
               className={draft.trim() ? "go" : ""}
               aria-label="发送KKT消息"
-              disabled={!draft.trim()}
+              disabled={scripted || !draft.trim()}
             >
               ↑
             </button>

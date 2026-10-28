@@ -1,7 +1,12 @@
 import { defineConfig } from "@playwright/test";
 export default defineConfig({
   testDir: "tests",
-  testMatch: ["transit.spec.ts", "runtime.spec.ts", "preview.spec.ts"],
+  testMatch: [
+    "transit.spec.ts",
+    "runtime.spec.ts",
+    "preview.spec.ts",
+    "mymy.spec.ts",
+  ],
   timeout: 45000,
   workers: 1,
   reporter: "list",
@@ -21,7 +26,7 @@ export default defineConfig({
     },
     {
       name: "existing-runtime",
-      testMatch: ["runtime.spec.ts", "preview.spec.ts"],
+      testMatch: ["runtime.spec.ts", "preview.spec.ts", "mymy.spec.ts"],
       use: {
         browserName: "chromium",
         viewport: { width: 1440, height: 1000 },

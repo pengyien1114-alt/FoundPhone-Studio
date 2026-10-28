@@ -1,4 +1,5 @@
 import {
+  groupEpisodeItems,
   renderStoryItem,
   renderStoryText,
   storyValues,
@@ -894,11 +895,11 @@ function AppContent({
   const [unlocks, setUnlocks] = useState<string[]>([]);
   const [pwError, setPwError] = useState("");
   const [likes, setLikes] = useState<string[]>([]);
-  const shown = items
-    .filter((i) => creator || visible(i, state))
-    .filter((i) =>
-      (i.title + i.body + i.sender).toLowerCase().includes(q.toLowerCase()),
-    );
+  const shown = groupEpisodeItems(
+    items.filter((i) => creator || visible(i, state)),
+  ).filter((i) =>
+    (i.title + i.body + i.sender).toLowerCase().includes(q.toLowerCase()),
+  );
   const filtered =
     tab === "收藏"
       ? shown.filter((i) => i.favorite)
@@ -991,6 +992,7 @@ function AppContent({
         <div className="catalog-slot" hidden={!!detail}>
           <Suspense fallback={<div className="catalog-loading">正在打开…</div>}>
             <Skin
+              completed={state.completed}
               appId={app.id}
               owner={work.phone.owner}
               virtualTime={state.time}
@@ -1023,7 +1025,7 @@ function AppContent({
             (!detail.password || unlocks.includes(detail.id)) ? (
             <NativeDetail
               app={app.id}
-              item={items.find((i) => i.id === detail.id) || detail}
+              item={shown.find((i) => i.id === detail.id) || detail}
               back={back}
               ui={state.ui?.[app.id]}
               onUi={onUi}
