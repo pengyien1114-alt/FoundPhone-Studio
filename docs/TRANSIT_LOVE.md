@@ -56,10 +56,18 @@ npx playwright test --config playwright.transit.config.ts
 
 測試包含三種最終方向的腳本路徑、兩種出場設定下的完整 21 天實際選項重放、逐題鎖定、保密時間、短信收發、存檔恢復、匿名聊天室和來源 App 通知；另保留原手機與 App 的瀏覽器回歸。行動視窗測試不等同實體 iPhone Safari 測試。
 
-GitHub Pages 沿用 `.github/workflows/pages.yml`，main 更新後驗證、建置並部署。試玩入口：https://pengyien1114-alt.github.io/FoundPhone-Studio/ 。
+GitHub Pages 沿用 `.github/workflows/pages.yml`，main 更新後驗證、建置並部署。新版試玩入口：https://transitloveald1.hazyhero2048.chatgpt.site/ 。
 
 ## 網頁與離線快取更新
 
 連線時首頁和故事 JSON 使用 Network First，故事請求包含本次建置識別碼並略過瀏覽器 HTTP 快取；離線時回退至已快取的同版資料。新版 Service Worker 接手後會將仍使用舊版的分頁導回原手機入口，不建立另一套介面，不清除 IndexedDB 存檔或桌面設定。回到分頁或恢復連線時也會檢查更新。
 
 快取回歸測試模擬舊 Service Worker 持續返回舊首頁與故事：更新後需能自動載入最新手機、保留相容存檔、讀到同網址更新的故事，且再次離線仍能開啟。瀏覽器測試的故事路由包含版本查詢參數。
+
+## 不含 GitHub 帳號名稱的新入口
+
+公開遊戲改由 Sites 託管，仍使用原有 Phone Runtime 的同一份正式建置，不另做介面。Site 身分保存在 `.openai/hosting.json`。GitHub 原倉庫繼續維護原始碼；原 Pages 工作流仍可運作，但不會自動更新 Sites。遊戲修改後必須另向這個既有 Site 發布相同版本。請勿重新 create_site。
+
+初次發布：Sites source commit `1aff5835b9ab3bd9572e5c7b1e367bf020587d84`，來源為 GitHub `ae1ffcc5c83d2da316ac0d54cc655ed4e3aef4a4` 的原始碼和通過驗證的 dist。來源使用相對路徑，可直接在新網域根目錄運行。跨網域的 IndexedDB 進度不會自動移轉；舊站資料不刪除。
+
+WOODZ〈SUN OR SUCK〉的官方曲目已確認，但尚未取得用於開屏播放的音檔，因此本版沒有假裝提供背景音樂。收到作者提供的 MP3/M4A 後，再接上使用者點亮／解鎖時的播放動作；iPhone Safari 的自動播放限制需以實機確認。
