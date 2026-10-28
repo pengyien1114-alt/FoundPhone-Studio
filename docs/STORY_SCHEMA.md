@@ -21,3 +21,5 @@
 媒体仅支持safeMedia允许的内嵌data URL格式。禁止HTML/JS脚本；富文本为安全结构化JSON。作品脚本是公开静态数据，谜题密码不属于安全保密机制。
 
 默认空白模板：stories/blank/story.json。引擎回归样例位于tests/fixtures/story-example，不作为内置作品。自然语言原稿：tests/fixtures/story-example/STORY.md。只改故事数据就能改变手机内容。
+
+phone.lockWallpaper 与 phone.homeWallpaper 可分别设置内嵌 PNG/JPEG/WebP data URL。照片完整居中显示、深色补边；未设置时保留原有 wallpaper 样式。纯壁纸修改可保留 revision，使玩家继续原存档。

@@ -741,3 +741,19 @@
   background: #fafafa;
   color: #ffadb7;
 }
+
+/* Author-provided lock and home photos keep the entire group visible. */
+.ios18 .phone-screen.photo-wallpaper {
+  background-color: #080d19;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.ios18 .photo-wallpaper .wallpaper-orb {
+  display: none;
+}
+.ios18 .photo-wallpaper:not(.in-app) .status-bar,
+.ios18 .photo-wallpaper .app-name {
+  color: white;
+  text-shadow: 0 1px 4px #000c;
+}
