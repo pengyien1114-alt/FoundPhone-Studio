@@ -176,5 +176,10 @@ export function socialValues(
         ])
       : "";
   }
+  for (let d = 1; d <= 21; d++) {
+    if (facts[`momentForum${d}`] !== undefined) {
+      result[`discussion${d}`] = facts[`momentForum${d}`];
+    }
+  }
   return result;
 }

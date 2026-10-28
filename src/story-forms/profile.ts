@@ -233,7 +233,15 @@ export function renderStoryItem(
   item: Item,
   values: Record<string, string>,
 ): Item {
-  const render = (s: string) => renderStoryText(s, values);
+  const render = (s: string) => {
+    let result = s;
+    for (let n = 0; n < 4; n++) {
+      const next = renderStoryText(result, values);
+      if (next === result) break;
+      result = next;
+    }
+    return result;
+  };
   const meta = Object.fromEntries(
     Object.entries(item.meta).map(([k, v]) => [k, render(v)]),
   );

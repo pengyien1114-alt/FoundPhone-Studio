@@ -2,6 +2,7 @@ import type { Work, Runtime } from "../schema";
 import { castFor, type Profile, type ProfileConfig } from "./profile";
 import { selected } from "./relationships";
 import { approachIndex } from "./contacts";
+import { momentFor, momentRecord } from "./encounters";
 function messages(work: Work, key: string): string[] {
   try {
     return JSON.parse(
@@ -27,6 +28,14 @@ export function outgoingSms(
       work,
       `ex${reason}${day < 7 ? "early" : day < 14 ? "middle" : "late"}`,
     );
+  const moment = momentFor(work, state, p, config, day);
+  if (
+    moment?.saved?.sceneId &&
+    moment.target === to &&
+    momentRecord(state, `d${day}-approach`)?.sceneId
+  ) {
+    return (moment.branch.sms || moment.scene.sms || []).map(moment.render);
+  }
   if (day === 1) {
     const cast = castFor(p, config),
       men = cast.presentMen.filter((m) => m !== p.ex),
@@ -133,6 +142,18 @@ export function incomingToPlayer(
     return (
       rows[approachIndex(work, state, day) === 1 ? 1 : 0] ||
       "有些習慣比我以為的更難改。今天還是想和你說晚安。"
+    );
+  }
+  const moment = momentFor(work, state, p, config, day);
+  if (
+    moment?.saved?.sceneId &&
+    moment.target === from &&
+    momentRecord(state, `d${day}-approach`)?.sceneId
+  ) {
+    return moment.render(
+      (moment.branch.incoming || moment.scene.incoming || [])[
+        approachIndex(work, state, day) === 1 ? 1 : 0
+      ] || "剛才還有一點話想說。先晚安，明天見。",
     );
   }
   const cast = castFor(p, config),

@@ -8,6 +8,8 @@ import {
   renderStoryItem,
 } from "../src/story-forms/profile";
 import { seasonValues, packSeasonAnswer } from "../src/story-forms/season";
+import { momentFor, packMoment } from "../src/story-forms/encounters";
+import { parseProfile } from "../src/story-forms/profile";
 import { test, expect, type Page } from "@playwright/test";
 async function pin(page: Page) {
   for (const n of "0112")
@@ -130,7 +132,7 @@ for (const late of [false, true])
     await x(page);
     await expect(page.locator(".post-detail-body")).toContainText("主廚");
     await kkt(page);
-    await option(page, "主動問旁邊的人需要什麼幫忙");
+    await option(page, "「要幫忙嗎？這個我來洗。」");
     await x(page);
     await expect(page.locator(".post-detail-body")).toContainText("19:10");
     await kkt(page);
@@ -151,10 +153,22 @@ for (const late of [false, true])
     await option(page, "打開箱子");
     await x(page);
     await expect(page.locator(".post-detail-body")).toContainText("你拆開包裝");
-    await expect(page.locator(".post-detail-body")).toContainText("走廊");
+    await expect(page.locator(".post-detail-body")).not.toContainText(
+      "你想把這段時間留給誰",
+    );
     await kkt(page);
-    await option(page); // select focus
-    await option(page); // select approach
+    const move = await option(page); // choose a concrete house action
+    expect([
+      "金俊抒",
+      "張家豪",
+      "金虔佑",
+      "李理悟",
+      "李相沅",
+      "賀鑫隆",
+      "周安信",
+      "鄭相炫",
+    ]).not.toContain(move);
+    await option(page); // follow the event instead of choosing a conversation style
     await x(page);
     await expect(page.locator(".post-detail-body")).toContainText("你說：");
     await kkt(page);
@@ -531,4 +545,72 @@ test("eight name-only candidates keep the six-person cap and place Geonwoo after
   await open(page, "备忘录");
   await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
   await expect(page.locator(".story-profile")).toContainText("入住資料已封存");
+});
+
+test("a drawn house incident offers physical actions and shows the selected response", async ({
+  page,
+}) => {
+  const raw = JSON.parse(readFileSync("stories/template/story.json", "utf8"));
+  const { work } = compileStory(raw),
+    config = work.data.notes.map(profileConfig).find(Boolean)!;
+  const state = snapshotBefore("d4-afternoon"),
+    p = parseProfile(state.ui?.notes?.profile)!;
+  let moment = momentFor(work, state, p, config, 4)!;
+  await restore(page, state);
+  await open(page, "X");
+  await expect(page.locator(".post-detail-body")).toContainText(
+    moment.scene.title,
+  );
+  await expect(page.locator(".post-detail-body")).not.toContainText(
+    "你想把這段時間留給誰",
+  );
+  await kkt(page);
+  await option(page, moment.options[0]);
+  state.ui!.kakao!["answer:d4-focus"] = JSON.stringify(
+    packMoment(work, state, p, config, 4, "focus", moment.options[0]),
+  );
+  moment = momentFor(work, state, p, config, 4)!;
+  await expect(page.locator(".msgs.kk")).toContainText(moment.prompt);
+  const response = [...moment.choices].sort((a, b) => b.signal - a.signal)[0];
+  await option(page, response.line);
+  await x(page);
+  await expect(page.locator(".post-detail-body")).toContainText(
+    response.result,
+  );
+  await expect(page.locator(".post-detail-body")).not.toContainText(
+    "現在方不方便",
+  );
+  await page.screenshot({ path: "outputs/season/house-incident.png" });
+});
+
+test("staying with a female guest gives a complete scene and still reaches the nightly SMS", async ({
+  page,
+}) => {
+  const raw = JSON.parse(readFileSync("stories/template/story.json", "utf8"));
+  const { work } = compileStory(raw),
+    config = work.data.notes.map(profileConfig).find(Boolean)!;
+  const state = snapshotBefore("d5-afternoon"),
+    p = parseProfile(state.ui?.notes?.profile)!;
+  let moment = momentFor(work, state, p, config, 5)!;
+  await restore(page, state);
+  await open(page, "X");
+  await kkt(page);
+  await option(page, moment.options[2]);
+  state.ui!.kakao!["answer:d5-focus"] = JSON.stringify(
+    packMoment(work, state, p, config, 5, "focus", moment.options[2]),
+  );
+  moment = momentFor(work, state, p, config, 5)!;
+  await expect(page.locator(".msgs.kk")).toContainText(moment.names.woman);
+  await option(page, moment.choices[0].line);
+  await x(page);
+  await expect(page.locator(".post-detail-body")).toContainText(
+    moment.choices[0].result,
+  );
+  await kkt(page);
+  await expect(page.locator(".msgs.kk")).toContainText(
+    "今晚的心動短信必須發送",
+  );
+  await page.getByRole("button", { name: "KKT消息", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "回答選項" })).toBeVisible();
+  await page.screenshot({ path: "outputs/season/female-house-scene.png" });
 });

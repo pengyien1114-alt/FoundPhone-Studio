@@ -10,10 +10,12 @@ export function seeded(seed: string): number {
 }
 export function selected(state: Runtime, id: string): string {
   try {
-    return (
-      JSON.parse(String(state.ui?.kakao?.["answer:" + id] || "null"))?.value ||
-      ""
+    const saved = JSON.parse(
+      String(state.ui?.kakao?.["answer:" + id] || "null"),
     );
+    return /^d\d+-focus$/.test(id) && typeof saved?.target === "string"
+      ? saved.target
+      : saved?.value || "";
   } catch {
     return "";
   }
@@ -22,14 +24,53 @@ export function repairOptions(
   work: Work,
   p: Profile,
   config: ProfileConfig,
+  day = 0,
 ): string[] {
   const meta = work.data.notes.find((i) => i.id === "relationship-rules")?.meta;
   try {
     return JSON.parse(
-      meta?.["repair" + config.reasons.indexOf(p.reason)] || "[]",
+      meta?.[`repair${config.reasons.indexOf(p.reason)}d${day}`] ||
+        meta?.["repair" + config.reasons.indexOf(p.reason)] ||
+        "[]",
     );
   } catch {
     return [];
+  }
+}
+export function repairChoice(
+  work: Work,
+  state: Runtime,
+  p: Profile,
+  config: ProfileConfig,
+  id: string,
+) {
+  try {
+    const saved = JSON.parse(
+      String(state.ui?.kakao?.["answer:" + id] || "null"),
+    );
+    if (Number.isInteger(saved?.optionIndex))
+      return saved.optionIndex as number;
+  } catch {
+    /* Match recordings saved before option indices existed. */
+  }
+  const day = Number(id.match(/^d(\d+)/)?.[1] || 0),
+    value = selected(state, id);
+  const current = repairOptions(work, p, config, day).indexOf(value);
+  return current >= 0 ? current : repairOptions(work, p, config).indexOf(value);
+}
+function committedAgain(work: Work, state: Runtime) {
+  const item = work.data.kakao.find((i) => i.id === "d21-chat2"),
+    value = selected(state, "d21-chat2");
+  try {
+    const saved = JSON.parse(
+      String(state.ui?.kakao?.["answer:d21-chat2"] || "null"),
+    );
+    if (Number.isInteger(saved?.optionIndex)) return saved.optionIndex === 0;
+    return [item?.meta.options, item?.meta.legacyOptions].some(
+      (options) => JSON.parse(options || "[]")[0] === value,
+    );
+  } catch {
+    return false;
   }
 }
 export type Relationship = {
@@ -78,17 +119,33 @@ export function relationshipHistory(
     meeting: boolean;
   }[] = [];
   for (const item of work.data.kakao || []) {
-    if (!item.meta.effects) continue;
+    if (!item.meta.effects && item.meta.encounter !== "true") continue;
     const day = Number(item.meta.day || item.id.match(/^d(\d+)/)?.[1] || 0);
     if (day > throughDay) continue;
     const value = selected(state, item.id);
-    if (!value) continue;
+    try {
+      const saved = JSON.parse(
+        String(state.ui?.kakao?.["answer:" + item.id] || "null"),
+      );
+      if (item.meta.encounter === "true" && saved?.sceneId) {
+        if (result[saved.target])
+          changes.push({
+            day,
+            target: saved.target,
+            effect: saved.sceneEffect || {},
+            meeting: saved.sceneMeeting === true,
+          });
+        continue;
+      }
+    } catch {
+      /* Old recordings retain their original effects. */
+    }
+    if (!value || !item.meta.effects) continue;
     let opts: string[] = [];
     try {
-      opts =
-        item.meta.options === "{{repairOptions}}"
-          ? repairOptions(work, p, config)
-          : JSON.parse(item.meta.legacyOptions || item.meta.options || "[]");
+      opts = item.meta.options?.startsWith("{{repairOptions")
+        ? repairOptions(work, p, config, day)
+        : JSON.parse(item.meta.legacyOptions || item.meta.options || "[]");
     } catch {
       continue;
     }
@@ -100,6 +157,8 @@ export function relationshipHistory(
       o.replace(/\{\{quiet1\}\}/g, quiet[1 % quiet.length]),
     );
     let index = opts.indexOf(value);
+    if (item.meta.options?.startsWith("{{repairOptions"))
+      index = repairChoice(work, state, p, config, item.id);
     let exBranch = false;
     let dateTarget = "";
     try {
@@ -156,6 +215,7 @@ export function relationshipHistory(
       for (const [key, delta] of Object.entries(change.effect)) {
         if (typeof delta === "number") r[key as keyof Relationship] += delta;
       }
+      r.pressure = Math.max(0, r.pressure);
       if (change.meeting) {
         r.meetings++;
         r.lastDay = d;
@@ -222,19 +282,13 @@ export function finalConsent(
         "對方在意你，但幾次被催著確認心意之後，仍不相信你們能安心面對不同的答案。",
     };
   if (target === p.ex) {
-    if (
-      r.repair < 7 ||
-      selected(state, "d21-chat1") !== repairOptions(work, p, config)[0]
-    )
+    if (r.repair < 7 || repairChoice(work, state, p, config, "d21-chat1") !== 0)
       return {
         success: false,
         reason:
           "你們仍有熟悉和留戀，但讓關係走到分開的問題，還沒有一起找到具體的改變方式。",
       };
-    if (
-      selected(state, "d21-chat2") !==
-      "我願意重新交往，但要把剛才談的改變放進生活裡。"
-    )
+    if (!committedAgain(work, state))
       return {
         success: false,
         reason:

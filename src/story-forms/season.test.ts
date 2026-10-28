@@ -21,6 +21,7 @@ import {
   inputError,
 } from "./season";
 import { notificationContent } from "../SystemNotifications";
+import { momentFor } from "./encounters";
 const { work } = compileStory(story);
 const config = work.data.notes.map(profileConfig).find(Boolean)!;
 const allItems = Object.values(work.data).flat();
@@ -109,13 +110,42 @@ for (const late of [false, true])
             route === "new"
               ? castFor(p, config).presentMen.find((m) => m !== p.ex)!
               : p.ex;
-          const value =
+          let value =
             (id.endsWith("-focus") ||
               id.endsWith("-recipient") ||
               id === "final-new-target") &&
             offered.includes(target)
               ? target
               : response(id, item);
+          const momentDay = id.match(/^d(\d+)-(focus|approach)$/);
+          if (momentDay) {
+            const moment = momentFor(
+              work,
+              state,
+              p,
+              config,
+              Number(momentDay[1]),
+            );
+            if (moment && !moment.old) {
+              if (momentDay[2] === "focus") {
+                const branch = moment.scene.branches.findIndex(
+                  (b) => b.target && moment.names[b.target] === target,
+                );
+                value = moment.options[branch < 0 ? 2 : branch];
+              } else {
+                const choice = [...moment.choices].sort(
+                  (a, b) =>
+                    (b.effect.trust || 0) * 3 +
+                    (b.effect.clarity || 0) * 2 -
+                    (b.effect.pressure || 0) * 2 -
+                    ((a.effect.trust || 0) * 3 +
+                      (a.effect.clarity || 0) * 2 -
+                      (a.effect.pressure || 0) * 2),
+                )[0];
+                value = choice.line;
+              }
+            }
+          }
           state = reply(state, id, value);
         } else if (step.choose) state = choose(work, state, step.choose);
         else if (step.event) {

@@ -1,5 +1,7 @@
 import { socialValues } from "./social";
 import { dateValues } from "./dates";
+import { packMoment } from "./encounters";
+import { daytimeValues } from "./daytime";
 import { incomingToPlayer } from "./messages";
 import { firstNightScore, firstNightSignals } from "./contacts";
 import {
@@ -8,6 +10,7 @@ import {
   finalConsent,
   interest,
   rivalInterest,
+  selected,
 } from "./relationships";
 export { seeded } from "./relationships";
 import { interactionValues } from "./scenes";
@@ -30,17 +33,7 @@ type Answer = {
 };
 type Vote = { from: string; to: string; text: string };
 export function answer(state: Runtime, id: string): string {
-  try {
-    return (
-      (
-        JSON.parse(
-          String(state.ui?.kakao?.["answer:" + id] || "null"),
-        ) as Answer
-      )?.value || ""
-    );
-  } catch {
-    return "";
-  }
+  return selected(state, id);
 }
 export function storedVotes(state: Runtime, day: number): Vote[] | undefined {
   try {
@@ -314,6 +307,19 @@ export function packSeasonAnswer(
     },
   };
   if (inputError(projected, value)) return undefined;
+  const moment = id.match(/^d(\d+)-(focus|approach)$/);
+  if (moment) {
+    const packed = packMoment(
+      work,
+      state,
+      c.p,
+      c.config,
+      Number(moment[1]),
+      moment[2] as "focus" | "approach",
+      value.trim(),
+    );
+    if (packed) return JSON.stringify(packed);
+  }
   const a: Answer = {
     value: value.trim(),
     optionIndex: (
@@ -387,9 +393,7 @@ export function seasonValues(
     letter: backstory.receivedLetter || "",
     selfLetter: backstory.selfLetter || "",
     preMeeting:
-      (backstory.preMeeting || "") +
-      "\n\n你能確認的舊事：" +
-      (backstory.privateRecall || ""),
+      (backstory.preMeeting || "") + "\n\n" + (backstory.privateRecall || ""),
     privateRecall: backstory.privateRecall || "",
     giftMemory: backstory.giftMemory || "",
     q3: backstory.q3 || "這次你最希望自己學會怎麼表達需要？",
@@ -738,6 +742,7 @@ export function seasonValues(
         : `你選擇了 ${newTarget}，對方沒有選擇開始新的關係。`) + result.reason;
   }
   values.endingJournal = `事前訪問裡，你曾選擇：${answer(state, "d0-q1") || "（尚未選擇）"}\n\n第一晚念完介紹信，你留下的話是：${answer(state, "d1-letter-feeling") || "（尚未選擇）"}。你對那只箱子的選擇是「${answer(state, "d1-gift") || "尚未選擇"}」，之後的心意沒有被這一個動作固定住。\n\n你先和 ${values.date2} 約會，又在下一個正式安排裡和 ${values.date3} 相處。回憶房間的意願是「${answer(state, "d7-room") || "尚未選擇"}」，而日本行的搭檔是 ${values.travelPartner}。這些是不同的環節，沒有哪一次配對直接替夜裡的短信作答。\n\n二十一晚，你寄給熟悉的人 ${sentToX} 次，也有 ${ownVotes.length - sentToX} 次把訊息交給其他人。次數是行動紀錄，不是誰愛得比較多的判決。\n\n最後一次談話，你說：${answer(state, "d21-chat2") || "（尚未選擇）"}\n\n${values.finalResult}\n\n節目結束後釋出的個別訪問裡，曾與你同桌的人說過：「我也在整理自己的過去，不是每一句照顧都有明確的暗示。」那些你沒有看見的停頓，有些來自對方自己的課題，並不都圍著你發生。這不會抹去你感到的委屈，也不要求你改變最後的決定。祝福你帶著自己的語言，繼續生活。`;
+  Object.assign(values, daytimeValues(work, state, values));
   Object.assign(values, interactionValues(work, state, p, config));
   Object.assign(values, socialValues(work, state, p, config, values));
   Object.assign(values, dateValues(work, state, values));

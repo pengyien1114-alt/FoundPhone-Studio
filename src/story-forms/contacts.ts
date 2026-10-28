@@ -7,6 +7,8 @@ export function approachIndex(work: Work, state: Runtime, day: number) {
     const saved = JSON.parse(
       String(state.ui?.kakao?.["answer:" + id] || "null"),
     );
+    if (saved?.sceneId)
+      return saved.sceneSignal < 0 ? 1 : saved.sceneSignal > 0 ? 0 : 2;
     if (Number.isInteger(saved?.optionIndex)) return saved.optionIndex;
   } catch {
     /* Legacy answer. */
@@ -37,7 +39,13 @@ export function firstNightSignals(
     quiet = newer[1 % newer.length];
   if (man === quiet) {
     const kitchen = selected(state, "d1-action");
-    if (kitchen.includes("主動") || kitchen.includes("需要")) points += 5;
+    if (
+      kitchen.includes("主動") ||
+      kitchen.includes("需要") ||
+      kitchen.includes("幫忙") ||
+      kitchen.includes("不辣")
+    )
+      points += 5;
     else if (kitchen) points += 2;
     if (selected(state, "d1-table").includes(man)) points += 3;
   }
