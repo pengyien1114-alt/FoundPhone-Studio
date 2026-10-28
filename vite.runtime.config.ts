@@ -17,8 +17,8 @@ export default defineConfig(({ command }) => ({
       filename: "sw.ts",
       injectRegister: false,
       manifest: {
-        name: "捡手机",
-        short_name: "捡手机",
+        name: "TransitLoveALD1",
+        short_name: "TransitLoveALD1",
         display: "standalone",
         background_color: "#000000",
         theme_color: "#000000",

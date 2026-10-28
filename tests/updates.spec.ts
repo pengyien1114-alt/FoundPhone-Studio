@@ -103,7 +103,7 @@ test("a stale service worker upgrades its old page without erasing the player's 
     await expect(page.getByRole("button", { name: "轻触解锁" })).toBeVisible({
       timeout: 30000,
     });
-    await expect(page).toHaveTitle(/二十一天/);
+    await expect(page).toHaveTitle(work.title);
     await expect(page).toHaveURL(/appRelease=/);
     expect(
       await page.evaluate(() => localStorage.getItem("update-probe")),

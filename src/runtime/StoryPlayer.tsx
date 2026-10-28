@@ -21,8 +21,7 @@ function StoryPlayer() {
       })
       .then((x) => {
         const w = validateWork(x);
-        document.title =
-          w.title === "捡手机" ? "捡手机" : w.title + " · 捡手机";
+        document.title = w.title;
         setWork(w);
       })
       .catch((e) => {
