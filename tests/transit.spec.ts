@@ -86,7 +86,7 @@ for (const late of [false, true])
     await page.goto("/");
     await page.locator(".notice-open").first().click();
     await pin(page);
-    await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
+    await page.getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ }).click();
     await page.getByRole("button", { name: "繁體中文", exact: true }).click();
     await page
       .getByRole("textbox", { name: "你的姓名", exact: true })
@@ -545,7 +545,7 @@ for (const script of ["traditional", "simplified"] as const)
         .getByRole("button", { name: "打开KakaoTalk", exact: true }),
     ).toBeInViewport();
     await open(page, "备忘录");
-    await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
+    await page.getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ }).click();
     await expect(
       page.getByRole("textbox", { name: "你的姓名", exact: true }),
     ).toHaveCount(0);
@@ -615,7 +615,7 @@ test("eight name-only candidates keep the six-person cap and place Geonwoo after
   await page.goto("/");
   await page.locator(".notice-open").first().click();
   await pin(page);
-  await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
+  await page.getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ }).click();
   await page.getByRole("button", { name: "繁體中文", exact: true }).click();
   await page
     .getByRole("textbox", { name: "你的姓名", exact: true })
@@ -658,7 +658,7 @@ test("eight name-only candidates keep the six-person cap and place Geonwoo after
   await page.getByRole("button", { name: "轻触解锁" }).click();
   await pin(page);
   await open(page, "备忘录");
-  await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
+  await page.getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ }).click();
   await expect(page.locator(".story-profile")).toContainText("入住資料已封存");
 });
 
