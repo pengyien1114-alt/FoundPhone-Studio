@@ -42,7 +42,8 @@ function route(target: string, late = false, reason = 0, pressure = false) {
       state,
       `d${d}-approach`,
       JSON.parse(
-        work.data.kakao.find((i) => i.id === `d${d}-approach`)!.meta.options,
+        work.data.kakao.find((i) => i.id === `d${d}-approach`)!.meta
+          .legacyOptions,
       )[pressure ? 1 : 0],
     );
     put(state, `d${d}-recipient`, target);
@@ -130,14 +131,19 @@ it("never awards points for rerendering and does not rewrite a past day's relati
 it("stores a conversation's reaction before a later same-day repair decision", () => {
   const { p, state } = setup();
   const approach = work.data.kakao.find((i) => i.id === "d7-approach")!;
-  const opts = JSON.parse(approach.meta.options);
+  const opts = JSON.parse(approach.meta.legacyOptions);
   for (const d of [1, 2]) {
     put(state, `d${d}-focus`, p.ex);
     put(state, `d${d}-approach`, opts[1]);
   }
   put(state, "d7-focus", p.ex);
   state.unlocked.push("d7-approach");
-  const packed = packSeasonAnswer(work, state, "d7-approach", opts[0]);
+  const packed = packSeasonAnswer(
+    work,
+    state,
+    "d7-approach",
+    JSON.parse(seasonValues(work, state, p, config).conversationOptions7)[0],
+  );
   expect(packed).toBeDefined();
   state.ui!.kakao!["answer:d7-approach"] = packed!;
   const before = seasonValues(work, state, p, config).interaction7;

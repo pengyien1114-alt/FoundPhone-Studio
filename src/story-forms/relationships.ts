@@ -55,8 +55,12 @@ export function relationshipHistory(
     p.men.map((name) => [
       name,
       {
-        affinity: 8 + Math.floor(seeded(`${p.seed}|affinity|${name}`) * 9),
-        trust: 12 + Math.floor(seeded(`${p.seed}|trust|${name}`) * 6),
+        affinity:
+          (name === p.ex ? 20 : 8) +
+          Math.floor(seeded(`${p.seed}|affinity|${name}`) * 9),
+        trust:
+          (name === p.ex ? 8 : 12) +
+          Math.floor(seeded(`${p.seed}|trust|${name}`) * 6),
         clarity: 0,
         repair: 0,
         pressure: 0,
@@ -84,7 +88,7 @@ export function relationshipHistory(
       opts =
         item.meta.options === "{{repairOptions}}"
           ? repairOptions(work, p, config)
-          : JSON.parse(item.meta.options || "[]");
+          : JSON.parse(item.meta.legacyOptions || item.meta.options || "[]");
     } catch {
       continue;
     }
@@ -95,7 +99,22 @@ export function relationshipHistory(
     opts = opts.map((o) =>
       o.replace(/\{\{quiet1\}\}/g, quiet[1 % quiet.length]),
     );
-    const index = opts.indexOf(value);
+    let index = opts.indexOf(value);
+    let exBranch = false;
+    try {
+      const saved = JSON.parse(
+        String(state.ui?.kakao?.["answer:" + item.id] || "null"),
+      );
+      if (
+        Number.isInteger(saved?.optionIndex) &&
+        saved.optionIndex >= 0 &&
+        saved.optionIndex < opts.length
+      )
+        index = saved.optionIndex;
+      exBranch = saved?.exBranch === true;
+    } catch {
+      /* Older saves match their original text. */
+    }
     if (index < 0) continue;
     const target =
       item.meta.effectTarget === "ex"
@@ -104,7 +123,9 @@ export function relationshipHistory(
           ? quiet[day % quiet.length]
           : selected(state, `d${day}-focus`);
     if (!result[target]) continue;
-    const effects = JSON.parse(item.meta.effects) as Partial<Relationship>[];
+    const effects = JSON.parse(
+      exBranch && item.meta.exEffects ? item.meta.exEffects : item.meta.effects,
+    ) as Partial<Relationship>[];
     changes.push({
       day,
       target,

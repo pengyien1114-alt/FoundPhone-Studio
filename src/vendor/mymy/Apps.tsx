@@ -137,8 +137,13 @@ export function MymyKakao(p: SkinProps) {
       (m) => m.meta.choiceNode && !p.completed?.includes(m.meta.choiceNode),
     );
   const speech = pending?.meta.selectionMode === "speech" ? pending : undefined;
+  const unreadProduction =
+    currentProduction?.title === p.thread && !currentProduction.meta.form
+      ? currentProduction
+      : undefined;
   const openSpeech = () => {
     if (speech) p.onRead(speech.id);
+    else if (unreadProduction) p.onRead(unreadProduction.id);
   };
   return (
     <div className="mymy-ui mymy-kakao" data-mymy="kakao">
@@ -246,14 +251,17 @@ export function MymyKakao(p: SkinProps) {
                   className="kakao-choice-trigger"
                   aria-label="KKT消息"
                   aria-haspopup="dialog"
-                  disabled={!speech}
+                  disabled={!speech && !unreadProduction}
                   onClick={openSpeech}
                 >
                   {speech
                     ? "输入消息 · 點此選擇台詞"
-                    : pending
-                      ? "請點上方對話框選擇動作"
-                      : "等待節目組下一則訊息"}
+                    : unreadProduction
+                      ? unreadProduction.meta.composerLabel ||
+                        "閱讀這則訊息，繼續 ▸"
+                      : pending
+                        ? "請點上方對話框選擇動作"
+                        : "等待節目組下一則訊息"}
                 </button>
               ) : (
                 <input

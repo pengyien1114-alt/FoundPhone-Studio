@@ -173,26 +173,32 @@ for (const late of [false, true])
     await expect(page.locator(".msgs.kk")).not.toContainText(
       "你的 X 選擇了你。",
     );
-    await page
-      .locator(".kzbub")
-      .filter({ hasText: "所有已入住嘉賓都已發送" })
-      .click();
-    await page
-      .locator(".kzbub")
-      .filter({ hasText: /你的 X (選擇了你|沒有選擇你)/ })
-      .click();
+    const continueField = page.getByRole("button", {
+      name: "KKT消息",
+      exact: true,
+    });
+    await expect(continueField).toContainText("讀完收件，查看 X 提示");
+    await continueField.click();
+    await expect(continueField).toContainText("繼續後期訪問");
+    await continueField.click();
     await option(page);
     const last = await option(page);
-    await expect(page.locator(".msgs.kk")).toContainText(
-      "準備好後才進入新的一天",
-    );
+    await expect(page.locator(".msgs.kk")).toContainText("第一天已完成");
     await page.waitForTimeout(700);
     await page.reload();
     await page.getByRole("button", { name: "轻触解锁" }).click();
     await pin(page);
     await open(page, "KakaoTalk");
     await expect(page.locator(".msgs.kk")).toContainText(last);
-    await page.screenshot({ path: `outputs/season/choice-day1-${late}.png` });
+    await expect(
+      page.getByRole("button", { name: "KKT消息", exact: true }),
+    ).toContainText("進入第 2 天");
+    await option(page, "進入第 2 天");
+    await x(page);
+    await expect(page.locator(".post-detail-body")).toContainText("第 2 天");
+    await kkt(page);
+    await expect(page.locator(".msgs.kk")).toContainText("第一次約會");
+    await page.screenshot({ path: `outputs/season/day2-entry-${late}.png` });
     expect(errors).toEqual([]);
   });
 

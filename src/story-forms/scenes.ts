@@ -1,3 +1,4 @@
+import { exScene, exDetail } from "./exScenes";
 import type { Runtime, Work } from "../schema";
 import { castFor, type Profile, type ProfileConfig } from "./profile";
 import { selected, relationshipHistory, repairOptions } from "./relationships";
@@ -18,6 +19,8 @@ export function interactionValues(
     roommateA: cast.presentWomen[0],
     roommateB: cast.presentWomen[1],
     repairOptions: JSON.stringify(repairOptions(work, p, config)),
+    xAtDinner: exDetail(work, p, config, p.late ? "absent" : "ambient"),
+    exLetterReaction: exDetail(work, p, config, "letterReaction"),
   };
   const introLines = [
     "把姓名牌立起來：「我怕你們等一下又忘了，可以隨時看這個。」",
@@ -28,7 +31,11 @@ export function interactionValues(
   ];
   values.arrivalRollCall = [...cast.presentMen, ...cast.presentWomen]
     .filter((n) => ![a, b, woman].includes(n))
-    .map((n, i) => `${n} ${introLines[i % introLines.length]}`)
+    .map((n, i) =>
+      n === p.ex
+        ? `${n} 把姓名牌放到桌上，只向大家作了簡短的介紹。${exDetail(work, p, config, "arrival")}`
+        : `${n} ${introLines[i % introLines.length]}`,
+    )
     .join("\n");
   const seat = selected(state, "d1-seat");
   values.seatResponse = seat.includes(a)
@@ -78,8 +85,26 @@ export function interactionValues(
     } catch {
       /* Keep unassigned profiles quiet. */
     }
-    const first = approach.includes("多聽"),
-      press = approach.includes("確認");
+    const approachItem = work.data.kakao.find((i) => i.id === `d${d}-approach`);
+    const legacyOptions = JSON.parse(
+      approachItem?.meta.legacyOptions || approachItem?.meta.options || "[]",
+    ) as string[];
+    const personal = focus === p.ex ? exScene(work, p, config, d) : undefined;
+    values["conversationOptions" + d] = JSON.stringify(
+      personal?.options || legacyOptions,
+    );
+    let choiceIndex = legacyOptions.indexOf(approach);
+    try {
+      const record = JSON.parse(
+        String(state.ui?.kakao?.[`answer:d${d}-approach`] || "null"),
+      );
+      if (Number.isInteger(record?.optionIndex))
+        choiceIndex = record.optionIndex;
+    } catch {
+      /* Legacy plain answer. */
+    }
+    const first = choiceIndex === 0,
+      press = choiceIndex === 1;
     const reply = press
       ? `他把杯子放到一旁：「${actorInfo.guarded || "我能說今天的感受，但現在還不能給你一個保證。"}」你看見他說完後沒有像剛才一樣繼續找話題。`
       : first
@@ -99,10 +124,24 @@ export function interactionValues(
       focus && approach
         ? `你先問 ${focus} 現在方不方便。他確認手上的分工已經結束，才和你坐到公共空間旁的長椅；兩個人都看得見屋裡，沒有躲開節目規定私下聯絡。\n\n${actorInfo.opening || "他先問你今天過得怎樣，等你坐穩才繼續。"}\n\n你說：「${approach}」\n${reply}\n\n${memory}\n\n${familiarity}\n\n${first ? "談到一半有人來找杯子，你們停了一下。等腳步聲走遠，他沒有立刻起身，而是問剛才說到哪裡。" : "屋裡傳來其他人商量早餐的聲音。你們把空杯帶回去，沒有替這次談話約定下一次。"}`
         : "";
+    if (personal && approach) {
+      const turn = personal.replies[choiceIndex] || personal.replies[0];
+      const strain =
+        r && r.pressure > 10
+          ? "他說到一半就停了。你認得這個快要把話收回去的樣子；不是不熟，而是太清楚再多問一句可能會變成什麼。你這次聽見他說需要停一下，沒有把那句話立刻當成不在乎。"
+          : r && r.meetings > 2
+            ? "這不是你們第一次把這件事放回談話裡。你記得上一次停在哪裡，今天也沒有假裝那個停頓已經過去。熟悉讓你很想替他接話，卻也讓你更怕，又只剩自己把空白補完。"
+            : "你不用重新介紹自己喜歡什麼，也不需要等三次見面才記住他的說話方式。最難的是你們都知道以前會怎麼接，今天卻還不確定能不能換一句。";
+      values["interaction" + d] =
+        `【錄製片段｜你的視角，未向其他嘉賓公開配對】\n\n你在公共空間旁等到 ${focus} 做完分工，才問能不能坐一會兒。你們沒有使用私人訊息聯絡，節目組也沒有向其他人說明這段談話的安排。\n\n${personal.opening}\n\n你說：「${approach}」\n${turn}\n\n${strain}\n\n${personal.ending}`;
+    }
     values["discussion" + d] =
       focus && approach
         ? `31F 今天 ${focus} 跟 {{player}} 那段終於有完整對話了，${first ? "停下來等對方說完比一直找話題更讓我記得。" : press ? "但問到要不要給確定答案時，氣氛真的變了。" : "兩個人都把話留了一點，還看不出來之後怎樣。"}\n32F 我注意到 ${values["sideMan" + d]} 也有自己的相處線，不是每個人都在等同一個人。\n33F ${first ? "願意說自己不擅長什麼，是有往前一點。" : press ? "想要被確認可以理解，但另一個人的猶豫也是真的。" : "先輕鬆相處也好，只是如果一直不講清楚，後面可能錯過。"}\n34F 今天的短信要分開看，白天找誰聊天不等於晚上一定寄給誰。\n35F ${focus} 這次的停頓我有看到，先看下一集會不會主動接回這段。`
         : "";
+    if (personal && approach && d < 14)
+      values["discussion" + d] =
+        `31F 今天 ${focus} 在公共空間那個停頓很明顯，但這集還沒有播出完整談話。\n32F 只看一個動作猜不出過去吧，我反而想看他接下來怎麼做。\n33F {{player}} 今天也有主動開口，沒有一直等別人來找。\n34F 沒公開的談話就先不要替他們填內容，短信也還是另一個環節。\n35F ${values["sideMan" + d]} 那邊也有自己的相處線，鏡頭切回飯桌時還在聊。`;
     const topics = [
       "今天在小屋裡",
       "吃過晚餐以後",

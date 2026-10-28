@@ -28,7 +28,7 @@ export function KakaoQuestion({
           aria-expanded={opened}
           onClick={() => setOpened(true)}
         >
-          输入消息 · 點此選擇回應
+          {item.meta.composerLabel || "输入消息 · 點此選擇回應"}
         </button>
         <Smile size={22} />
         <button aria-label="发送KKT消息" disabled>

@@ -19,6 +19,8 @@ import {
 type Answer = {
   value: string;
   votes?: Vote[];
+  optionIndex?: number;
+  exBranch?: boolean;
   reaction?: { meetings: number; pressure: number };
 };
 type Vote = { from: string; to: string; text: string };
@@ -199,7 +201,9 @@ function nightlyVotes(
         if (residents.men.includes(from)) {
           if (v === p.name)
             return (
-              interest(bonds[from]) + rank(p, "nightly-mood", day, from, v) * 8
+              interest(bonds[from]) +
+              (from === p.ex ? 6 : 0) +
+              rank(p, "nightly-mood", day, from, v) * 8
             );
           return (
             25 +
@@ -294,9 +298,16 @@ export function packSeasonAnswer(
     },
   };
   if (inputError(projected, value)) return undefined;
-  const a: Answer = { value: value.trim() };
+  const a: Answer = {
+    value: value.trim(),
+    optionIndex: (
+      JSON.parse(projected.meta.options || "[]") as string[]
+    ).indexOf(value.trim()),
+  };
   const conversationDay = id.match(/^d(\d+)-approach$/);
   if (conversationDay) {
+    const chosenFocus = answer(state, `d${conversationDay[1]}-focus`);
+    a.exBranch = chosenFocus === c.p.ex;
     const next: Runtime = {
       ...state,
       ui: {
