@@ -1,3 +1,6 @@
+import { socialValues } from "./social";
+import { incomingToPlayer } from "./messages";
+import { firstNightScore, firstNightSignals } from "./contacts";
 import {
   seeded,
   relationships,
@@ -198,17 +201,23 @@ function nightlyVotes(
     )?.to;
     const to = [...candidates].sort((a, b) => {
       const score = (v: string) => {
+        if (day === 1 && residents.men.includes(from))
+          return firstNightScore(work, state, p, config, from, v);
         if (residents.men.includes(from)) {
           if (v === p.name)
             return (
-              interest(bonds[from]) +
+              interest(bonds[from]) -
+              bonds[from].sent +
+              Math.max(0, firstNightSignals(work, state, p, config, from)) *
+                Math.max(0, (6 - day) / 10) +
               (from === p.ex ? 6 : 0) +
               rank(p, "nightly-mood", day, from, v) * 8
             );
           return (
-            25 +
-            seeded(`${p.seed}|rival|${from}|${v}`) * 13 +
-            Math.min(day, 14) * 0.25 +
+            14 +
+            seeded(`${p.seed}|rival|${from}|${v}`) * 9 +
+            Math.min(day, 14) * 0.65 +
+            (v === oldPartner ? 3 : 0) +
             rank(p, "nightly-mood", day, from, v) * 8 +
             (v === previous ? 2 : 0)
           );
@@ -230,9 +239,14 @@ function nightlyVotes(
     votes.push({
       from,
       to,
-      text: messages[
-        Math.floor(rank(p, "message-text", day, from, to) * messages.length)
-      ],
+      text:
+        to === p.name
+          ? incomingToPlayer(work, state, p, config, from, day)
+          : messages[
+              Math.floor(
+                rank(p, "message-text", day, from, to) * messages.length,
+              )
+            ],
     });
   }
   return votes;
@@ -713,6 +727,7 @@ export function seasonValues(
   }
   values.endingJournal = `事前訪問裡，你曾選擇：${answer(state, "d0-q1") || "（尚未選擇）"}\n\n第一晚念完介紹信，你留下的話是：${answer(state, "d1-letter-feeling") || "（尚未選擇）"}。你對那只箱子的選擇是「${answer(state, "d1-gift") || "尚未選擇"}」，之後的心意沒有被這一個動作固定住。\n\n你先和 ${values.date2} 約會，又在下一個正式安排裡和 ${values.date3} 相處。回憶房間的意願是「${answer(state, "d7-room") || "尚未選擇"}」，而日本行的搭檔是 ${values.travelPartner}。這些是不同的環節，沒有哪一次配對直接替夜裡的短信作答。\n\n二十一晚，你寄給熟悉的人 ${sentToX} 次，也有 ${ownVotes.length - sentToX} 次把訊息交給其他人。次數是行動紀錄，不是誰愛得比較多的判決。\n\n最後一次談話，你說：${answer(state, "d21-chat2") || "（尚未選擇）"}\n\n${values.finalResult}\n\n節目結束後釋出的個別訪問裡，曾與你同桌的人說過：「我也在整理自己的過去，不是每一句照顧都有明確的暗示。」那些你沒有看見的停頓，有些來自對方自己的課題，並不都圍著你發生。這不會抹去你感到的委屈，也不要求你改變最後的決定。祝福你帶著自己的語言，繼續生活。`;
   Object.assign(values, interactionValues(work, state, p, config));
+  Object.assign(values, socialValues(work, state, p, config, values));
   return Object.fromEntries(
     Object.entries(values).map(([k, v]) => [
       k,

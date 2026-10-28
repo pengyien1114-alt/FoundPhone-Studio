@@ -858,7 +858,7 @@ export function MymyX(p: SkinProps) {
                       onClick={() => p.onItem(i)}
                     >
                       <MessageCircle />
-                      {i.comments.length}
+                      {i.meta.commentCount || i.comments.length}
                     </button>
                     <button
                       aria-label={"转发" + i.title}
@@ -866,7 +866,10 @@ export function MymyX(p: SkinProps) {
                       onClick={() => toggle(i.id, reposts, setReposts)}
                     >
                       <Repeat2 />
-                      {reposts.includes(i.id) ? 1 : 0}
+                      {Number.isFinite(Number(i.meta.reposts || "0"))
+                        ? Number(i.meta.reposts || "0") +
+                          (reposts.includes(i.id) ? 1 : 0)
+                        : i.meta.reposts}
                     </button>
                     <button
                       aria-label={"点赞" + i.title}

@@ -79,7 +79,13 @@ export function interactionValues(
     }
     const actor = work.data.notes.find((i) => i.id === "relationship-rules")
       ?.meta["actor" + config.men.indexOf(focus)];
-    let actorInfo: { opening?: string; gentle?: string; guarded?: string } = {};
+    let actorInfo: {
+      opening?: string;
+      gentle?: string;
+      guarded?: string;
+      firstOpening?: string;
+      firstReplies?: string[];
+    } = {};
     try {
       actorInfo = JSON.parse(actor || "{}");
     } catch {
@@ -124,6 +130,10 @@ export function interactionValues(
       focus && approach
         ? `你先問 ${focus} 現在方不方便。他確認手上的分工已經結束，才和你坐到公共空間旁的長椅；兩個人都看得見屋裡，沒有躲開節目規定私下聯絡。\n\n${actorInfo.opening || "他先問你今天過得怎樣，等你坐穩才繼續。"}\n\n你說：「${approach}」\n${reply}\n\n${memory}\n\n${familiarity}\n\n${first ? "談到一半有人來找杯子，你們停了一下。等腳步聲走遠，他沒有立刻起身，而是問剛才說到哪裡。" : "屋裡傳來其他人商量早餐的聲音。你們把空杯帶回去，沒有替這次談話約定下一次。"}`
         : "";
+    if (d === 1 && focus && approach && !personal && actorInfo.firstReplies) {
+      values["interaction1"] =
+        `你問 ${focus} 方便不方便，他先把手上的事收好，才和你坐到公共空間旁邊。\n\n${actorInfo.firstOpening}\n\n你說：「${approach}」\n${actorInfo.firstReplies[choiceIndex] || actorInfo.firstReplies[0]}\n\n屋裡有人在確認明天早餐的食材，另一邊還在找乾淨的杯子。你們沒有急著替今天取一個關係的名字，但回去前，他記得把沒有接完的話再問一次。`;
+    }
     if (personal && approach) {
       const turn = personal.replies[choiceIndex] || personal.replies[0];
       const strain =
@@ -135,27 +145,6 @@ export function interactionValues(
       values["interaction" + d] =
         `【錄製片段｜你的視角，未向其他嘉賓公開配對】\n\n你在公共空間旁等到 ${focus} 做完分工，才問能不能坐一會兒。你們沒有使用私人訊息聯絡，節目組也沒有向其他人說明這段談話的安排。\n\n${personal.opening}\n\n你說：「${approach}」\n${turn}\n\n${strain}\n\n${personal.ending}`;
     }
-    values["discussion" + d] =
-      focus && approach
-        ? `31F 今天 ${focus} 跟 {{player}} 那段終於有完整對話了，${first ? "停下來等對方說完比一直找話題更讓我記得。" : press ? "但問到要不要給確定答案時，氣氛真的變了。" : "兩個人都把話留了一點，還看不出來之後怎樣。"}\n32F 我注意到 ${values["sideMan" + d]} 也有自己的相處線，不是每個人都在等同一個人。\n33F ${first ? "願意說自己不擅長什麼，是有往前一點。" : press ? "想要被確認可以理解，但另一個人的猶豫也是真的。" : "先輕鬆相處也好，只是如果一直不講清楚，後面可能錯過。"}\n34F 今天的短信要分開看，白天找誰聊天不等於晚上一定寄給誰。\n35F ${focus} 這次的停頓我有看到，先看下一集會不會主動接回這段。`
-        : "";
-    if (personal && approach && d < 14)
-      values["discussion" + d] =
-        `31F 今天 ${focus} 在公共空間那個停頓很明顯，但這集還沒有播出完整談話。\n32F 只看一個動作猜不出過去吧，我反而想看他接下來怎麼做。\n33F {{player}} 今天也有主動開口，沒有一直等別人來找。\n34F 沒公開的談話就先不要替他們填內容，短信也還是另一個環節。\n35F ${values["sideMan" + d]} 那邊也有自己的相處線，鏡頭切回飯桌時還在聊。`;
-    const topics = [
-      "今天在小屋裡",
-      "吃過晚餐以後",
-      "回到房間之前",
-      "剛才收拾桌子的時候",
-      "大家一起準備早餐時",
-      "輪到洗碗的時候",
-      "今天說起往後的生活時",
-    ];
-    values["smsOptions" + d] = JSON.stringify([
-      `${topics[(d - 1) % topics.length]}，我發現自己有想再和你說話的念頭。明天有空的話，再聊一會兒吧。`,
-      "今天有幾次我不太知道怎麼接話，但不是不想認識你。謝謝你給我一點時間。",
-      "今天辛苦了。我的心意還在整理，但這封訊息是我自己想寄給你的。",
-    ]);
     let repairReply = "";
     try {
       repairReply =

@@ -170,6 +170,10 @@ for (const late of [false, true])
     await expect(page.locator(".msgs.kk")).toContainText(
       "所有已入住嘉賓都已發送",
     );
+    await expect(page.locator(".msgs.kk")).toContainText("匿名訊息 1");
+    await expect(page.locator(".msgs.kk")).not.toContainText(
+      "沒有嘉賓選擇您。",
+    );
     await expect(page.locator(".msgs.kk")).not.toContainText(
       "你的 X 選擇了你。",
     );
@@ -343,4 +347,57 @@ test("final choice and completion also start from the KKT message field", async 
   await kkt(page);
   await option(page, "確認結束這次旅程");
   await expect(page.locator(".story-overlay")).toContainText("保留自己");
+});
+
+test("official X posts have audience-scale counters in detail and feed, with per-cut comments", async ({
+  page,
+}) => {
+  await restore(page, snapshotBefore("d1-intro"));
+  await open(page, "X");
+  const likes = page.getByRole("button", { name: "喜欢帖子", exact: true });
+  const label = await likes.innerText();
+  expect(
+    parseFloat(label) * (label.endsWith("w") ? 10000 : 1),
+  ).toBeGreaterThanOrEqual(42000);
+  expect(
+    Number(
+      await page
+        .getByRole("button", { name: "查看转发", exact: true })
+        .innerText(),
+    ),
+  ).toBeGreaterThanOrEqual(8600);
+  await expect(page.locator(".post-detail-comment")).toHaveCount(8);
+  await expect(page.locator(".post-detail-comments")).toContainText("行李輪子");
+  await likes.click();
+  await expect(likes).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("button", { name: "返回帖子列表", exact: true }).click();
+  const raw = JSON.parse(readFileSync("stories/template/story.json", "utf8"));
+  const post = raw.content.twitter.find(
+    (i: { id: string }) => i.id === "d1-intro",
+  );
+  const repost = page.getByRole("button", {
+    name: "转发" + post.title,
+    exact: true,
+  });
+  await expect(repost).toHaveText(String(post.meta.reposts));
+  await repost.click();
+  await expect(repost).toHaveText(String(Number(post.meta.reposts) + 1));
+  await page.screenshot({ path: "outputs/season/official-x-counters.png" });
+});
+test("theqoo remains one episode thread with banter, replies and an actual receipt reaction", async ({
+  page,
+}) => {
+  await restore(page, snapshotBefore("d1-i2"));
+  await open(page, "浏览器");
+  await page.getByRole("button", { name: /EP\.1｜十個人面試/ }).click();
+  const reader = page.locator(".native-reader");
+  await expect(reader).toContainText("目前全員待複試");
+  await expect(reader).toContainText("62樓");
+  await expect(reader).toContainText("收到");
+  await expect(reader).toContainText(">>");
+  await expect(reader).not.toContainText("匿名觀眾01");
+  await expect(reader).not.toContainText(
+    "先把這一集的公開片段看完，不用急著站隊",
+  );
+  await page.screenshot({ path: "outputs/season/theqoo-episode1.png" });
 });

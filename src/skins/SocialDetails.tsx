@@ -71,7 +71,9 @@ export function SocialDetail(p: {
     <div className="post-detail-actions">
       <button aria-label="查看评论" onClick={() => setTab("评论")}>
         <MessageCircle />
-        {count(comments.length)}
+        {count(
+          Number(item.meta.commentCount || item.comments.length) + extra.length,
+        )}
       </button>
       <button aria-label="查看转发" onClick={() => setTab("转发")}>
         <Repeat2 />
