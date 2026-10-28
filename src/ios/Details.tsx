@@ -1,3 +1,4 @@
+import { useChineseScript } from "../story-forms/ChineseScript";
 import { ProfileForm } from "../story-forms/ProfileForm";
 import { profileConfig } from "../story-forms/profile";
 import type { UiValue } from "../schema";
@@ -39,6 +40,7 @@ export function NativeDetail({
   ui?: Record<string, UiValue>;
   onUi?: (key: string, value: UiValue) => void;
 }) {
+  const t = useChineseScript();
   const [favorite, setFavorite] = useState(item.favorite),
     [copied, setCopied] = useState(false),
     [call, setCall] = useState(false);
@@ -70,7 +72,7 @@ export function NativeDetail({
       <header className="app-nav">
         <button aria-label="返回" onClick={back}>
           <ChevronLeft size={24} />
-          {name}
+          {t(name)}
         </button>
         <strong>{app === "photos" ? item.time.slice(0, 10) : ""}</strong>
         <button aria-label="更多操作" onClick={() => setCopied(!copied)}>
@@ -81,7 +83,7 @@ export function NativeDetail({
         <div className="native-action-sheet">
           <button onClick={copy}>
             <Copy size={18} />
-            复制文字
+            {t("复制文字")}
           </button>
           <button onClick={() => setCopied(false)}>取消</button>
         </div>

@@ -14,6 +14,7 @@ export const layoutSchema = z
     version: z.literal(1),
     workId: z.string(),
     previewLayoutRevision: z.number().int().min(0).default(0),
+    storyLayoutRevision: z.number().int().min(0).default(0),
     apps: workSchema.shape.apps,
     widgets: z.array(widgetSchema).max(24),
     order: z.array(z.string().max(150)).max(500),
@@ -54,10 +55,11 @@ export function ensureAppStore(work: Work): Work {
 }
 export function defaultLayout(input: Work): DeviceLayout {
   const w = ensureAppStore(input);
-  return {
+  const layout: DeviceLayout = {
     version: 1,
     workId: w.id,
     previewLayoutRevision: w.id === "ui-test-phone-v2" ? 1 : 0,
+    storyLayoutRevision: 0,
     apps: structuredClone(w.apps)
       .sort((a, b) => (a.id === "appstore" ? -1 : b.id === "appstore" ? 1 : 0))
       .map((a) =>
@@ -70,6 +72,39 @@ export function defaultLayout(input: Work): DeviceLayout {
     cleared: [],
     positions: {},
   };
+  arrangeStoryApps(layout, w);
+  return layout;
+}
+function arrangeStoryApps(layout: DeviceLayout, work: Work) {
+  const revision = Number(work.variables.homeLayoutRevision || 0);
+  if (layout.storyLayoutRevision >= revision) return;
+  const ids = String(work.variables.firstPageApps || "")
+    .split(",")
+    .filter(
+      (id, i, all) =>
+        layout.apps.some((a) => a.id === id) && all.indexOf(id) === i,
+    )
+    .slice(0, 4);
+  for (const id of ids) {
+    const app = layout.apps.find((a) => a.id === id)!;
+    Object.assign(app, {
+      installed: true,
+      visible: true,
+      dock: false,
+      folder: "",
+    });
+    delete layout.positions[id];
+  }
+  // Move any item occupying the requested cells to the next free space, keeping the item itself.
+  for (const cell of packHome(homeEntries(layout), layout.positions)[0]) {
+    if (cell.y === 0 && cell.x < ids.length)
+      delete layout.positions[cell.entry.key];
+  }
+  ids.forEach((id, x) => {
+    layout.positions[id] = { page: 0, x, y: 0 };
+  });
+  layout.order = [...ids, ...layout.order.filter((id) => !ids.includes(id))];
+  layout.storyLayoutRevision = revision;
 }
 export function validateLayout(raw: unknown, input: Work) {
   const w = ensureAppStore(input);
@@ -118,6 +153,7 @@ export function validateLayout(raw: unknown, input: Work) {
     ];
     layout.previewLayoutRevision = 1;
   }
+  arrangeStoryApps(layout, w);
   const entries = homeEntries(layout),
     packed = packHome(entries, layout.positions);
   for (const entry of entries) {

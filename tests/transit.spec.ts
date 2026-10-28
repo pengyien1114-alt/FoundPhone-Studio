@@ -11,23 +11,34 @@ import { seasonValues, packSeasonAnswer } from "../src/story-forms/season";
 import { momentFor, packMoment } from "../src/story-forms/encounters";
 import { parseProfile } from "../src/story-forms/profile";
 import { test, expect, type Page } from "@playwright/test";
+import { scriptConverter } from "../src/story-forms/ChineseScript";
 async function pin(page: Page) {
   for (const n of "0112")
     await page.getByRole("button", { name: "密码键" + n, exact: true }).click();
 }
 async function open(page: Page, name: string) {
+  await expect(page.locator(".home-pages")).toBeVisible();
   const icon = page.getByRole("button", { name: "打开" + name, exact: true });
   if (await icon.isVisible()) await icon.click();
   else {
     await page.locator(".home-search").click();
     await page
       .locator(".system-panel")
-      .getByRole("button", { name, exact: true })
+      .getByRole("button", {
+        name: scriptConverter(
+          (await page.locator(".phone-shell").getAttribute("lang")) ===
+            "zh-Hant"
+            ? "traditional"
+            : "simplified",
+        )(name),
+        exact: true,
+      })
       .click();
   }
 }
 async function home(page: Page) {
   await page.getByRole("button", { name: "返回桌面", exact: true }).click();
+  await expect(page.locator(".home-pages")).toBeVisible();
 }
 async function next(page: Page) {
   await page.getByRole("button", { name: "下一題", exact: true }).click();
@@ -76,6 +87,7 @@ for (const late of [false, true])
     await page.locator(".notice-open").first().click();
     await pin(page);
     await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
+    await page.getByRole("button", { name: "繁體中文", exact: true }).click();
     await page
       .getByRole("textbox", { name: "你的姓名", exact: true })
       .fill("小雨");
@@ -493,7 +505,109 @@ test("opening soundtrack continues across apps and Music controls pause without 
   await expect
     .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).paused))
     .toBe(true);
+  await home(page);
+  await open(page, "音乐");
+  await page.getByRole("button", { name: "播放開屏音樂", exact: true }).click();
+  await expect(audio).not.toHaveAttribute("loop");
+  await audio.evaluate((el) => {
+    const a = el as HTMLAudioElement;
+    a.currentTime = a.duration - 0.15;
+  });
+  await expect
+    .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).ended))
+    .toBe(true);
+  await home(page);
+  await open(page, "X");
+  await expect
+    .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).paused))
+    .toBe(true);
+  await expect
+    .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).ended))
+    .toBe(true);
 });
+
+for (const script of ["traditional", "simplified"] as const)
+  test(`language is selected before the name and survives setup, KKT answers and refresh: ${script}`, async ({
+    page,
+  }) => {
+    const t = scriptConverter(script);
+    await page.goto("/");
+    await page.getByRole("button", { name: "轻触解锁" }).click();
+    await pin(page);
+    await expect(
+      page
+        .locator(".home-pages")
+        .getByRole("button", { name: "打开X", exact: true }),
+    ).toBeInViewport();
+    await expect(
+      page
+        .locator(".home-pages")
+        .getByRole("button", { name: "打开KakaoTalk", exact: true }),
+    ).toBeInViewport();
+    await open(page, "备忘录");
+    await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
+    await expect(
+      page.getByRole("textbox", { name: "你的姓名", exact: true }),
+    ).toHaveCount(0);
+    await page
+      .getByRole("button", {
+        name: script === "traditional" ? "繁體中文" : "简体中文",
+        exact: true,
+      })
+      .click();
+    await page
+      .getByRole("textbox", { name: "你的姓名", exact: true })
+      .fill("小雨");
+    const nextQuestion = () =>
+      page.getByRole("button", { name: t("下一題"), exact: true }).click();
+    await nextQuestion();
+    for (const name of [
+      "金俊抒",
+      "張家豪",
+      "金虔佑",
+      "李理悟",
+      "李相沅",
+      "賀鑫隆",
+    ])
+      await page.getByRole("checkbox", { name: t(name), exact: true }).check();
+    await nextQuestion();
+    await page.getByLabel("前任 X", { exact: true }).selectOption("張家豪");
+    await nextQuestion();
+    await nextQuestion();
+    await nextQuestion();
+    await nextQuestion();
+    await page
+      .getByRole("button", { name: t("封存資料，閱讀節目規則"), exact: true })
+      .click();
+    await home(page);
+    await open(page, "备忘录");
+    await page
+      .getByRole("button", { name: new RegExp(t("錄製須知｜請先閱讀")) })
+      .click();
+    await page.locator(".device-banner").click();
+    await expect(page.locator(".post-detail-body")).toContainText(
+      t("事前見面"),
+    );
+    await kkt(page);
+    await page.getByRole("button", { name: "KKT消息", exact: true }).click();
+    const dialog = page.getByRole("dialog");
+    const shown = await dialog.getByRole("button").first().innerText();
+    await dialog.getByRole("button").first().click();
+    await expect(page.locator(".msgs.kk")).toContainText(shown);
+    await expect(page.locator(".msgs.kk")).toContainText("Q2：");
+    await page.waitForTimeout(350);
+    await page.reload();
+    await page.getByRole("button", { name: "轻触解锁" }).click();
+    await pin(page);
+    await open(page, "KakaoTalk");
+    await expect(page.locator(".phone-shell")).toHaveAttribute(
+      "lang",
+      script === "simplified" ? "zh-Hans" : "zh-Hant",
+    );
+    await expect(page.locator(".msgs.kk")).toContainText(shown);
+    await expect(page.locator(".msgs.kk")).toContainText("Q2：");
+    await page.screenshot({ path: `outputs/season/script-${script}.png` });
+  });
 
 test("eight name-only candidates keep the six-person cap and place Geonwoo after Jiahao", async ({
   page,
@@ -502,6 +616,7 @@ test("eight name-only candidates keep the six-person cap and place Geonwoo after
   await page.locator(".notice-open").first().click();
   await pin(page);
   await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
+  await page.getByRole("button", { name: "繁體中文", exact: true }).click();
   await page
     .getByRole("textbox", { name: "你的姓名", exact: true })
     .fill("小雨");

@@ -103,10 +103,13 @@ export function OpeningMusic({
           data-opening-music
           src={src}
           preload="auto"
-          loop
           playsInline
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
+          onEnded={() => {
+            started.current = true;
+            setPlaying(false);
+          }}
           onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
           onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
         />

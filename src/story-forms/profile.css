@@ -41,6 +41,18 @@
 .story-profile button:disabled {
   opacity: 0.4;
 }
+.story-script-options {
+  display: flex;
+  gap: 8px;
+}
+.story-script-options button {
+  flex: 1;
+  background: #ece9de;
+}
+.story-script-options button[aria-pressed="true"] {
+  background: #ffcc00;
+  box-shadow: inset 0 0 0 2px #b68c00;
+}
 
 .kzinp select {
   flex: 1;

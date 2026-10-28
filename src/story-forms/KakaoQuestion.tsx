@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Plus, Smile } from "lucide-react";
 import type { Item, UiValue } from "../schema";
+import { useChineseScript } from "./ChineseScript";
 export function KakaoQuestion({
   item,
   onUi,
@@ -9,6 +10,7 @@ export function KakaoQuestion({
   ui?: Record<string, UiValue>;
   onUi?: (key: string, value: UiValue) => void;
 }) {
+  const t = useChineseScript();
   const [opened, setOpened] = useState(false);
   let options: string[] = [];
   try {
@@ -28,7 +30,7 @@ export function KakaoQuestion({
           aria-expanded={opened}
           onClick={() => setOpened(true)}
         >
-          {item.meta.composerLabel || "输入消息 · 點此選擇回應"}
+          {t(item.meta.composerLabel || "输入消息 · 點此選擇回應")}
         </button>
         <Smile size={22} />
         <button aria-label="发送KKT消息" disabled>
@@ -50,10 +52,10 @@ export function KakaoQuestion({
                 onUi?.("answer:" + item.id, value);
               }}
             >
-              {value}
+              {t(value)}
             </button>
           ))}
-          <button onClick={() => setOpened(false)}>再想一下</button>
+          <button onClick={() => setOpened(false)}>{t("再想一下")}</button>
         </div>
       )}
     </>

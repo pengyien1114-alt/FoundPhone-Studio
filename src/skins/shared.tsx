@@ -1,3 +1,4 @@
+import { useChineseScript } from "../story-forms/ChineseScript";
 import {
   ChevronLeft,
   ChevronRight,
@@ -48,6 +49,7 @@ export function Tabs({
   set: (s: string) => void;
   icons?: ReactNode[];
 }) {
+  const tr = useChineseScript();
   return (
     <nav className="catalog-tabs">
       {tabs.map((t, i) => (
@@ -57,7 +59,7 @@ export function Tabs({
           onClick={() => set(t)}
         >
           {icons?.[i]}
-          <span>{t}</span>
+          <span>{tr(t)}</span>
         </button>
       ))}
     </nav>

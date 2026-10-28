@@ -550,6 +550,15 @@
     "repository": "https://github.com/motiondivision/motion"
   },
   {
+    "name": "opencc-js",
+    "version": "1.4.2",
+    "license": "MIT AND Apache-2.0",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/nk2028/opencc-js.git"
+    }
+  },
+  {
     "name": "orderedmap",
     "version": "2.1.1",
     "license": "MIT",

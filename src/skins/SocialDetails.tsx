@@ -1,3 +1,4 @@
+import { useChineseScript } from "../story-forms/ChineseScript";
 import { useState } from "react";
 import {
   ChevronLeft,
@@ -34,6 +35,7 @@ export function SocialDetail(p: {
   ui?: Record<string, UiValue>;
   onUi?: (key: string, value: UiValue) => void;
 }) {
+  const t = useChineseScript();
   const { item } = p,
     weibo = p.app === "weibo",
     privateRecord = !weibo && item.meta.visibility === "player";
@@ -118,7 +120,7 @@ export function SocialDetail(p: {
         <button aria-label="返回帖子列表" onClick={p.back}>
           <ChevronLeft size={27} />
         </button>
-        <strong>{weibo ? "微博正文" : "帖子"}</strong>
+        <strong>{t(weibo ? "微博正文" : "帖子")}</strong>
         <div>
           {weibo && <Headphones size={23} />}
           <button aria-label="帖子更多选项" onClick={() => setMenu(!menu)}>
@@ -149,7 +151,7 @@ export function SocialDetail(p: {
               className="post-follow"
               onClick={() => setFollowed(!followed)}
             >
-              {privateRecord ? "僅玩家可見" : followed ? "已关注" : "关注"}
+              {t(privateRecord ? "僅玩家可見" : followed ? "已关注" : "关注")}
             </button>
           )}
         </div>
@@ -159,7 +161,7 @@ export function SocialDetail(p: {
         </div>
         {privateRecord ? (
           <p className="x-private-record">
-            僅玩家可見 · 尚未公開的個人錄製紀錄
+            {t("僅玩家可見 · 尚未公開的個人錄製紀錄")}
           </p>
         ) : weibo ? (
           <div className="weibo-share-options">
@@ -176,7 +178,7 @@ export function SocialDetail(p: {
         ) : (
           <>
             <div className="x-post-metadata">
-              {item.time} · <b>{meta(item, "views", "0")}</b> 次查看
+              {item.time} · <b>{meta(item, "views", "0")}</b> {t("次查看")}
             </div>
             {actions}
           </>
@@ -201,10 +203,10 @@ export function SocialDetail(p: {
         ) : (
           <div className="x-related-row">
             <button onClick={() => setSort(!sort)}>
-              {sort ? "最新" : "相关"}⌄
+              {t(sort ? "最新" : "相关")}⌄
             </button>
             <button onClick={() => setTab(tab === "转发" ? "评论" : "转发")}>
-              查看引用 ›
+              {t("查看引用")} ›
             </button>
           </div>
         )}
@@ -247,7 +249,9 @@ export function SocialDetail(p: {
                 </article>
               );
             })}
-            {!replies.length && <p className="post-comments-empty">暂无评论</p>}
+            {!replies.length && (
+              <p className="post-comments-empty">{t("暂无评论")}</p>
+            )}
           </div>
         ) : (
           <p className="post-comments-empty">

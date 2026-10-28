@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import blank from "../../stories/blank/story.json";
+import transit from "../../stories/template/story.json";
 import { compileStory } from "../story-engine/compiler";
 import {
   defaultLayout,
@@ -10,6 +11,31 @@ import {
   moveHome,
 } from "./layout";
 const work = () => compileStory(blank).work;
+it("moves story apps onto page one for new and existing layouts, without resetting customized layouts again", () => {
+  const w = compileStory(transit).work;
+  const old = defaultLayout(w);
+  old.storyLayoutRevision = 0;
+  old.positions.twitter = { page: 2, x: 0, y: 0 };
+  old.positions.kakao = { page: 1, x: 0, y: 0 };
+  old.widgets.push({ id: "widget-keep", type: "clock", size: "small" });
+  old.positions["widget-keep"] = { page: 0, x: 0, y: 0 };
+  const migrated = validateLayout(old, w);
+  const first = packHome(homeEntries(migrated), migrated.positions)[0];
+  expect(first.slice(0, 2).map((c) => c.entry.key)).toEqual([
+    "twitter",
+    "kakao",
+  ]);
+  expect(migrated.widgets).toEqual(old.widgets);
+  expect(migrated.apps).toHaveLength(49);
+  migrated.positions.twitter = { page: 2, x: 0, y: 0 };
+  expect(validateLayout(migrated, w).positions.twitter.page).toBe(2);
+  const fresh = defaultLayout(w);
+  expect(
+    packHome(homeEntries(fresh), fresh.positions)[0]
+      .slice(0, 2)
+      .map((c) => c.entry.key),
+  ).toEqual(["twitter", "kakao"]);
+});
 describe("device layout", () => {
   it("keeps all 47 apps and only defaults installed", () => {
     const l = defaultLayout(work());

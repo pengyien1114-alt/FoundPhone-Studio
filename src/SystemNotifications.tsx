@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { X } from "lucide-react";
 import { AppArtwork } from "./AppArtwork";
 import type { Work } from "./schema";
+import { useChineseScript } from "./story-forms/ChineseScript";
 export function notificationContent(text: string, apps: Work["apps"]) {
   const tagged = text.match(/^\[app:([a-z]+)\]([\s\S]*)$/);
   if (tagged) {
@@ -31,6 +32,7 @@ export function SystemNotifications({
   onDismiss: (index: number) => void;
   compact?: boolean;
 }) {
+  const t = useChineseScript();
   const [expanded, setExpanded] = useState(false);
   const entries = notices.map((text, index) => ({ text, index })).reverse();
   const shown = compact && !expanded ? entries.slice(0, 1) : entries;
@@ -63,10 +65,10 @@ export function SystemNotifications({
                   <AppArtwork id={n.appId} />
                 </span>
                 <span className="notice-copy">
-                  <strong>{n.title}</strong>
-                  <span>{n.body}</span>
+                  <strong>{t(n.title)}</strong>
+                  <span>{t(n.body)}</span>
                 </span>
-                <time>现在</time>
+                <time>{t("现在")}</time>
               </button>
               {!compact && (
                 <button
@@ -86,7 +88,7 @@ export function SystemNotifications({
           className="notice-expand"
           onClick={() => setExpanded(!expanded)}
         >
-          {expanded ? "收起" : notices.length + " 条通知"}
+          {t(expanded ? "收起" : notices.length + " 条通知")}
         </button>
       )}
     </div>

@@ -1,3 +1,4 @@
+import { useChineseScript } from "../../story-forms/ChineseScript";
 import { KakaoQuestion } from "../../story-forms/KakaoQuestion";
 /* React/data adapters for dudwo5/Mymy UI templates: kt/ktn/KHD/bub,
  * igHome/igProfile/igDM/igSheet, xHome. See NOTICE.txt for permission.
@@ -53,7 +54,8 @@ export function messageRun(items: Item[], index: number) {
 const read = (p: SkinProps, i: Item) =>
   p.creator || i.password ? p.onItem(i) : p.onRead(i.id);
 function Blank() {
-  return <p className="mymy-empty">暂无内容</p>;
+  const t = useChineseScript();
+  return <p className="mymy-empty">{t("暂无内容")}</p>;
 }
 function Back({ onClick }: { onClick: () => void }) {
   return (
@@ -63,6 +65,7 @@ function Back({ onClick }: { onClick: () => void }) {
   );
 }
 export function MymyKakao(p: SkinProps) {
+  const t = useChineseScript();
   const [actionQuestion, setActionQuestion] = useState("");
   const [tab, setTab] = useSkinState<string>(p, "mymyTab", "聊天"),
     [sent, setSent] = useSkinState<string[]>(p, "mymyKktSent", []),
@@ -203,7 +206,7 @@ export function MymyKakao(p: SkinProps) {
                         read(p, m);
                     }}
                   >
-                    {m.media ? <Media item={m} /> : m.body}
+                    {m.media ? <Media item={m} /> : t(m.body)}
                   </button>
                   {!m.outgoing && run.last && (
                     <span className="kzt">{m.time.slice(-5)}</span>
@@ -254,14 +257,16 @@ export function MymyKakao(p: SkinProps) {
                   disabled={!speech && !unreadProduction}
                   onClick={openSpeech}
                 >
-                  {speech
-                    ? "输入消息 · 點此選擇台詞"
-                    : unreadProduction
-                      ? unreadProduction.meta.composerLabel ||
-                        "閱讀這則訊息，繼續 ▸"
-                      : pending
-                        ? "請點上方對話框選擇動作"
-                        : "等待節目組下一則訊息"}
+                  {t(
+                    speech
+                      ? "输入消息 · 點此選擇台詞"
+                      : unreadProduction
+                        ? unreadProduction.meta.composerLabel ||
+                          "閱讀這則訊息，繼續 ▸"
+                        : pending
+                          ? "請點上方對話框選擇動作"
+                          : "等待節目組下一則訊息",
+                  )}
                 </button>
               ) : (
                 <input
@@ -290,13 +295,13 @@ export function MymyKakao(p: SkinProps) {
                 {(JSON.parse(question.meta.options || "[]") as string[]).map(
                   (value) => (
                     <button
-                      key={value}
+                      key={t(value)}
                       onClick={() => {
                         p.onUi?.("answer:" + question.id, value);
                         setActionQuestion("");
                       }}
                     >
-                      {value}
+                      {t(value)}
                     </button>
                   ),
                 )}
@@ -745,6 +750,7 @@ export function MymyInstagram(p: SkinProps) {
   );
 }
 export function MymyX(p: SkinProps) {
+  const tr = useChineseScript();
   const [dark, setDark] = useSkinState<boolean>(p, "x-dark", true);
   const [tab, setTab] = useSkinState<string>(p, "mymyTab", "推荐"),
     [likes, setLikes] = useSkinState<string[]>(p, "mymyXLikes", []),
@@ -799,10 +805,10 @@ export function MymyX(p: SkinProps) {
           {["为你推荐", "正在关注", "添加 +", "时间"].map((t) => (
             <button
               className={t === tab ? "on" : ""}
-              key={t}
+              key={tr(t)}
               onClick={() => setTab(t)}
             >
-              {t}
+              {tr(t)}
             </button>
           ))}
         </div>
@@ -823,7 +829,9 @@ export function MymyX(p: SkinProps) {
                 <Avatar name={i.sender} src={i.avatar} />
                 <div className="kzxb">
                   {i.id === pinned?.id && (
-                    <small aria-label="置頂推文">置頂 · 換乘戀愛官方</small>
+                    <small aria-label="置頂推文">
+                      {tr("置頂 · 換乘戀愛官方")}
+                    </small>
                   )}
                   <div className="kzxn">
                     <b>{i.sender}</b>
@@ -853,7 +861,9 @@ export function MymyX(p: SkinProps) {
                     </button>
                   )}
                   {i.meta.visibility === "player" ? (
-                    <small className="x-private-record">僅玩家可見</small>
+                    <small className="x-private-record">
+                      {tr("僅玩家可見")}
+                    </small>
                   ) : (
                     <div className="kzxac">
                       <button

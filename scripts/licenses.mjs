@@ -30,6 +30,12 @@ async function visit(name, from = ".") {
         `\n--- ${f} ---\n` + (await readFile(path.join(dir, f), "utf8"));
     } catch {}
   }
+  // OpenCC's bundled conversion dictionaries carry a separate Apache notice.
+  if (pkg.name === "opencc-js") {
+    licenses +=
+      "\n--- LICENSES/Apache-2.0.txt ---\n" +
+      (await readFile(path.join(dir, "LICENSES/Apache-2.0.txt"), "utf8"));
+  }
   records.push({
     name: pkg.name,
     version: pkg.version,

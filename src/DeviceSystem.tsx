@@ -1,3 +1,4 @@
+import { useChineseScript } from "./story-forms/ChineseScript";
 import { SystemNotifications } from "./SystemNotifications";
 import {
   ConnectivityModule,
@@ -84,6 +85,7 @@ export function DeviceLock({
   onCamera: () => void;
   onLight: () => void;
 }) {
+  const t = useChineseScript();
   const [code, setCode] = useState("");
   useEffect(() => {
     if (error) setCode("");
@@ -158,7 +160,7 @@ export function DeviceLock({
       ) : (
         <div className="device-passcode">
           <LockKeyhole size={22} />
-          <h2>输入密码</h2>
+          <h2>{t("输入密码")}</h2>
           <div
             className={"passcode-dots " + (error ? "pin-shake" : "")}
             aria-label={"已输入" + code.length + "位密码"}
@@ -214,7 +216,7 @@ export function DeviceLock({
             )}
           </div>
           <span role="status" className="pin-error">
-            {error}
+            {t(error)}
           </span>
           {!/^[0-9]+$/.test(work.phone.passcode) && (
             <button onClick={() => onUnlock(code)}>解锁</button>

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useChineseScript } from "./story-forms/ChineseScript";
 type RichNode = {
   type?: string;
   text?: string;
@@ -61,12 +62,13 @@ export function RichText({
   value: string;
   fallback: string;
 }) {
+  const t = useChineseScript();
   const n = parseRichText(value);
-  if (!n) return <p className="detail-body">{fallback}</p>;
+  if (!n) return <p className="detail-body">{t(fallback)}</p>;
   const render = (n: RichNode, depth: number, key: number): ReactNode => {
     if (depth > 12) return null;
     if (n.type === "text") {
-      let text: ReactNode = n.text ?? "";
+      let text: ReactNode = t(n.text ?? "");
       for (const m of n.marks ?? []) {
         if (m.type === "bold") text = <strong>{text}</strong>;
         if (m.type === "italic") text = <em>{text}</em>;

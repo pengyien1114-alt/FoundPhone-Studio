@@ -1,3 +1,4 @@
+import { useChineseScript } from "../story-forms/ChineseScript";
 export { WeatherSkin, HealthSkin } from "./CalibratedSystemApps";
 import { AudioPlayer, useTrack } from "../audio";
 import { useSkinState } from "../skinState";
@@ -303,6 +304,7 @@ export function CameraSkin(p: Props) {
   );
 }
 export function SafariSkin(p: Props) {
+  const t = useChineseScript();
   const [q, setQ] = useState(""),
     [tab, setTab] = useState("书签");
   const items = p.items
@@ -320,7 +322,7 @@ export function SafariSkin(p: Props) {
     <div className="catalog-skin native-safari">
       <Header p={p} />
       <div className="catalog-scroll">
-        <h1>{tab}</h1>
+        <h1>{t(tab)}</h1>
         <div className="safari-favorites">
           {items.map((i) => (
             <button key={i.id} onClick={() => p.onItem(i)}>
@@ -332,14 +334,14 @@ export function SafariSkin(p: Props) {
             </button>
           ))}
         </div>
-        <Empty items={items} label="没有匹配的虚构网页" />
+        <Empty items={items} label={t("没有匹配的虚构网页")} />
       </div>
       <label className="safari-address">
         <LockKeyhole size={13} />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="搜索或输入虚构网址"
+          placeholder={t("搜索或输入虚构网址")}
           aria-label="地址栏"
           onKeyDown={(e) => {
             if (e.key === "Enter" && items[0]) p.onItem(items[0]);
@@ -357,6 +359,7 @@ export function SafariSkin(p: Props) {
   );
 }
 export function NotesSkin(p: Props) {
+  const t = useChineseScript();
   const { q, setQ, items } = useContent(p, "备忘录");
   const [folder, setFolder] = useState<string | null>(null);
   const list = folder
@@ -368,16 +371,16 @@ export function NotesSkin(p: Props) {
       <div className="catalog-scroll">
         <button className="notes-back" onClick={() => setFolder(null)}>
           <Folder size={17} />
-          文件夹
+          {t("文件夹")}
         </button>
-        <h1>{folder || "所有备忘录"}</h1>
+        <h1>{t(folder || "所有备忘录")}</h1>
         <SearchBox value={q} set={setQ} />
         {!folder && (
           <div className="note-folders">
             {groupItems(items, "备忘录").map((g) => (
               <button key={g} onClick={() => setFolder(g)}>
                 <Folder size={17} />
-                {g}
+                {t(g)}
                 <small>
                   {items.filter((i) => (i.folder || "备忘录") === g).length}
                 </small>
@@ -395,14 +398,16 @@ export function NotesSkin(p: Props) {
                 <time>{i.time.slice(5, 10)}</time>{" "}
                 {i.password ? "已锁定的备忘录" : i.body.split("\n")[0]}
               </p>
-              <small>{i.folder}</small>
+              <small>{t(i.folder)}</small>
             </button>
           ))}
         </div>
         <Empty items={list} />
       </div>
       <div className="notes-footer">
-        <span>{list.length} 则备忘录</span>
+        <span>
+          {list.length} {t("则备忘录")}
+        </span>
         <Add p={p} label="新建备忘录" />
       </div>
     </div>

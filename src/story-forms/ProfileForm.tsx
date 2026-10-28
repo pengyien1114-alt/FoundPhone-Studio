@@ -1,6 +1,11 @@
 import { useState } from "react";
 import type { UiValue } from "../schema";
 import {
+  parseScript,
+  useChineseScript,
+  type ChineseScript,
+} from "./ChineseScript";
+import {
   saveProfile,
   parseProfile,
   type Profile,
@@ -16,6 +21,9 @@ export function ProfileForm({
   ui?: Record<string, UiValue>;
   onUi?: (key: string, value: UiValue) => void;
 }) {
+  const t = useChineseScript();
+  const script = parseScript(ui?.script);
+  const selectScript = (value: ChineseScript) => onUi?.("script", value);
   const saved = parseProfile(ui?.profile);
   const [step, setStep] = useState(Number(ui?.profileStep || 0));
   const [p, setP] = useState<Profile>(
@@ -40,18 +48,50 @@ export function ProfileForm({
     setStep(value);
     onUi?.("profileStep", value);
   };
+  const languages = (
+    <div className="story-script-options" role="group" aria-label="文字版本">
+      <button
+        type="button"
+        aria-pressed={script === "traditional"}
+        onClick={() => selectScript("traditional")}
+        lang="zh-Hant"
+      >
+        繁體中文
+      </button>
+      <button
+        type="button"
+        aria-pressed={script === "simplified"}
+        onClick={() => selectScript("simplified")}
+        lang="zh-Hans"
+      >
+        简体中文
+      </button>
+    </div>
+  );
+  if (!script)
+    return (
+      <section className="story-profile">
+        <small>入住前設定 · 入住前设置</small>
+        <h2>選擇文字版本／选择文字版本</h2>
+        {languages}
+      </section>
+    );
   if (saved)
     return (
       <section className="story-profile">
+        {languages}
         <p>
-          入住資料已封存。公開時機由節目流程決定，這裡不展示其他人的關係資料。
+          {t(
+            "入住資料已封存。公開時機由節目流程決定，這裡不展示其他人的關係資料。",
+          )}
         </p>
         <p>
-          {saved.name}｜{saved.mbti || "INFP"}
+          {t(saved.name)}｜{saved.mbti || "INFP"}
         </p>
         <p>
-          請先閱讀備忘錄中的節目規則，再開啟 X 的事前採訪。節目組會透過對應 App
-          通知下一步。
+          {t(
+            "請先閱讀備忘錄中的節目規則，再開啟 X 的事前採訪。節目組會透過對應 App 通知下一步。",
+          )}
         </p>
       </section>
     );
@@ -82,11 +122,14 @@ export function ProfileForm({
         else onUi?.("profile", JSON.stringify(saveProfile(p, config)));
       }}
     >
-      <small>入住資料 {step + 1} / 7</small>
-      <h2>{titles[step]}</h2>
+      {languages}
+      <small>
+        {t("入住資料")} {step + 1} / 7
+      </small>
+      <h2>{t(titles[step])}</h2>
       {step === 0 && (
         <label>
-          你的姓名
+          {t("你的姓名")}
           <input
             aria-label="你的姓名"
             maxLength={20}
@@ -98,7 +141,9 @@ export function ProfileForm({
       )}
       {step === 1 && (
         <fieldset>
-          <legend>男嘉賓（已選 {p.men.length}/6）</legend>
+          <legend>
+            {t("男嘉賓（已選")} {p.men.length}/6）
+          </legend>
           {config.men.map((name) => (
             <label key={name}>
               <input
@@ -112,22 +157,24 @@ export function ProfileForm({
                   change({ men, ex: men.includes(p.ex) ? p.ex : "" });
                 }}
               />
-              {name}
+              {t(name)}
             </label>
           ))}
         </fieldset>
       )}
       {step === 2 && (
         <label>
-          前任 X
+          {t("前任 X")}
           <select
             aria-label="前任 X"
             value={p.ex}
             onChange={(e) => change({ ex: e.target.value })}
           >
-            <option value="">請選擇</option>
+            <option value="">{t("請選擇")}</option>
             {p.men.map((m) => (
-              <option key={m}>{m}</option>
+              <option key={m} value={m}>
+                {t(m)}
+              </option>
             ))}
           </select>
         </label>
@@ -139,26 +186,28 @@ export function ProfileForm({
             checked={p.late}
             onChange={(e) => change({ late: e.target.checked })}
           />
-          安排於後續入場
+          {t("安排於後續入場")}
         </label>
       )}
       {step === 4 && (
         <label>
-          分手原因
+          {t("分手原因")}
           <select
             aria-label="分手原因"
             value={p.reason}
             onChange={(e) => change({ reason: e.target.value })}
           >
             {config.reasons.map((r) => (
-              <option key={r}>{r}</option>
+              <option key={r} value={r}>
+                {t(r)}
+              </option>
             ))}
           </select>
         </label>
       )}
       {step === 5 && (
         <label>
-          目前回頭的傾向 {p.reunion}%
+          {t("目前回頭的傾向")} {p.reunion}%
           <input
             aria-label="初始復合傾向"
             type="range"
@@ -201,11 +250,11 @@ export function ProfileForm({
         </label>
       )}
       <button type="submit" disabled={!allowed}>
-        {step === 6 ? "封存資料，閱讀節目規則" : "下一題"}
+        {t(step === 6 ? "封存資料，閱讀節目規則" : "下一題")}
       </button>
       {step > 0 && (
         <button type="button" onClick={() => move(step - 1)}>
-          上一題
+          {t("上一題")}
         </button>
       )}
     </form>
