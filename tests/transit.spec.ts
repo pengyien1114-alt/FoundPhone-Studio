@@ -69,7 +69,7 @@ for (const late of [false, true])
     await page.locator(".notice-open").first().click();
     await pin(page);
     await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
-    await page.getByLabel("你的姓名", { exact: true }).selectOption("小雨");
+    await page.getByRole("textbox", { name: "你的姓名", exact: true }).fill("小雨");
     await next(page);
     for (const name of [
       "金俊抒",

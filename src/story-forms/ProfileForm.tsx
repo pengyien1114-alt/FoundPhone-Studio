@@ -87,16 +87,13 @@ export function ProfileForm({
       {step === 0 && (
         <label>
           你的姓名
-          <select
+          <input
             aria-label="你的姓名"
+            maxLength={20}
+            autoComplete="off"
             value={p.name}
             onChange={(e) => change({ name: e.target.value })}
-          >
-            <option value="">請選擇</option>
-            {["小雨", "知夏", "以寧", "若安", "予晴", "書棠"].map((name) => (
-              <option key={name}>{name}</option>
-            ))}
-          </select>
+          />
         </label>
       )}
       {step === 1 && (
