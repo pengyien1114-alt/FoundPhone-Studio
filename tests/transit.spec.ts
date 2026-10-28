@@ -401,3 +401,82 @@ test("theqoo remains one episode thread with banter, replies and an actual recei
   );
   await page.screenshot({ path: "outputs/season/theqoo-episode1.png" });
 });
+
+test("unreleased personal footage has no audience actions or replies and uses readable X type", async ({
+  page,
+}) => {
+  await restore(page, snapshotBefore("d0-meeting"));
+  await open(page, "X");
+  await expect(
+    page.locator(".app-post-detail .x-private-record"),
+  ).toContainText("僅玩家可見");
+  await expect(page.locator(".post-detail-comment")).toHaveCount(0);
+  await expect(page.locator(".post-detail-actions")).toHaveCount(0);
+  await expect(page.locator(".post-detail-reply")).toHaveCount(0);
+  expect(
+    await page
+      .locator(".post-detail-body")
+      .evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
+  ).toBeGreaterThanOrEqual(21);
+  await page.getByRole("button", { name: "返回帖子列表", exact: true }).click();
+  expect(
+    await page
+      .locator(".kzxx")
+      .first()
+      .evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
+  ).toBeGreaterThanOrEqual(20);
+});
+
+test("a date has two decisions with visible consequences before its existing reflection", async ({
+  page,
+}) => {
+  await restore(page, snapshotBefore("d2-date-scene"));
+  await open(page, "X");
+  await expect(page.locator(".post-detail-body")).toContainText("唱片咖啡店");
+  await kkt(page);
+  await option(page, 0);
+  await x(page);
+  await expect(page.locator(".post-detail-body")).toContainText("二手店");
+  await expect(page.locator(".post-detail-body")).toContainText("雨棚");
+  await kkt(page);
+  await option(page, 1);
+  await x(page);
+  await expect(page.locator(".post-detail-body")).toContainText(
+    "不想在這裡替誰排先後",
+  );
+  await kkt(page);
+  await page.getByRole("button", { name: "KKT消息", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "回答選項" })).toContainText(
+    "還沒有完全投入",
+  );
+});
+
+test("opening soundtrack continues across apps and Music controls pause without a duplicate player", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const audio = page.locator("audio[data-opening-music]");
+  await expect(audio).toHaveCount(1);
+  await page.getByRole("button", { name: "轻触解锁" }).click();
+  await pin(page);
+  await expect
+    .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).paused))
+    .toBe(false);
+  await expect
+    .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).currentTime))
+    .toBeGreaterThan(0);
+  await open(page, "音乐");
+  await expect(page.locator(".native-now-playing")).toContainText(
+    "SUN OR SUCK",
+  );
+  await expect(page.locator("audio")).toHaveCount(1);
+  await page.getByRole("button", { name: "暫停開屏音樂", exact: true }).click();
+  await expect
+    .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).paused))
+    .toBe(true);
+  await home(page);
+  await open(page, "X");
+  await expect
+    .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).paused))
+    .toBe(true);
+});

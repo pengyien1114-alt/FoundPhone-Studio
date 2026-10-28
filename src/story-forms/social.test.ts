@@ -160,7 +160,10 @@ it("gives each episode its own thread and each official clip its own visible dis
   for (const root of roots)
     expect(root.body.match(/\d+樓｜/g)?.length).toBeGreaterThanOrEqual(20);
   const clips = work.data.twitter.filter(
-    (i) => i.meta.production === "true" && i.id !== "d0-meeting",
+    (i) =>
+      i.meta.production === "true" &&
+      i.id !== "d0-meeting" &&
+      i.meta.visibility !== "player",
   );
   expect(new Set(clips.map((i) => JSON.stringify(i.comments))).size).toBe(
     clips.length,

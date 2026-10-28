@@ -35,7 +35,8 @@ export function SocialDetail(p: {
   onUi?: (key: string, value: UiValue) => void;
 }) {
   const { item } = p,
-    weibo = p.app === "weibo";
+    weibo = p.app === "weibo",
+    privateRecord = !weibo && item.meta.visibility === "player";
   const [liked, setLiked] = useSkinState<boolean>(p, "liked-" + item.id, false),
     [saved, setSaved] = useSkinState<boolean>(p, "saved-" + item.id, false),
     [followed, setFollowed] = useSkinState<boolean>(
@@ -148,7 +149,7 @@ export function SocialDetail(p: {
               className="post-follow"
               onClick={() => setFollowed(!followed)}
             >
-              {followed ? "已关注" : "关注"}
+              {privateRecord ? "僅玩家可見" : followed ? "已关注" : "关注"}
             </button>
           )}
         </div>
@@ -156,7 +157,11 @@ export function SocialDetail(p: {
           <RichText value={item.richText} fallback={item.body} />
           {item.media && <Media item={item} />}
         </div>
-        {weibo ? (
+        {privateRecord ? (
+          <p className="x-private-record">
+            僅玩家可見 · 尚未公開的個人錄製紀錄
+          </p>
+        ) : weibo ? (
           <div className="weibo-share-options">
             {[Crown, MessageCircle, Camera, Share, Copy].map((Icon, n) => (
               <button
@@ -176,7 +181,7 @@ export function SocialDetail(p: {
             {actions}
           </>
         )}
-        {weibo ? (
+        {privateRecord ? null : weibo ? (
           <div className="weibo-detail-tabs">
             {["转发", "评论", "赞"].map((name) => (
               <button
@@ -208,7 +213,7 @@ export function SocialDetail(p: {
             {sort ? "按时间" : "按热度"}⌄
           </button>
         )}
-        {tab === "评论" ? (
+        {privateRecord ? null : tab === "评论" ? (
           <div className="post-detail-comments">
             {replies.map((c, index) => {
               const split = c.search(/[：:]/),
@@ -250,26 +255,32 @@ export function SocialDetail(p: {
           </p>
         )}
       </div>
-      <form
-        className="post-detail-reply"
-        onSubmit={(e) => {
-          e.preventDefault();
-          submit();
-        }}
-      >
-        <Avatar name={p.owner || "机主"} />
-        <input
-          aria-label="回复帖子"
-          placeholder={
-            target ? "回复 @" + target : weibo ? "发表你的评论" : "发布你的回复"
-          }
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-        />
-        <button aria-label="发送回复" disabled={!draft.trim()}>
-          <Send size={20} />
-        </button>
-      </form>
+      {!privateRecord && (
+        <form
+          className="post-detail-reply"
+          onSubmit={(e) => {
+            e.preventDefault();
+            submit();
+          }}
+        >
+          <Avatar name={p.owner || "机主"} />
+          <input
+            aria-label="回复帖子"
+            placeholder={
+              target
+                ? "回复 @" + target
+                : weibo
+                  ? "发表你的评论"
+                  : "发布你的回复"
+            }
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+          />
+          <button aria-label="发送回复" disabled={!draft.trim()}>
+            <Send size={20} />
+          </button>
+        </form>
+      )}
       {!weibo && (
         <nav className="x-detail-bottom">
           {[Home, Search, Circle, Bell, MessageCircle].map((Icon, n) => (

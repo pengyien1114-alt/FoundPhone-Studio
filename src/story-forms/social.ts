@@ -52,7 +52,7 @@ export function socialValues(
       index = approachIndex(work, state, d);
     const a = facts[`quiet${d}`],
       w = facts[`woman${d}`];
-    if (focus && approach) {
+    if (focus && approach && !(focus === p.ex && d < 14)) {
       const observed =
         focus === p.ex && d < 14
           ? [

@@ -349,3 +349,21 @@
   font-size: inherit;
   line-height: inherit;
 }
+
+/* The phone scales to a mobile viewport; story text needs a larger base size. */
+.ios18 .app-post-detail.x-post-detail .post-detail-body {
+  font-size: 21px;
+  line-height: 1.8;
+}
+.ios18 .x-post-detail .post-detail-comment p {
+  font-size: 18px;
+  line-height: 1.65;
+}
+.ios18 .x-private-record,
+.mymy-ui .x-private-record {
+  display: block;
+  color: #8b98a5;
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 12px 14px;
+}

@@ -647,3 +647,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.mymy-ui.mymy-x .kzxx,
+.mymy-ui.mymy-x.x-reference-dark .kzxx {
+  font-size: 20px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}

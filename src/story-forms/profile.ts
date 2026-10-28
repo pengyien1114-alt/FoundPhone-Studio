@@ -234,14 +234,19 @@ export function renderStoryItem(
   values: Record<string, string>,
 ): Item {
   const render = (s: string) => renderStoryText(s, values);
+  const meta = Object.fromEntries(
+    Object.entries(item.meta).map(([k, v]) => [k, render(v)]),
+  );
+  const privateRecord = meta.visibility === "player";
   return {
     ...item,
     title: render(item.title),
     body: render(item.body),
     sender: render(item.sender),
-    comments: item.comments.map(render),
-    meta: Object.fromEntries(
-      Object.entries(item.meta).map(([k, v]) => [k, render(v)]),
-    ),
+    comments: privateRecord ? [] : item.comments.map(render),
+    likes: privateRecord ? 0 : item.likes,
+    meta: privateRecord
+      ? { ...meta, views: "0", reposts: "0", commentCount: "0" }
+      : meta,
   };
 }

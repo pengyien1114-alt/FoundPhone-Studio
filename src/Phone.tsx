@@ -1,4 +1,5 @@
 import { packSeasonAnswer } from "./story-forms/season";
+import { OpeningMusic, OpeningMusicControls } from "./OpeningMusic";
 import {
   groupEpisodeItems,
   renderStoryItem,
@@ -111,11 +112,19 @@ type PhoneProps = Omit<Parameters<typeof PhoneRuntime>[0], "deviceLayout">;
 export function Phone(props: PhoneProps) {
   const deviceLayout = useDeviceLayout(props.work, props.creator);
   return (
-    <PhoneRuntime
-      {...props}
-      work={deviceLayout.work}
-      deviceLayout={deviceLayout}
-    />
+    <OpeningMusic
+      item={
+        props.creator
+          ? undefined
+          : deviceLayout.work.data.music?.find((i) => i.meta.opening === "true")
+      }
+    >
+      <PhoneRuntime
+        {...props}
+        work={deviceLayout.work}
+        deviceLayout={deviceLayout}
+      />
+    </OpeningMusic>
   );
 }
 function PhoneRuntime({
@@ -870,6 +879,7 @@ function AppSearch({
 }
 function Media({ item }: { item: Item }) {
   const src = safeMedia(item.media);
+  if (item.meta.opening === "true") return <OpeningMusicControls />;
   return src ? (
     item.kind === "audio" ? (
       <audio controls src={src} />

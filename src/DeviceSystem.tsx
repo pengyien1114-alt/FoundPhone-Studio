@@ -12,6 +12,7 @@ import {
   Delete,
   ChevronDown,
   Play,
+  Pause,
   SkipForward,
   Moon,
   RotateCcw,
@@ -241,6 +242,7 @@ export function ControlCenter({
   network: string;
   close: () => void;
 }) {
+  const music = useOpeningMusic();
   const [rotation, setRotation] = useState(true),
     [focus, setFocus] = useState(false),
     [playing, setPlaying] = useState(false);
@@ -312,18 +314,24 @@ export function ControlCenter({
             <Airplay size={21} />
           </div>
           <div className="cc-media-title">
-            <strong>{playing ? "测试播放" : "未在播放"}</strong>
-            <small>音乐</small>
+            <strong>
+              {music ? music.item.title : playing ? "测试播放" : "未在播放"}
+            </strong>
+            <small>{music ? music.item.sender : "音乐"}</small>
           </div>
           <div>
             <button aria-label="上一首">
               <SkipForward style={{ transform: "rotate(180deg)" }} />
             </button>
             <button
-              aria-label={playing ? "暂停" : "播放"}
-              onClick={() => setPlaying(!playing)}
+              aria-label={(music ? music.playing : playing) ? "暂停" : "播放"}
+              onClick={() => (music ? music.toggle() : setPlaying(!playing))}
             >
-              <Play fill="currentColor" />
+              {(music ? music.playing : playing) ? (
+                <Pause fill="currentColor" />
+              ) : (
+                <Play fill="currentColor" />
+              )}
             </button>
             <button aria-label="下一首">
               <SkipForward />
@@ -484,3 +492,4 @@ export function DeviceKeyboard({ close }: { close: () => void }) {
   );
 }
 export { NativeSettings } from "./ios/Settings";
+import { useOpeningMusic } from "./OpeningMusic";

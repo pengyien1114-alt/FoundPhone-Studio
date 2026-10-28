@@ -852,54 +852,58 @@ export function MymyX(p: SkinProps) {
                       <Media item={i} />
                     </button>
                   )}
-                  <div className="kzxac">
-                    <button
-                      aria-label={"评论" + i.title}
-                      onClick={() => p.onItem(i)}
-                    >
-                      <MessageCircle />
-                      {i.meta.commentCount || i.comments.length}
-                    </button>
-                    <button
-                      aria-label={"转发" + i.title}
-                      aria-pressed={reposts.includes(i.id)}
-                      onClick={() => toggle(i.id, reposts, setReposts)}
-                    >
-                      <Repeat2 />
-                      {Number.isFinite(Number(i.meta.reposts || "0"))
-                        ? Number(i.meta.reposts || "0") +
-                          (reposts.includes(i.id) ? 1 : 0)
-                        : i.meta.reposts}
-                    </button>
-                    <button
-                      aria-label={"点赞" + i.title}
-                      aria-pressed={isLiked(i.id)}
-                      onClick={() => {
-                        toggle(i.id, likes, setLikes);
-                        p.onUi?.("liked-" + i.id, !isLiked(i.id));
-                      }}
-                    >
-                      <Heart fill={isLiked(i.id) ? "#f91880" : "none"} />
-                      {i.likes + (isLiked(i.id) ? 1 : 0)}
-                    </button>
-                    <span>
-                      <BarChart2 />
-                      {i.meta.views || "—"}
-                    </span>
-                    <button
-                      aria-label={"收藏" + i.title}
-                      aria-pressed={isSaved(i.id)}
-                      onClick={() => {
-                        toggle(i.id, marks, setMarks);
-                        p.onUi?.("saved-" + i.id, !isSaved(i.id));
-                      }}
-                    >
-                      <Bookmark />
-                    </button>
-                    <button aria-label="分享" onClick={() => p.onItem(i)}>
-                      <Share />
-                    </button>
-                  </div>
+                  {i.meta.visibility === "player" ? (
+                    <small className="x-private-record">僅玩家可見</small>
+                  ) : (
+                    <div className="kzxac">
+                      <button
+                        aria-label={"评论" + i.title}
+                        onClick={() => p.onItem(i)}
+                      >
+                        <MessageCircle />
+                        {i.meta.commentCount || i.comments.length}
+                      </button>
+                      <button
+                        aria-label={"转发" + i.title}
+                        aria-pressed={reposts.includes(i.id)}
+                        onClick={() => toggle(i.id, reposts, setReposts)}
+                      >
+                        <Repeat2 />
+                        {Number.isFinite(Number(i.meta.reposts || "0"))
+                          ? Number(i.meta.reposts || "0") +
+                            (reposts.includes(i.id) ? 1 : 0)
+                          : i.meta.reposts}
+                      </button>
+                      <button
+                        aria-label={"点赞" + i.title}
+                        aria-pressed={isLiked(i.id)}
+                        onClick={() => {
+                          toggle(i.id, likes, setLikes);
+                          p.onUi?.("liked-" + i.id, !isLiked(i.id));
+                        }}
+                      >
+                        <Heart fill={isLiked(i.id) ? "#f91880" : "none"} />
+                        {i.likes + (isLiked(i.id) ? 1 : 0)}
+                      </button>
+                      <span>
+                        <BarChart2 />
+                        {i.meta.views || "—"}
+                      </span>
+                      <button
+                        aria-label={"收藏" + i.title}
+                        aria-pressed={isSaved(i.id)}
+                        onClick={() => {
+                          toggle(i.id, marks, setMarks);
+                          p.onUi?.("saved-" + i.id, !isSaved(i.id));
+                        }}
+                      >
+                        <Bookmark />
+                      </button>
+                      <button aria-label="分享" onClick={() => p.onItem(i)}>
+                        <Share />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </article>
             ))}

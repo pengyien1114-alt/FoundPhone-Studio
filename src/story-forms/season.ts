@@ -1,4 +1,5 @@
 import { socialValues } from "./social";
+import { dateValues } from "./dates";
 import { incomingToPlayer } from "./messages";
 import { firstNightScore, firstNightSignals } from "./contacts";
 import {
@@ -25,6 +26,7 @@ type Answer = {
   optionIndex?: number;
   exBranch?: boolean;
   reaction?: { meetings: number; pressure: number };
+  dateTarget?: string;
 };
 type Vote = { from: string; to: string; text: string };
 export function answer(state: Runtime, id: string): string {
@@ -319,6 +321,11 @@ export function packSeasonAnswer(
     ).indexOf(value.trim()),
   };
   const conversationDay = id.match(/^d(\d+)-approach$/);
+  const dateDay = id.match(/^d(\d+)-date-choice-[ab]$/);
+  if (dateDay) {
+    const day = Number(dateDay[1]);
+    a.dateTarget = day === 13 ? values.mutualTarget : values["date" + day];
+  }
   if (conversationDay) {
     const chosenFocus = answer(state, `d${conversationDay[1]}-focus`);
     a.exBranch = chosenFocus === c.p.ex;
@@ -589,7 +596,7 @@ export function seasonValues(
     : "你留在外面。節目組不向你轉述房間裡的表情，也不要求你用同一種方式面對回憶。";
   values.roomDate =
     wantsRoom || xWantsRoom
-      ? "按規則，節目組安排了一次不公開配對的面對面談話。你們在指定地點談自己的想法，不得私下聯絡其他人。六點前你回到小屋，對方由不同通道離場；未入住者不會因此提前住進小屋。"
+      ? `節目組安排的不公開見面，在離小屋一段路的茶室。你到的時候，桌上沒有點好的飲料，對方把菜單留在中間，等你自己選。你們都知道今天為什麼來，卻先問了一句路上順不順，像需要那一點很普通的對話，才能真的坐下。\n\n${youEnter ? "你剛從回憶房間出來，看到眼前的人，才發現自己記住的不是物品值多少，而是當時以為還會有很多次的普通日子。" : "你沒有進入房間，也不向對方索取裡面的反應。你只問現在願不願意坐著說一會兒，讓今天的你也有機會被聽見。"}\n\n${values.privateRecall}\n\n茶送來時，對方先問你要不要加水，沒有照以前的習慣直接動手。「以前我總覺得我們應該懂，」他說，「有時候連問都省了。」你聽出那不是一句可以補完所有問題的道歉。他把杯子移開一點，留出桌上的空處，問你這幾天有沒有哪個瞬間，想說話卻忍住了。\n\n錄製時間快結束時，工作人員在門外提醒。你們沒有用一個擁抱假裝所有話都談完。六點前你回到小屋，對方由不同通道離場；未入住者不會提前進屋。沒有說清楚的事，節目組會在晚間正式談話時留給你逐題表達。`
       : "你們這次都沒有進入，沒有啟動秘密約會。下午你在公共空間完成自己的輪值，不追問別人的行程。";
   const giftOptions = [
     "A｜一張手繪地圖",
@@ -640,7 +647,7 @@ export function seasonValues(
       ? "交換與補抽結束後，你仍是尚未互選成功的人。節目組為你安排另一段約會；見面的人此前沒有在小屋出現。"
       : `交換與補抽結束後，節目組確認你與 ${values.date10} 抽到了彼此準備的禮物。其他人的未配對行程，不向你提前透露。`;
   const mutualChoice = answer(state, "d13-mutual");
-  const mutualBond = relationships(work, state, p, config, 13)[mutualChoice];
+  const mutualBond = relationships(work, state, p, config, 12)[mutualChoice];
   const mutualSuccess =
     !!mutualBond &&
     mutualBond.meetings >= 2 &&
@@ -648,6 +655,11 @@ export function seasonValues(
   values.mutualOutcome = mutualSuccess
     ? `你與 ${mutualChoice} 互選成功，一同完成半日行程，五點前回到小屋。`
     : "節目組通知你沒有互選成功。你留在小屋，不得知其他人的單向選擇，也不替對方解釋原因。";
+  values.mutualSuccess = String(mutualSuccess);
+  values.mutualTarget = mutualSuccess ? mutualChoice : "";
+  values.dateVisibility10 = values.date10 === p.ex ? "player" : "public";
+  values.dateVisibility13 =
+    mutualSuccess && mutualChoice === p.ex ? "player" : "public";
   const travelPreferred: Record<string, string> = {};
   for (const w of [p.name, ...config.women])
     travelPreferred[w] =
@@ -728,6 +740,7 @@ export function seasonValues(
   values.endingJournal = `事前訪問裡，你曾選擇：${answer(state, "d0-q1") || "（尚未選擇）"}\n\n第一晚念完介紹信，你留下的話是：${answer(state, "d1-letter-feeling") || "（尚未選擇）"}。你對那只箱子的選擇是「${answer(state, "d1-gift") || "尚未選擇"}」，之後的心意沒有被這一個動作固定住。\n\n你先和 ${values.date2} 約會，又在下一個正式安排裡和 ${values.date3} 相處。回憶房間的意願是「${answer(state, "d7-room") || "尚未選擇"}」，而日本行的搭檔是 ${values.travelPartner}。這些是不同的環節，沒有哪一次配對直接替夜裡的短信作答。\n\n二十一晚，你寄給熟悉的人 ${sentToX} 次，也有 ${ownVotes.length - sentToX} 次把訊息交給其他人。次數是行動紀錄，不是誰愛得比較多的判決。\n\n最後一次談話，你說：${answer(state, "d21-chat2") || "（尚未選擇）"}\n\n${values.finalResult}\n\n節目結束後釋出的個別訪問裡，曾與你同桌的人說過：「我也在整理自己的過去，不是每一句照顧都有明確的暗示。」那些你沒有看見的停頓，有些來自對方自己的課題，並不都圍著你發生。這不會抹去你感到的委屈，也不要求你改變最後的決定。祝福你帶著自己的語言，繼續生活。`;
   Object.assign(values, interactionValues(work, state, p, config));
   Object.assign(values, socialValues(work, state, p, config, values));
+  Object.assign(values, dateValues(work, state, values));
   return Object.fromEntries(
     Object.entries(values).map(([k, v]) => [
       k,

@@ -66,6 +66,8 @@ export function interactionValues(
     const focus = selected(state, `d${d}-focus`);
     const socialMen = men.filter((m) => m !== p.ex);
     values["focus" + d] = focus || "對方";
+    values["conversationVisibility" + d] =
+      focus === p.ex && d < 14 ? "player" : "public";
     values["sideMan" + d] = socialMen[(d + 1) % socialMen.length];
     const approach = selected(state, `d${d}-approach`),
       live = focus ? history[d][focus] : undefined;
@@ -95,9 +97,54 @@ export function interactionValues(
     const legacyOptions = JSON.parse(
       approachItem?.meta.legacyOptions || approachItem?.meta.options || "[]",
     ) as string[];
-    const personal = focus === p.ex ? exScene(work, p, config, d) : undefined;
+    const rules = work.data.notes.find(
+      (i) => i.id === "relationship-rules",
+    )?.meta;
+    const prior = Array.from({ length: d - 1 }, (_, i) => i + 1).filter(
+      (day) =>
+        selected(state, `d${day}-focus`) === focus &&
+        selected(state, `d${day}-approach`),
+    );
+    const topic = JSON.parse(rules?.[`topic${d}`] || "{}");
+    let personal = focus === p.ex ? exScene(work, p, config, d) : undefined;
+    if (personal && prior.length) {
+      const follow = JSON.parse(
+        rules?.[`ex${config.reasons.indexOf(p.reason)}follow`] || "null",
+      );
+      if (follow)
+        personal = {
+          ...follow,
+          opening:
+            prior.length === 1
+              ? `${follow.opening}\n\n今天從「${topic.topic}」談起。${topic.opening}`
+              : `你們上一次談話停在這句：「${selected(state, `d${prior.at(-1)}-approach`)}」\n他沒有假裝忘了，也沒有要求你重說一次。今天從「${topic.topic}」接著往下走。${topic.opening}`,
+          replies: follow.options.map((option: string, index: number) =>
+            prior.some((day) => selected(state, `d${day}-approach`) === option)
+              ? [
+                  `${topic.gentle} 他接著問，你剛才說的改變，有沒有一件可以從今天開始。這次你們把「${topic.topic}」留在具體的小事裡，沒有又回到誰更愛誰的辯論。`,
+                  `他聽到你又想先確認自己的位置，沒有用熟悉的保證結束話題：「我想把今天的事說完，但不能每次都先證明我還愛不愛。」你知道這個反應和以前有關，也看見他這次沒有直接走掉。`,
+                  `他尊重你今天不把「${topic.topic}」說成關係答案。你們有一段真的輕鬆下來的時間，卻也知道今天沒有處理完原來的心結。`,
+                ][index]
+              : follow.replies[index],
+          ),
+          options: follow.options.map((option: string, index: number) =>
+            prior.some((day) => selected(state, `d${day}-approach`) === option)
+              ? [
+                  `我想從${topic.topic}說起，告訴你今天和以前不一樣的地方，也聽你怎麼想。`,
+                  `聊到${topic.topic}，我還是想先知道：你現在會不會把我放在最前面？`,
+                  `關於${topic.topic}，今天先說眼前的小事。我還沒準備好把每件事都談成我們。`,
+                ][index]
+              : option,
+          ),
+        };
+    }
+    const dailyOptions = [
+      `說到${topic.topic}，我也想講一件自己的事，再聽你多說一點。`,
+      `聊${topic.topic}之前，我更想知道你是不是也在意我，能不能現在告訴我？`,
+      `今天先輕鬆聊${topic.topic}吧，我還不想給彼此更多期待。`,
+    ];
     values["conversationOptions" + d] = JSON.stringify(
-      personal?.options || legacyOptions,
+      personal?.options || (d === 1 ? legacyOptions : dailyOptions),
     );
     let choiceIndex = legacyOptions.indexOf(approach);
     try {
@@ -114,8 +161,8 @@ export function interactionValues(
     const reply = press
       ? `他把杯子放到一旁：「${actorInfo.guarded || "我能說今天的感受，但現在還不能給你一個保證。"}」你看見他說完後沒有像剛才一樣繼續找話題。`
       : first
-        ? `他想了幾秒，才接著說：「${actorInfo.gentle || "有些話我需要想一想，謝謝你沒有急著幫我說完。"}」`
-        : `他點頭：「那今天先不把什麼事都講成答案。」你們聊了些輕鬆的事，他沒有繼續追問你的感情方向。`;
+        ? `${topic.gentle || actorInfo.gentle} 他也把同一個問題問回來，這次沒有用一句「我也是」就接過去。`
+        : `他順著「${topic.topic}」說起一件不太重要、卻真的發生過的小事。你們笑了，但他沒有把輕鬆聊天誤會成你已經確定了心意。`;
     const familiarity =
       !r || r.meetings < 3
         ? "這是你們還不熟悉彼此的說話節奏，卻願意把時間留下的一次。"
@@ -128,7 +175,7 @@ export function interactionValues(
         : "你對他的了解還不多。有一兩個瞬間會讓你想到過去，但眼前這個人正用自己的方式回答，你試著不把兩段關係混在一起。";
     values["interaction" + d] =
       focus && approach
-        ? `你先問 ${focus} 現在方不方便。他確認手上的分工已經結束，才和你坐到公共空間旁的長椅；兩個人都看得見屋裡，沒有躲開節目規定私下聯絡。\n\n${actorInfo.opening || "他先問你今天過得怎樣，等你坐穩才繼續。"}\n\n你說：「${approach}」\n${reply}\n\n${memory}\n\n${familiarity}\n\n${first ? "談到一半有人來找杯子，你們停了一下。等腳步聲走遠，他沒有立刻起身，而是問剛才說到哪裡。" : "屋裡傳來其他人商量早餐的聲音。你們把空杯帶回去，沒有替這次談話約定下一次。"}`
+        ? `你先問 ${focus} 現在方不方便。他確認手上的分工已經結束，才和你坐到公共空間旁的長椅；兩個人都看得見屋裡，沒有躲開節目規定私下聯絡。\n\n${d === 1 ? actorInfo.opening : topic.opening}\n\n你說：「${approach}」\n${reply}\n\n${memory}\n\n${familiarity}\n\n${first ? "談到一半有人來找杯子，你們停了一下。等腳步聲走遠，他沒有立刻起身，而是問剛才說到哪裡。" : "屋裡傳來其他人商量早餐的聲音。你們把空杯帶回去，沒有替這次談話約定下一次。"}`
         : "";
     if (d === 1 && focus && approach && !personal && actorInfo.firstReplies) {
       values["interaction1"] =

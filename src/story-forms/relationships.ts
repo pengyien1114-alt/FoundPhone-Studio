@@ -101,6 +101,7 @@ export function relationshipHistory(
     );
     let index = opts.indexOf(value);
     let exBranch = false;
+    let dateTarget = "";
     try {
       const saved = JSON.parse(
         String(state.ui?.kakao?.["answer:" + item.id] || "null"),
@@ -112,16 +113,20 @@ export function relationshipHistory(
       )
         index = saved.optionIndex;
       exBranch = saved?.exBranch === true;
+      dateTarget =
+        typeof saved?.dateTarget === "string" ? saved.dateTarget : "";
     } catch {
       /* Older saves match their original text. */
     }
     if (index < 0) continue;
     const target =
-      item.meta.effectTarget === "ex"
-        ? p.ex
-        : item.meta.effectTarget === "quiet"
-          ? quiet[day % quiet.length]
-          : selected(state, `d${day}-focus`);
+      item.meta.effectTarget === "date"
+        ? dateTarget
+        : item.meta.effectTarget === "ex"
+          ? p.ex
+          : item.meta.effectTarget === "quiet"
+            ? quiet[day % quiet.length]
+            : selected(state, `d${day}-focus`);
     if (!result[target]) continue;
     const effects = JSON.parse(
       exBranch && item.meta.exEffects ? item.meta.exEffects : item.meta.effects,
@@ -130,7 +135,8 @@ export function relationshipHistory(
       day,
       target,
       effect: effects[index] || {},
-      meeting: item.id.endsWith("-approach"),
+      meeting:
+        item.id.endsWith("-approach") || item.id.endsWith("-date-choice-a"),
     });
   }
   for (let d = 1; d <= throughDay; d++) {

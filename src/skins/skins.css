@@ -4130,3 +4130,23 @@
 .catalog-slot[hidden] {
   display: none;
 }
+
+.opening-music-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+}
+.opening-music-controls input[type="range"] {
+  min-width: 40px;
+  width: 100%;
+  accent-color: #fa2d48;
+}
+.opening-music-controls button {
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  color: inherit;
+}
