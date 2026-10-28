@@ -628,3 +628,22 @@
   width: 25px;
   height: 25px;
 }
+
+/* A scripted reply opens choices; it must not focus an iOS text field. */
+.mymy-ui .kzinp .kakao-choice-trigger {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  height: 32px;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  color: #6f7c87;
+  font-size: 14.5px;
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

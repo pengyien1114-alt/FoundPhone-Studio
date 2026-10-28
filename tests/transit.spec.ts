@@ -41,11 +41,16 @@ async function kkt(page: Page) {
   await expect(page.locator(".msgs.kk")).toBeVisible();
 }
 async function option(page: Page, choice?: string | number) {
-  const field = page.getByRole("textbox", { name: "KKT消息", exact: true });
-  await expect(field).toHaveAttribute("readonly", "");
+  const field = page.getByRole("button", { name: "KKT消息", exact: true });
+  await expect(field).toHaveAttribute("aria-haspopup", "dialog");
+  const scale = await page.evaluate(() => window.visualViewport?.scale || 1);
   await field.click();
   const dialog = page.getByRole("dialog", { name: "回答選項" });
   await expect(dialog).toBeVisible();
+  expect(await page.evaluate(() => window.visualViewport?.scale || 1)).toBe(
+    scale,
+  );
+  await expect(page.locator(".kzinp input")).toHaveCount(0);
   const button =
     typeof choice === "string"
       ? dialog.getByRole("button", { name: choice, exact: true })
@@ -69,7 +74,9 @@ for (const late of [false, true])
     await page.locator(".notice-open").first().click();
     await pin(page);
     await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
-    await page.getByRole("textbox", { name: "你的姓名", exact: true }).fill("小雨");
+    await page
+      .getByRole("textbox", { name: "你的姓名", exact: true })
+      .fill("小雨");
     await next(page);
     for (const name of [
       "金俊抒",
@@ -100,7 +107,7 @@ for (const late of [false, true])
       page.locator("input:not([readonly]):not([type=hidden]), textarea"),
     ).toHaveCount(0);
     await expect(page.locator(".msgs.kk")).not.toContainText("Q2：");
-    await page.getByRole("textbox", { name: "KKT消息", exact: true }).click();
+    await page.getByRole("button", { name: "KKT消息", exact: true }).click();
     await page
       .getByRole("dialog")
       .getByRole("button", { name: "再想一下" })
@@ -151,7 +158,7 @@ for (const late of [false, true])
     await x(page);
     await expect(page.locator(".post-detail-body")).toContainText("你說：");
     await kkt(page);
-    await page.getByRole("textbox", { name: "KKT消息", exact: true }).click();
+    await page.getByRole("button", { name: "KKT消息", exact: true }).click();
     const choices = await page
       .getByRole("dialog")
       .getByRole("button")
@@ -320,7 +327,7 @@ test("final choice and completion also start from the KKT message field", async 
 }) => {
   await restore(page, snapshotBefore("final-choice"));
   await open(page, "KakaoTalk");
-  await page.getByRole("textbox", { name: "KKT消息", exact: true }).click();
+  await page.getByRole("button", { name: "KKT消息", exact: true }).click();
   await page
     .locator(".story-overlay")
     .getByRole("button", { name: "我選擇先保持單身", exact: true })

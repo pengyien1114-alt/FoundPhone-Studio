@@ -240,29 +240,30 @@ export function MymyKakao(p: SkinProps) {
               >
                 <Plus size={21} />
               </button>
-              <input
-                aria-label="KKT消息"
-                placeholder={
-                  scripted
-                    ? speech
-                      ? "输入消息 · 點此選擇台詞"
-                      : pending
-                        ? "請點上方對話框選擇動作"
-                        : "等待節目組下一則訊息"
-                    : "输入消息"
-                }
-                readOnly={scripted}
-                onClick={openSpeech}
-                onKeyDown={(e) => {
-                  if (scripted && (e.key === "Enter" || e.key === " ")) {
-                    e.preventDefault();
-                    openSpeech();
-                  }
-                }}
-                value={draft}
-                maxLength={2000}
-                onChange={(e) => !scripted && setDraft(e.target.value)}
-              />
+              {scripted ? (
+                <button
+                  type="button"
+                  className="kakao-choice-trigger"
+                  aria-label="KKT消息"
+                  aria-haspopup="dialog"
+                  disabled={!speech}
+                  onClick={openSpeech}
+                >
+                  {speech
+                    ? "输入消息 · 點此選擇台詞"
+                    : pending
+                      ? "請點上方對話框選擇動作"
+                      : "等待節目組下一則訊息"}
+                </button>
+              ) : (
+                <input
+                  aria-label="KKT消息"
+                  placeholder="输入消息"
+                  value={draft}
+                  maxLength={2000}
+                  onChange={(e) => setDraft(e.target.value)}
+                />
+              )}
               <Smile size={22} />
               <button
                 className={draft.trim() ? "go" : ""}

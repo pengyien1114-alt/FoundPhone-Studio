@@ -20,19 +20,16 @@ export function KakaoQuestion({
     <>
       <div className="kzinp" aria-label="節目組作答">
         <Plus size={21} />
-        <input
+        <button
+          type="button"
+          className="kakao-choice-trigger"
           aria-label="KKT消息"
-          placeholder="输入消息 · 點此選擇回應"
-          readOnly
-          value=""
+          aria-haspopup="dialog"
+          aria-expanded={opened}
           onClick={() => setOpened(true)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              setOpened(true);
-            }
-          }}
-        />
+        >
+          输入消息 · 點此選擇回應
+        </button>
         <Smile size={22} />
         <button aria-label="发送KKT消息" disabled>
           ↑
