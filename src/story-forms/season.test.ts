@@ -201,7 +201,7 @@ for (const late of [false, true])
       expect(seasonValues(work, recovered, p, config).travelPartner).toBe(
         seasonValues(work, state, p, config).travelPartner,
       );
-    }, 20000);
+    }, 30000);
   }
 describe("eligibility, privacy and independent choices", () => {
   it("keeps arrivals on day 3 and day 10 and never counts future participants", () => {

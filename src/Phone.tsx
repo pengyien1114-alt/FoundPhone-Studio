@@ -52,6 +52,7 @@ import {
   useEffect,
   useState,
   useRef,
+  useMemo,
   Suspense,
   type CSSProperties,
 } from "react";
@@ -78,7 +79,7 @@ import {
   type UiValue,
 } from "./schema";
 import { dispatch, choose, visible, advance } from "./engine";
-import { db } from "./persistence";
+import { runtimeSaves } from "./runtime/saves";
 export function AppIcon({
   id,
   name,
@@ -189,6 +190,13 @@ function PhoneRuntime({
   const [own, setOwn] = useState(() => initialRuntime(work));
   const [ready, setReady] = useState(creator || !!external);
   const [loadError, setLoadError] = useState("");
+  const saves = useMemo(
+    () =>
+      runtimeSaves(work.id, () =>
+        setLoadError("存档失败，请检查浏览器存储权限。"),
+      ),
+    [work.id],
+  );
   useEffect(() => {
     const el = shell.current;
     if (!el) return;
@@ -217,17 +225,24 @@ function PhoneRuntime({
   const script = parseScript(s.ui?.notes?.script);
   const t = scriptConverter(script);
   const runtimeRef = useRef(s);
-  runtimeRef.current = s;
+  const renderedRuntime = useRef(s);
+  if (renderedRuntime.current !== s) {
+    runtimeRef.current = s;
+    renderedRuntime.current = s;
+  }
   const update = (next: Runtime) => {
     runtimeRef.current = next;
+    // Synchronous backup precedes React rendering, so an immediate tab close
+    // cannot lose the choice while the IndexedDB transaction is pending.
+    if (!creator && !external && ready) saves.save(next);
     setOwn(next);
     onRuntime?.(next);
   };
   useEffect(() => {
     let active = true;
     if (creator || external) return;
-    void db.saves
-      .get(work.id)
+    void saves
+      .load()
       .then((saved) => {
         if (!active) return;
         if (saved && saved.state.revision === work.updatedAt)
@@ -246,13 +261,24 @@ function PhoneRuntime({
     return () => {
       active = false;
     };
-  }, [work.id, work.updatedAt, creator, external]);
+  }, [work.id, work.updatedAt, creator, external, saves]);
   useEffect(() => {
-    if (!creator && !external && ready)
-      void db.saves
-        .put({ id: work.id, state: own })
-        .catch(() => setLoadError("存档失败，请检查浏览器存储权限。"));
-  }, [own, creator, work.id, external, ready]);
+    if (!creator && !external && ready) saves.save(own);
+  }, [own, creator, external, ready, saves]);
+  useEffect(() => {
+    if (creator || external || !ready) return;
+    const checkpoint = () => saves.save(runtimeRef.current);
+    const visibility = () => {
+      if (document.visibilityState === "hidden") checkpoint();
+    };
+    window.addEventListener("pagehide", checkpoint);
+    document.addEventListener("visibilitychange", visibility);
+    return () => {
+      window.removeEventListener("pagehide", checkpoint);
+      document.removeEventListener("visibilitychange", visibility);
+      void saves.flush();
+    };
+  }, [creator, external, ready, saves]);
   useEffect(() => {
     if (creator || !ready) return;
     const interval = setInterval(() => {
@@ -263,9 +289,7 @@ function PhoneRuntime({
         next.time !== previous.time ||
         next.trace.join() !== previous.trace.join() ||
         (next.scheduled?.length ?? 0) !== (previous.scheduled?.length ?? 0) ||
-        (next.scheduled?.length ?? 0) > 0 ||
-        Math.floor((next.elapsedMs ?? 0) / 5000) !==
-          Math.floor((previous.elapsedMs ?? 0) / 5000);
+        (next.scheduled?.length ?? 0) > 0;
       if (changed) update(next);
     }, 1000);
     return () => clearInterval(interval);
@@ -323,7 +347,7 @@ function PhoneRuntime({
     if (app && !work.apps.some((a) => a.id === app && a.installed)) setApp("");
   }, [app, work.apps]);
   const displayTime = creator ? work.phone.time : s.time || work.phone.time;
-  const storyTextValues = storyValues(work, s);
+  const storyTextValues = useMemo(() => storyValues(work, s), [work, s]);
   const plugin = getApp(app);
   useEffect(() => {
     const count = s.notifications.length;

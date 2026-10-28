@@ -21,20 +21,8 @@ export function enableUpdates() {
   const script = new URL("sw.js", document.baseURI);
   let stopped = false,
     lastCheck = 0;
-  const onBuild = (event: MessageEvent) => {
-    const source = event.source as ServiceWorker | null;
-    if (
-      source?.scriptURL !== script.href ||
-      event.data?.type !== "FOUND_PHONE_BUILD" ||
-      typeof event.data.build !== "string" ||
-      event.data.build === appBuild
-    )
-      return;
-    const url = new URL(location.href);
-    url.searchParams.set("appRelease", event.data.build);
-    location.replace(url.href);
-  };
-  navigator.serviceWorker.addEventListener("message", onBuild);
+  // Cache updates must never navigate a player out of a running scene.
+  // New code and story data are loaded together on the next normal visit.
   const registration = navigator.serviceWorker
     .register(script, {
       scope: new URL(".", script).pathname,
@@ -64,7 +52,6 @@ export function enableUpdates() {
   const interval = window.setInterval(check, 60000);
   return () => {
     stopped = true;
-    navigator.serviceWorker.removeEventListener("message", onBuild);
     clearInterval(interval);
     window.removeEventListener("online", check);
     document.removeEventListener("visibilitychange", check);

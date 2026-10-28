@@ -9,6 +9,7 @@ test("a stale service worker upgrades its old page without erasing the player's 
 }) => {
   test.setTimeout(60000);
   let latest = false;
+  let replaceBuild = "";
   const dist = resolve("dist");
   const work = JSON.parse(readFileSync(resolve(dist, "work.json"), "utf8"));
   let latestTitle = work.title;
@@ -46,6 +47,16 @@ test("a stale service worker upgrades its old page without erasing the player's 
       return;
     }
     try {
+      if (file === "sw.js" && replaceBuild) {
+        res.setHeader("Content-Type", "application/javascript");
+        res.end(
+          readFileSync(resolve(dist, file), "utf8").replaceAll(
+            replaceBuild,
+            "fixture-next-release",
+          ),
+        );
+        return;
+      }
       res.setHeader(
         "Content-Type",
         file.endsWith(".js")
@@ -127,6 +138,51 @@ test("a stale service worker upgrades its old page without erasing the player's 
       work.id,
     );
     expect(saved).toBe("保留這份存檔");
+    // Updating a modern player in the middle of a draft must not relock,
+    // navigate, dismiss the app, or erase the current unsent input.
+    await page.getByRole("button", { name: "轻触解锁" }).click();
+    for (const digit of work.phone.passcode)
+      await page
+        .getByRole("button", { name: "密码键" + digit, exact: true })
+        .click();
+    await page.getByRole("button", { name: "打开备忘录", exact: true }).click();
+    await page
+      .getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ })
+      .click();
+    await page.getByRole("button", { name: "繁體中文", exact: true }).click();
+    await page
+      .getByRole("textbox", { name: "你的姓名", exact: true })
+      .fill("不中斷的名字");
+    const currentUrl = page.url();
+    replaceBuild = new URL(currentUrl).searchParams.get("appRelease")!;
+    await page.evaluate(async () => {
+      const changed = new Promise<void>((resolve) =>
+        navigator.serviceWorker.addEventListener(
+          "controllerchange",
+          () => resolve(),
+          { once: true },
+        ),
+      );
+      const registration = await navigator.serviceWorker.ready;
+      await registration.update();
+      await changed;
+      await new Promise<void>((resolve) => {
+        const receive = (event: MessageEvent) => {
+          if (event.data?.build === "fixture-next-release") {
+            navigator.serviceWorker.removeEventListener("message", receive);
+            resolve();
+          }
+        };
+        navigator.serviceWorker.addEventListener("message", receive);
+        navigator.serviceWorker.controller!.postMessage({
+          type: "FOUND_PHONE_CHECK_BUILD",
+        });
+      });
+    });
+    await expect(page).toHaveURL(currentUrl);
+    await expect(
+      page.getByRole("textbox", { name: "你的姓名", exact: true }),
+    ).toHaveValue("不中斷的名字");
     // Once upgraded, a changed story at the same URL must beat the existing cached JSON.
     latestTitle = "二十一天 · 更新已驗證";
     await page.reload();

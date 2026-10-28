@@ -71,7 +71,9 @@ self.addEventListener("activate", (event) => {
         if (
           url.origin !== scope.origin ||
           !url.pathname.startsWith(scope.pathname) ||
-          url.searchParams.get("appRelease") === __APP_BUILD__
+          // Only rescue legacy cache-only pages that lack the runtime's
+          // release marker. A running modern player must keep its scene.
+          url.searchParams.has("appRelease")
         )
           continue;
         url.searchParams.set("appRelease", __APP_BUILD__);

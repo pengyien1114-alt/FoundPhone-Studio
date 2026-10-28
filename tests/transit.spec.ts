@@ -293,7 +293,12 @@ function snapshotBefore(target: string): Runtime {
 async function restore(page: Page, state: Runtime) {
   await page.goto("/");
   await expect(page.getByRole("button", { name: "轻触解锁" })).toBeVisible();
+  // Leave the running player before replacing a fixture. Its pagehide handler
+  // correctly checkpoints the real current game and would undo a live import.
+  await page.goto("/icon.svg");
   await page.evaluate(async (saved) => {
+    // This fixture deliberately replaces the user's entire save.
+    localStorage.removeItem("foundphone-progress-v1:" + saved.workId);
     await new Promise<void>((resolve, reject) => {
       const request = indexedDB.open("foundphone-studio");
       request.onerror = () => reject(request.error);
@@ -309,10 +314,58 @@ async function restore(page: Page, state: Runtime) {
       };
     });
   }, state);
-  await page.reload();
+  await page.goto("/");
   await page.getByRole("button", { name: "轻触解锁" }).click();
   await pin(page);
 }
+
+test("an immediate reload recovers the latest date choice even with an older database save", async ({
+  page,
+}) => {
+  test.setTimeout(60000);
+  const prior = snapshotBefore("d2-date-choice-a");
+  await restore(page, prior);
+  await open(page, "KakaoTalk");
+  const chosen = await option(page);
+  const key = "foundphone-progress-v1:" + prior.workId;
+  const copy = await page.evaluate(
+    (k) => JSON.parse(localStorage.getItem(k)!),
+    key,
+  );
+  expect(copy.state.completed).toContain("submit-d2-date-choice-a");
+  // Model a suspended tab whose last IndexedDB write never committed.
+  await page.evaluate(async (saved) => {
+    await new Promise<void>((resolve, reject) => {
+      const request = indexedDB.open("foundphone-studio");
+      request.onsuccess = () => {
+        const db = request.result;
+        const tx = db.transaction("saves", "readwrite");
+        tx.objectStore("saves").put({ id: saved.workId, state: saved });
+        tx.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+        tx.onerror = () => reject(tx.error);
+      };
+      request.onerror = () => reject(request.error);
+    });
+  }, prior);
+  await page.reload();
+  await page.getByRole("button", { name: "轻触解锁" }).click();
+  await pin(page);
+  await open(page, "KakaoTalk");
+  await expect(page.locator(".phone-screen")).toContainText(chosen);
+  await x(page);
+  await kkt(page);
+  await page.getByRole("button", { name: "KKT消息", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "回答選項" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).not.toContainText(chosen);
+  await dialog.getByRole("button").first().click();
+  await x(page);
+  await kkt(page);
+  await expect(page.locator(".msgs.kk")).toContainText("約會後");
+});
 
 test("date-two temporary chat hides identity and closes before departure", async ({
   page,

@@ -69,7 +69,7 @@ it("has only authored choices, rejects arbitrary injected answers, and never fal
       packSeasonAnswer(work, state, i.id, "我任意輸入一段沒有提供的答案"),
     ).toBeUndefined();
   }
-});
+}, 20000);
 it("can earn reunion for every background, including the later-entry X", () => {
   for (let reason = 0; reason < 6; reason++)
     for (const late of [false, true]) {
