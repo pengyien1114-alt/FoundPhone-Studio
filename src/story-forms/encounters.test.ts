@@ -53,11 +53,30 @@ it("draws different, nonrepeating phase decks and never casts a guest who has no
         expect(momentFor(work, snap, p, config, day)?.scene.id).toBe(
           m.scene.id,
         );
+        save(
+          state,
+          `d${day}-focus`,
+          packMoment(work, state, p, config, day, "focus", m.options[0]),
+        );
+        const current = momentFor(work, state, p, config, day)!;
+        save(
+          state,
+          `d${day}-approach`,
+          packMoment(
+            work,
+            state,
+            p,
+            config,
+            day,
+            "approach",
+            current.choices[0].line,
+          ),
+        );
       }
       expect(new Set(ids).size).toBe(21);
       sequences.add(ids.join("|"));
     }
-  expect(sequences.size).toBe(4);
+  expect(sequences.size).toBe(8);
   expect(houseMoments(work)).toHaveLength(24);
 });
 it("every scene branch has a payoff, a private reply or a complete female-companion exit", () => {
@@ -106,7 +125,7 @@ it("every scene branch has a payoff, a private reply or a complete female-compan
         );
     }
 });
-it("shuffles the actual emotional choices instead of always putting the safe answer first", () => {
+it("shuffles the emotional tradeoffs so the highest-trust choice is not always first", () => {
   const positions = new Set<number>();
   for (const seed of ["a", "b", "c", "d", "e"]) {
     const { p, state } = setup(seed);
@@ -118,7 +137,10 @@ it("shuffles the actual emotional choices instead of always putting the safe ans
         packMoment(work, state, p, config, day, "focus", m.options[0]),
       );
       m = momentFor(work, state, p, config, day)!;
-      positions.add(m.choices.findIndex((c) => c.signal < 0));
+      const best = [...m.choices].sort(
+        (a, b) => (b.effect.trust || 0) - (a.effect.trust || 0),
+      )[0];
+      positions.add(m.choices.indexOf(best));
     }
   }
   expect(positions.has(0)).toBe(true);

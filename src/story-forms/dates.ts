@@ -1,4 +1,5 @@
 import type { Runtime, Work } from "../schema";
+import { dateRoute, readAnswer } from "./characters";
 
 export function dateValues(
   work: Work,
@@ -106,5 +107,67 @@ export function dateValues(
               (_, k) => all[k] || "",
             );
     }
+  const pEx = (() => {
+    try {
+      return JSON.parse(String(state.ui?.notes?.profile || "null"))?.ex || "";
+    } catch {
+      return "";
+    }
+  })();
+  for (const day of [2, 3, 10, 13]) {
+    const target = day === 13 ? facts.mutualTarget : facts["date" + day];
+    const route =
+      day === 13 && !together
+        ? undefined
+        : dateRoute(work, state, day, target, pEx);
+    const substitute = (s: string) =>
+      s.replace(
+        /\{\{(\w+)\}\}/g,
+        (all, k) => ({ ...allValues, ...result })[k] ?? all,
+      );
+    const allValues = { ...facts, ...result };
+    for (const turn of ["a", "b"]) {
+      const item = work.data.kakao.find(
+        (i) => i.id === `d${day}-date-choice-${turn}`,
+      );
+      result[`dateOptions${day}${turn}`] = route
+        ? JSON.stringify(
+            (turn === "a" ? route.choicesA : route.choicesB).map((c) => c.line),
+          )
+        : substitute(item?.meta.legacyOptions || "[]");
+      result[`dateQuestion${day}${turn}`] = route
+        ? turn === "a"
+          ? route.questionA
+          : route.questionB
+        : substitute(
+            item?.meta.legacyQuestion ||
+              result[`dateQuestion${day}${turn}`] ||
+              "",
+          );
+      const answer = readAnswer(state, `d${day}-date-choice-${turn}`);
+      if (answer?.characterDate && typeof answer.dateReply === "string")
+        result[`dateReply${day}${turn}`] = answer.dateReply;
+    }
+    for (const [key, id] of [
+      ["Opening", day === 10 ? "d10-date" : `d${day}-date-scene`],
+      ["Middle", `d${day}-date-turn`],
+      ["Closing", `d${day}-date-end`],
+    ]) {
+      const original =
+        work.data.twitter.find((i) => i.id === id)?.meta.legacyDate || "";
+      result[`date${key}${day}`] = route
+        ? key === "Opening"
+          ? route.opening
+          : key === "Middle"
+            ? route.middle
+            : route.ending
+        : substitute(original);
+    }
+    // Keep the established solo branch when a mutual invitation was not accepted.
+    if (day === 13 && !route) {
+      result.dateOpening13 = allValues.dateOpening13;
+      result.dateMiddle13 = allValues.dateMiddle13;
+    }
+  }
   return result;
 }

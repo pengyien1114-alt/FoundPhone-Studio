@@ -1,3 +1,4 @@
+import { savedAnswer } from "./answers";
 import type { Runtime, Work } from "../schema";
 import { castFor, type Profile, type ProfileConfig } from "./profile";
 import { selected } from "./relationships";
@@ -105,9 +106,7 @@ export function socialValues(
     } else result["discussion" + d] = "";
     let votes: { from: string; to: string; text: string }[] | undefined;
     try {
-      votes = JSON.parse(
-        String(state.ui?.kakao?.[`answer:d${d}-sms`] || "null"),
-      )?.votes;
+      votes = savedAnswer(state, `d${d}-sms`)?.votes;
     } catch {
       /* Not submitted. */
     }

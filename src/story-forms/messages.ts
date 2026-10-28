@@ -146,6 +146,12 @@ export function incomingToPlayer(
   }
   const moment = momentFor(work, state, p, config, day);
   if (
+    moment?.sharedClue &&
+    [moment.names.a, moment.names.b].includes(from) &&
+    day % 3 === 1
+  )
+    return from === moment.names.b ? moment.sharedClueB : moment.sharedClue;
+  if (
     moment?.saved?.sceneId &&
     moment.target === from &&
     momentRecord(state, `d${day}-approach`)?.sceneId

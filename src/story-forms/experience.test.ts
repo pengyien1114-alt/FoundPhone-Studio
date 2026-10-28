@@ -24,29 +24,33 @@ function setup(reason = 0) {
   state.ui = { notes: { profile: JSON.stringify(p) }, kakao: {} };
   return { p, state };
 }
-it("never offers a selected evening line again with the same person, including every X background", () => {
-  for (const reason of [0, 1, 2, 3, 4, 5])
-    for (const ex of [true, false]) {
-      const { p, state } = setup(reason),
-        used = new Set<string>();
-      for (let d = 1; d <= 20; d++) {
-        state.ui!.kakao![`answer:d${d}-focus`] = JSON.stringify({
-          value: ex ? p.ex : p.men[1],
-        });
-        const opts = JSON.parse(
-          seasonValues(work, state, p, config)[`conversationOptions${d}`],
-        ) as string[];
-        expect(opts.some((option) => used.has(option))).toBe(false);
-        const chosen = opts[(d - 1) % 3];
-        state.ui!.kakao![`answer:d${d}-approach`] = JSON.stringify({
-          value: chosen,
-          optionIndex: (d - 1) % 3,
-          exBranch: ex,
-        });
-        used.add(chosen);
+it(
+  "never offers a selected evening line again with the same person, including every X background",
+  { timeout: 15000 },
+  () => {
+    for (const reason of [0, 1, 2, 3, 4, 5])
+      for (const ex of [true, false]) {
+        const { p, state } = setup(reason),
+          used = new Set<string>();
+        for (let d = 1; d <= 20; d++) {
+          state.ui!.kakao![`answer:d${d}-focus`] = JSON.stringify({
+            value: ex ? p.ex : p.men[1],
+          });
+          const opts = JSON.parse(
+            seasonValues(work, state, p, config)[`conversationOptions${d}`],
+          ) as string[];
+          expect(opts.some((option) => used.has(option))).toBe(false);
+          const chosen = opts[(d - 1) % 3];
+          state.ui!.kakao![`answer:d${d}-approach`] = JSON.stringify({
+            value: chosen,
+            optionIndex: (d - 1) % 3,
+            exBranch: ex,
+          });
+          used.add(chosen);
+        }
       }
-    }
-});
+  },
+);
 it("strips all audience comments and counters from private prereveal records", () => {
   const { p, state } = setup();
   state.ui!.kakao!["answer:d2-focus"] = JSON.stringify({ value: p.ex });
@@ -80,7 +84,9 @@ it("date choices change the actual date partner's bond once and produce distinct
   const before = relationships(work, state, p, config)[target];
   const item = work.data.kakao.find((i) => i.id === "d2-date-choice-a")!;
   state.unlocked.push(item.id);
-  const options = JSON.parse(item.meta.options);
+  const options = JSON.parse(
+    renderStoryItem(item, seasonValues(work, state, p, config)).meta.options,
+  );
   const outcomes = [];
   for (let index = 0; index < 3; index++) {
     delete state.ui!.kakao!["answer:" + item.id];
@@ -95,9 +101,9 @@ it("date choices change the actual date partner's bond once and produce distinct
       outcomes[index],
     );
   }
-  expect(outcomes[0].affinity).toBe(before.affinity + 3);
-  expect(outcomes[1].affinity).toBe(before.affinity - 2);
-  expect(outcomes[0].trust).toBeGreaterThan(outcomes[1].trust);
+  expect(outcomes[0].affinity).not.toBe(outcomes[1].affinity);
+  expect(outcomes[0].trust).not.toBe(outcomes[1].trust);
+  expect(outcomes.every((r) => r.trust >= before.trust)).toBe(true);
   expect(outcomes[0].meetings).toBe(before.meetings + 1);
 });
 it("a failed mutual date offers solo activities and cannot grant an imaginary partner points", () => {

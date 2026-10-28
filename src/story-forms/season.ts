@@ -1,6 +1,8 @@
+import { savedAnswer } from "./answers";
 import { socialValues } from "./social";
 import { dateValues } from "./dates";
-import { packMoment } from "./encounters";
+import { packMoment, momentFor } from "./encounters";
+import { dateRoute, type CharacterDateAnswer } from "./characters";
 import { daytimeValues } from "./daytime";
 import { incomingToPlayer } from "./messages";
 import { firstNightScore, firstNightSignals } from "./contacts";
@@ -11,6 +13,7 @@ import {
   interest,
   rivalInterest,
   selected,
+  publicPartner,
 } from "./relationships";
 export { seeded } from "./relationships";
 import { interactionValues } from "./scenes";
@@ -30,16 +33,14 @@ type Answer = {
   exBranch?: boolean;
   reaction?: { meetings: number; pressure: number };
   dateTarget?: string;
-};
+} & Partial<CharacterDateAnswer>;
 type Vote = { from: string; to: string; text: string };
 export function answer(state: Runtime, id: string): string {
   return selected(state, id);
 }
 export function storedVotes(state: Runtime, day: number): Vote[] | undefined {
   try {
-    return JSON.parse(
-      String(state.ui?.kakao?.["answer:d" + day + "-sms"] || "null"),
-    )?.votes;
+    return savedAnswer(state, `d${day}-sms`)?.votes;
   } catch {
     return undefined;
   }
@@ -212,6 +213,7 @@ function nightlyVotes(
             14 +
             seeded(`${p.seed}|rival|${from}|${v}`) * 9 +
             Math.min(day, 14) * 0.65 +
+            (publicPartner(p, config, v) === from ? Math.min(4, day / 5) : 0) +
             (v === oldPartner ? 3 : 0) +
             rank(p, "nightly-mood", day, from, v) * 8 +
             (v === previous ? 2 : 0)
@@ -220,7 +222,8 @@ function nightlyVotes(
         return (
           rank(p, "nightly-heart", day, from, v) +
           (v === previous ? 0.18 : 0) +
-          (v === oldPartner ? 0.12 : 0)
+          (v === oldPartner ? 0.12 : 0) +
+          (publicPartner(p, config, from) === v ? Math.min(0.25, day / 40) : 0)
         );
       };
       return score(b) - score(a);
@@ -331,6 +334,24 @@ export function packSeasonAnswer(
   if (dateDay) {
     const day = Number(dateDay[1]);
     a.dateTarget = day === 13 ? values.mutualTarget : values["date" + day];
+    const route =
+      day === 13 && values.mutualSuccess !== "true"
+        ? undefined
+        : dateRoute(work, state, day, a.dateTarget, c.p.ex);
+    if (route) {
+      const choice = (id.endsWith("-a") ? route.choicesA : route.choicesB)[
+        a.optionIndex!
+      ];
+      if (!choice) return undefined;
+      Object.assign(a, {
+        characterDate: true,
+        dateVersion: 2,
+        sceneEffect: choice.effect,
+        dateReply: choice.result,
+        dateMiddle: route.middle,
+        dateQuestion: id.endsWith("-a") ? route.questionA : route.questionB,
+      });
+    }
   }
   if (conversationDay) {
     const chosenFocus = answer(state, `d${conversationDay[1]}-focus`);
@@ -397,6 +418,13 @@ export function seasonValues(
     privateRecall: backstory.privateRecall || "",
     giftMemory: backstory.giftMemory || "",
     q3: backstory.q3 || "這次你最希望自己學會怎麼表達需要？",
+    q3Options:
+      backstory.q3Options ||
+      JSON.stringify([
+        "我想把沒講完的話說清楚。",
+        "我想先了解現在的自己。",
+        "我還需要一點時間想。",
+      ]),
     reunion: String(
       Math.max(
         0,
@@ -494,6 +522,16 @@ export function seasonValues(
       values["sms" + d] = received.length
         ? received.map((v, i) => `匿名訊息 ${i + 1}\n${v.text}`).join("\n\n")
         : "沒有嘉賓選擇您。";
+      const moment = momentFor(work, state, p, config, d);
+      const commonClue = moment?.sharedClue;
+      if (
+        commonClue &&
+        received.some(
+          (v) => v.text === commonClue || v.text === moment?.sharedClueB,
+        )
+      )
+        values["sms" + d] +=
+          "\n\n那句話提到的，是幾個人都在場的小事。你看向客廳，還沒辦法只靠這個細節替短信署名。";
       const xVote = votes.find((v) => v.from === p.ex);
       values["hint" + d] =
         d >= 14

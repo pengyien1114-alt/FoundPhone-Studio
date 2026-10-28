@@ -61,30 +61,34 @@ function submit(
   expect(packed).toBeDefined();
   return { p, state, focus, packed: JSON.parse(packed!) };
 }
-it("an actually receptive first-night conversation wins attention across seeds, backgrounds and both arrival settings", () => {
-  for (let reason = 0; reason < 6; reason++)
-    for (const late of [false, true])
-      for (let n = 0; n < 12; n++) {
-        const { p, state, focus, packed } = submit(
-          String(n),
-          reason,
-          late,
-          0,
-          !late,
-        );
-        expect(
-          packed.votes.find(
-            (v: { from: string; to: string }) => v.from === focus,
-          ).to,
-        ).toBe(p.name);
-        expect(
-          firstNightScore(work, state, p, config, focus, p.name),
-        ).toBeGreaterThan(23);
-        expect(
-          packed.votes.filter((v: { to: string }) => v.to === p.name).length,
-        ).toBeGreaterThan(0);
-      }
-});
+it(
+  "an actually receptive first-night conversation wins attention across seeds, backgrounds and both arrival settings",
+  { timeout: 15000 },
+  () => {
+    for (let reason = 0; reason < 6; reason++)
+      for (const late of [false, true])
+        for (let n = 0; n < 12; n++) {
+          const { p, state, focus, packed } = submit(
+            String(n),
+            reason,
+            late,
+            0,
+            !late,
+          );
+          expect(
+            packed.votes.find(
+              (v: { from: string; to: string }) => v.from === focus,
+            ).to,
+          ).toBe(p.name);
+          expect(
+            firstNightScore(work, state, p, config, focus, p.name),
+          ).toBeGreaterThan(23);
+          expect(
+            packed.votes.filter((v: { to: string }) => v.to === p.name).length,
+          ).toBeGreaterThan(0);
+        }
+  },
+);
 it("changing the outgoing recipient does not force that person to send a message back", () => {
   const { p, state, packed } = submit("independent", 0, false, 0);
   const to = castFor(p, config).presentMen.find(

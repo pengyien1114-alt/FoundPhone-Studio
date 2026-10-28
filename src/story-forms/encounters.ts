@@ -1,11 +1,20 @@
+import { savedAnswer } from "./answers";
 import type { Runtime, Work } from "../schema";
 import { castFor, type Profile, type ProfileConfig } from "./profile";
 import { seeded, selected, type Relationship } from "./relationships";
+import {
+  characterBook,
+  characterFor,
+  characterMoment,
+  characterScene,
+  recallFor,
+} from "./characters";
 export type MomentChoice = {
   line: string;
   result: string;
   effect: Partial<Relationship>;
   signal: number;
+  memoryKey?: string;
 };
 type Branch = {
   label: string;
@@ -27,6 +36,7 @@ export type HouseMoment = {
   sms?: string[];
   incoming?: string[];
   voices?: Record<string, string>;
+  peer?: string;
 };
 export type MomentAnswer = {
   value: string;
@@ -38,19 +48,19 @@ export type MomentAnswer = {
   sceneSignal: number;
   sceneMeeting: boolean;
   exBeat?: boolean;
+  version?: 2;
+  cast?: { a: string; b: string; woman: string; other: string };
+  actorScene?: string;
+  memoryKey?: string;
+  recallId?: string;
+  renderedLead?: string;
+  renderedResult?: string;
 };
 export function momentRecord(
   state: Runtime,
   id: string,
 ): MomentAnswer | undefined {
-  try {
-    return (
-      JSON.parse(String(state.ui?.kakao?.["answer:" + id] || "null")) ||
-      undefined
-    );
-  } catch {
-    return undefined;
-  }
+  return savedAnswer<MomentAnswer>(state, id);
 }
 const libraries = new WeakMap<Work, HouseMoment[]>();
 const pastLibraries = new WeakMap<
@@ -91,10 +101,10 @@ export function momentFor(
           seeded(`${p.seed}|moment|${b.id}`),
       ),
     saved = momentRecord(state, `d${day}-focus`),
-    scene =
+    baseScene =
       library.find((i) => i.id === saved?.sceneId) ||
       deck[(day - [1, 7, 14][stage]) % Math.max(1, deck.length)];
-  if (!scene) return undefined;
+  if (!baseScene) return undefined;
   const cast = castFor(p, config),
     men = day >= 10 ? p.men : cast.presentMen,
     women = day >= 3 ? config.women : cast.presentWomen,
@@ -129,14 +139,24 @@ export function momentFor(
           women.length
       ],
     other = men.find((m) => m !== a && m !== b)!;
+  const castNames = saved?.cast || { a, b, woman, other };
+  const personal = characterMoment(
+    work,
+    state,
+    p,
+    config,
+    day,
+    castNames,
+    baseScene,
+  );
+  const scene = personal || baseScene;
+  const shared = characterBook(work).publicMoments?.[day - 1];
   const names = {
-    a,
-    b,
-    woman,
-    other,
+    ...castNames,
+    other: personal?.peer || castNames.other,
     player: p.name,
-    aLine: scene.voices?.[a] || "",
-    bLine: scene.voices?.[b] || "",
+    aLine: scene.voices?.[castNames.a] || "",
+    bLine: scene.voices?.[castNames.b] || "",
   };
   const render = (s: string) =>
     s.replace(
@@ -173,7 +193,11 @@ export function momentFor(
       }
     }
   }
-  const source = beat?.choices || branch.choices;
+  const recall =
+    saved?.version === 2 && !beat
+      ? recallFor(work, state, target, day)
+      : undefined;
+  const source = recall?.choices || beat?.choices || branch.choices;
   const order =
     day === 1
       ? source.map((_, i) => i)
@@ -187,7 +211,14 @@ export function momentFor(
   const choices = order.map((i) => ({
     ...source[i],
     line: render(source[i].line),
-    result: render(source[i].result),
+    result:
+      render(source[i].result) +
+      (beat
+        ? "\n\n" +
+          (characterFor(work, target)?.exVoice[
+            source[i].signal < 0 ? 1 : source[i].effect.release ? 2 : 0
+          ] || "")
+        : ""),
   }));
   return {
     scene,
@@ -199,11 +230,21 @@ export function momentFor(
     branchIndex,
     target,
     beat,
+    recall,
+    personal: !!personal,
+    sharedClue: shared?.message || "",
+    sharedClueB: shared?.alternate || shared?.message || "",
     choices,
-    opening: render(scene.intro),
+    opening:
+      render(scene.intro) + (shared ? "\n\n" + render(shared.scene) : ""),
     options: scene.branches.map((i) => render(i.label)),
-    lead: render(branch.lead) + (beat ? "\n\n" + render(beat.intro) : ""),
-    prompt: render(beat?.prompt || branch.prompt),
+    lead:
+      render(branch.lead) +
+      (beat ? "\n\n" + render(beat.intro) : "") +
+      (recall
+        ? `\n\n他提起第 ${recall.day} 天，你說的「${recall.said.replace(/^[「“]|[」”]$/g, "")}」。\n${render(recall.line)}`
+        : ""),
+    prompt: render(recall?.prompt || beat?.prompt || branch.prompt),
   };
 }
 export function packMoment(
@@ -244,6 +285,31 @@ export function packMoment(
           : {},
     sceneSignal: turn === "focus" ? 0 : choice.signal,
     sceneMeeting: turn === "approach" && !!target,
+    version: 2,
+    cast: {
+      a: m.names.a,
+      b: m.names.b,
+      woman: m.names.woman,
+      other: m.names.other,
+    },
+    ...(turn === "approach"
+      ? {
+          renderedLead: m.lead,
+          renderedResult: choice.result,
+          actorScene: m.personal
+            ? characterScene(
+                work,
+                target,
+                day < 7 ? 0 : day < 14 ? 1 : 2,
+                state,
+                day,
+                p.ex,
+              )?.id
+            : undefined,
+          ...(choice.memoryKey ? { memoryKey: choice.memoryKey } : {}),
+          ...(m.recall ? { recallId: m.recall.id } : {}),
+        }
+      : {}),
     ...(turn === "approach" && m.beat ? { exBeat: true } : {}),
   };
 }
@@ -281,7 +347,7 @@ export function encounterValues(
       const reply = m.choices[response.optionIndex];
       const spoken = response.value.replace(/^[「“]/, "").replace(/[」”]$/, "");
       values[`interaction${day}`] =
-        `${m.lead}\n\n你說：「${spoken}」\n\n${reply?.result || ""}`;
+        `${response.renderedLead ?? m.lead}\n\n你說：「${spoken}」\n\n${response.renderedResult ?? reply?.result ?? ""}`;
       values[`conversationVisibility${day}`] =
         m.target === p.ex && day < 14 ? "player" : "public";
       const extra = [

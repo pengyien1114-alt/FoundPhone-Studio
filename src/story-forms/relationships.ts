@@ -1,3 +1,4 @@
+import { savedAnswer } from "./answers";
 import type { Runtime, Work } from "../schema";
 import { castFor, type Profile, type ProfileConfig } from "./profile";
 export function seeded(seed: string): number {
@@ -8,11 +9,20 @@ export function seeded(seed: string): number {
   }
   return (h >>> 0) / 4294967296;
 }
+export function publicPartner(
+  p: Profile,
+  config: ProfileConfig,
+  woman: string,
+) {
+  return [...castFor(p, config).presentMen].sort(
+    (a, b) =>
+      seeded(`${p.seed}|public-pair|${woman}|${b}`) -
+      seeded(`${p.seed}|public-pair|${woman}|${a}`),
+  )[0];
+}
 export function selected(state: Runtime, id: string): string {
   try {
-    const saved = JSON.parse(
-      String(state.ui?.kakao?.["answer:" + id] || "null"),
-    );
+    const saved = savedAnswer(state, id);
     return /^d\d+-focus$/.test(id) && typeof saved?.target === "string"
       ? saved.target
       : saved?.value || "";
@@ -45,11 +55,9 @@ export function repairChoice(
   id: string,
 ) {
   try {
-    const saved = JSON.parse(
-      String(state.ui?.kakao?.["answer:" + id] || "null"),
-    );
+    const saved = savedAnswer(state, id);
     if (Number.isInteger(saved?.optionIndex))
-      return saved.optionIndex as number;
+      return saved!.optionIndex as number;
   } catch {
     /* Match recordings saved before option indices existed. */
   }
@@ -62,10 +70,8 @@ function committedAgain(work: Work, state: Runtime) {
   const item = work.data.kakao.find((i) => i.id === "d21-chat2"),
     value = selected(state, "d21-chat2");
   try {
-    const saved = JSON.parse(
-      String(state.ui?.kakao?.["answer:d21-chat2"] || "null"),
-    );
-    if (Number.isInteger(saved?.optionIndex)) return saved.optionIndex === 0;
+    const saved = savedAnswer(state, "d21-chat2");
+    if (Number.isInteger(saved?.optionIndex)) return saved?.optionIndex === 0;
     return [item?.meta.options, item?.meta.legacyOptions].some(
       (options) => JSON.parse(options || "[]")[0] === value,
     );
@@ -124,16 +130,21 @@ export function relationshipHistory(
     if (day > throughDay) continue;
     const value = selected(state, item.id);
     try {
-      const saved = JSON.parse(
-        String(state.ui?.kakao?.["answer:" + item.id] || "null"),
-      );
-      if (item.meta.encounter === "true" && saved?.sceneId) {
-        if (result[saved.target])
+      const saved = savedAnswer(state, item.id);
+      if (
+        (item.meta.encounter === "true" && saved?.sceneId) ||
+        saved?.characterDate === true
+      ) {
+        const target =
+          (saved.characterDate ? saved.dateTarget : saved.target) || "";
+        if (result[target])
           changes.push({
             day,
-            target: saved.target,
+            target,
             effect: saved.sceneEffect || {},
-            meeting: saved.sceneMeeting === true,
+            meeting:
+              saved.sceneMeeting === true ||
+              (saved.characterDate === true && item.id.endsWith("-a")),
           });
         continue;
       }
@@ -162,11 +173,10 @@ export function relationshipHistory(
     let exBranch = false;
     let dateTarget = "";
     try {
-      const saved = JSON.parse(
-        String(state.ui?.kakao?.["answer:" + item.id] || "null"),
-      );
+      const saved = savedAnswer(state, item.id);
       if (
-        Number.isInteger(saved?.optionIndex) &&
+        typeof saved?.optionIndex === "number" &&
+        Number.isInteger(saved.optionIndex) &&
         saved.optionIndex >= 0 &&
         saved.optionIndex < opts.length
       )
@@ -248,6 +258,7 @@ export function rivalInterest(
       (w) =>
         25 +
         seeded(`${p.seed}|rival|${man}|${w}`) * 13 +
+        (publicPartner(p, config, w) === man ? Math.min(4, day / 5) : 0) +
         Math.min(day, 14) * 0.25,
     ),
   );

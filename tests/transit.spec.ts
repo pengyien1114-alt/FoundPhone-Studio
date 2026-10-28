@@ -86,7 +86,9 @@ for (const late of [false, true])
     await page.goto("/");
     await page.locator(".notice-open").first().click();
     await pin(page);
-    await page.getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ }).click();
+    await page
+      .getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ })
+      .click();
     await page.getByRole("button", { name: "繁體中文", exact: true }).click();
     await page
       .getByRole("textbox", { name: "你的姓名", exact: true })
@@ -456,24 +458,51 @@ test("unreleased personal footage has no audience actions or replies and uses re
 test("a date has two decisions with visible consequences before its existing reflection", async ({
   page,
 }) => {
-  await restore(page, snapshotBefore("d2-date-scene"));
+  const state = snapshotBefore("d2-date-scene");
+  const raw = JSON.parse(readFileSync("stories/template/story.json", "utf8"));
+  const { work } = compileStory(raw),
+    config = work.data.notes.map(profileConfig).find(Boolean)!,
+    p = parseProfile(state.ui?.notes?.profile)!;
+  const before = seasonValues(work, state, p, config);
+  await restore(page, state);
   await open(page, "X");
-  await expect(page.locator(".post-detail-body")).toContainText("唱片咖啡店");
+  await expect(page.locator(".post-detail-body")).toContainText(
+    before.dateOpening2,
+  );
   await kkt(page);
-  await option(page, 0);
-  await x(page);
-  await expect(page.locator(".post-detail-body")).toContainText("二手店");
-  await expect(page.locator(".post-detail-body")).toContainText("雨棚");
-  await kkt(page);
-  await option(page, 1);
+  const first = await option(page, 0);
+  state.unlocked.push("d2-date-choice-a");
+  state.ui!.kakao!["answer:d2-date-choice-a"] = packSeasonAnswer(
+    work,
+    state,
+    "d2-date-choice-a",
+    first,
+  )!;
+  const after = seasonValues(work, state, p, config);
   await x(page);
   await expect(page.locator(".post-detail-body")).toContainText(
-    "不想在這裡替誰排先後",
+    after.dateReply2a,
+  );
+  await expect(page.locator(".post-detail-body")).toContainText(
+    after.dateMiddle2,
+  );
+  await kkt(page);
+  const second = await option(page, 1);
+  state.unlocked.push("d2-date-choice-b");
+  state.ui!.kakao!["answer:d2-date-choice-b"] = packSeasonAnswer(
+    work,
+    state,
+    "d2-date-choice-b",
+    second,
+  )!;
+  await x(page);
+  await expect(page.locator(".post-detail-body")).toContainText(
+    seasonValues(work, state, p, config).dateReply2b,
   );
   await kkt(page);
   await page.getByRole("button", { name: "KKT消息", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "回答選項" })).toContainText(
-    "還沒有完全投入",
+    "沒完全投入",
   );
 });
 
@@ -545,7 +574,9 @@ for (const script of ["traditional", "simplified"] as const)
         .getByRole("button", { name: "打开KakaoTalk", exact: true }),
     ).toBeInViewport();
     await open(page, "备忘录");
-    await page.getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ }).click();
+    await page
+      .getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ })
+      .click();
     await expect(
       page.getByRole("textbox", { name: "你的姓名", exact: true }),
     ).toHaveCount(0);
@@ -615,7 +646,9 @@ test("eight name-only candidates keep the six-person cap and place Geonwoo after
   await page.goto("/");
   await page.locator(".notice-open").first().click();
   await pin(page);
-  await page.getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ }).click();
+  await page
+    .getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ })
+    .click();
   await page.getByRole("button", { name: "繁體中文", exact: true }).click();
   await page
     .getByRole("textbox", { name: "你的姓名", exact: true })
@@ -658,7 +691,9 @@ test("eight name-only candidates keep the six-person cap and place Geonwoo after
   await page.getByRole("button", { name: "轻触解锁" }).click();
   await pin(page);
   await open(page, "备忘录");
-  await page.getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ }).click();
+  await page
+    .getByRole("button", { name: /01｜入住前的[秘祕]密備忘錄/ })
+    .click();
   await expect(page.locator(".story-profile")).toContainText("入住資料已封存");
 });
 

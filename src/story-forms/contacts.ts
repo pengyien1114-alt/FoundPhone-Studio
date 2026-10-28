@@ -1,15 +1,19 @@
+import { savedAnswer } from "./answers";
 import type { Runtime, Work } from "../schema";
 import { castFor, type Profile, type ProfileConfig } from "./profile";
 import { selected, seeded } from "./relationships";
 export function approachIndex(work: Work, state: Runtime, day: number) {
   const id = `d${day}-approach`;
   try {
-    const saved = JSON.parse(
-      String(state.ui?.kakao?.["answer:" + id] || "null"),
-    );
+    const saved = savedAnswer(state, id);
     if (saved?.sceneId)
-      return saved.sceneSignal < 0 ? 1 : saved.sceneSignal > 0 ? 0 : 2;
-    if (Number.isInteger(saved?.optionIndex)) return saved.optionIndex;
+      return Number(saved.sceneSignal || 0) < 0
+        ? 1
+        : Number(saved.sceneSignal || 0) > 0
+          ? 0
+          : 2;
+    if (Number.isInteger(saved?.optionIndex))
+      return saved!.optionIndex as number;
   } catch {
     /* Legacy answer. */
   }
