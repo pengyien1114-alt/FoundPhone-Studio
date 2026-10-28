@@ -41,3 +41,23 @@
 .story-profile button:disabled {
   opacity: 0.4;
 }
+
+.kzinp select {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  border-radius: 18px;
+  padding: 10px;
+  font: inherit;
+  background: #fff;
+  color: #222;
+}
+.kzinp[aria-label="節目組作答"] {
+  flex-wrap: wrap;
+}
+.kzinp[aria-label="節目組作答"] [role="alert"] {
+  width: 100%;
+  margin: 0;
+  color: #9c2b2b;
+  font-size: 12px;
+}

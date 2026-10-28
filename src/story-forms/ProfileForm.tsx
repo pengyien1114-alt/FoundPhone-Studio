@@ -7,7 +7,6 @@ import {
   type ProfileConfig,
 } from "./profile";
 import "./profile.css";
-
 export function ProfileForm({
   config,
   ui,
@@ -18,6 +17,7 @@ export function ProfileForm({
   onUi?: (key: string, value: UiValue) => void;
 }) {
   const saved = parseProfile(ui?.profile);
+  const [step, setStep] = useState(Number(ui?.profileStep || 0));
   const [p, setP] = useState<Profile>(
     () =>
       saved ||
@@ -28,6 +28,7 @@ export function ProfileForm({
         late: false,
         reason: config.reasons[0],
         reunion: 50,
+        mbti: "INFP",
       },
   );
   const change = (patch: Partial<Profile>) => {
@@ -35,116 +36,177 @@ export function ProfileForm({
     setP(next);
     onUi?.("profileDraft", JSON.stringify(next));
   };
-  const valid =
-    p.name.trim().length > 0 &&
-    p.men.length === 6 &&
-    p.men.includes(p.ex) &&
-    config.reasons.includes(p.reason);
+  const move = (value: number) => {
+    setStep(value);
+    onUi?.("profileStep", value);
+  };
   if (saved)
     return (
       <section className="story-profile">
         <p>
-          設定已保存。請返回桌面，打開 X 閱讀第一天，再到 Safari 看
-          theqoo、KakaoTalk 回覆節目組。
+          入住資料已封存。公開時機由節目流程決定，這裡不展示其他人的關係資料。
         </p>
         <p>
-          {saved.name} · X：{saved.ex} · {saved.late ? "後期鯰魚" : "首日入住"}
+          {saved.name}｜{saved.mbti || "INFP"}
         </p>
-        <p>分手原因：{saved.reason}</p>
         <p>
-          初始復合 {saved.reunion}% ／換乘 {100 - saved.reunion}%
+          請先閱讀備忘錄中的節目規則，再開啟 X 的事前採訪。節目組會透過對應 App
+          通知下一步。
         </p>
-        <p>本輪設定已鎖定；完成第一天後可選擇重新開始。</p>
       </section>
     );
+  const allowed =
+    step === 0
+      ? !!p.name.trim()
+      : step === 1
+        ? p.men.length === 6
+        : step === 2
+          ? p.men.includes(p.ex)
+          : true;
+  const titles = [
+    "你希望在節目裡使用什麼名字？",
+    "請從七位男嘉賓中選擇六位。",
+    "哪一位是你的前任？這份資料只交給節目組。",
+    "你的前任是否安排在後續入場？",
+    "你們是怎麼走到分開的？",
+    "你目前比較想回頭，還是往前走？",
+    "你的 MBTI 是什麼？",
+  ];
   return (
     <form
       className="story-profile"
       onSubmit={(e) => {
         e.preventDefault();
-        if (valid) onUi?.("profile", JSON.stringify(saveProfile(p, config)));
+        if (!allowed) return;
+        if (step < 6) move(step + 1);
+        else onUi?.("profile", JSON.stringify(saveProfile(p, config)));
       }}
     >
-      <label>
-        你的姓名
-        <input
-          aria-label="你的姓名"
-          maxLength={20}
-          value={p.name}
-          onChange={(e) => change({ name: e.target.value })}
-        />
-      </label>
-      <fieldset>
-        <legend>男嘉賓（選擇六位，已選 {p.men.length}/6）</legend>
-        {config.men.map((name) => (
-          <label key={name}>
-            <input
-              type="checkbox"
-              checked={p.men.includes(name)}
-              disabled={p.men.length === 6 && !p.men.includes(name)}
-              onChange={() => {
-                const men = p.men.includes(name)
-                  ? p.men.filter((m) => m !== name)
-                  : [...p.men, name];
-                change({ men, ex: men.includes(p.ex) ? p.ex : "" });
-              }}
-            />
-            {name}
-          </label>
-        ))}
-      </fieldset>
-      <label>
-        前任 X
-        <select
-          aria-label="前任 X"
-          value={p.ex}
-          onChange={(e) => change({ ex: e.target.value })}
-        >
-          <option value="">請選擇</option>
-          {p.men.map((m) => (
-            <option key={m}>{m}</option>
+      <small>入住資料 {step + 1} / 7</small>
+      <h2>{titles[step]}</h2>
+      {step === 0 && (
+        <label>
+          你的姓名
+          <input
+            aria-label="你的姓名"
+            maxLength={20}
+            value={p.name}
+            onChange={(e) => change({ name: e.target.value })}
+          />
+        </label>
+      )}
+      {step === 1 && (
+        <fieldset>
+          <legend>男嘉賓（已選 {p.men.length}/6）</legend>
+          {config.men.map((name) => (
+            <label key={name}>
+              <input
+                type="checkbox"
+                checked={p.men.includes(name)}
+                disabled={p.men.length === 6 && !p.men.includes(name)}
+                onChange={() => {
+                  const men = p.men.includes(name)
+                    ? p.men.filter((m) => m !== name)
+                    : [...p.men, name];
+                  change({ men, ex: men.includes(p.ex) ? p.ex : "" });
+                }}
+              />
+              {name}
+            </label>
           ))}
-        </select>
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          checked={p.late}
-          onChange={(e) => change({ late: e.target.checked })}
-        />
-        X 是後期登場的鯰魚
-      </label>
-      <p>
-        首日五男五女；中期再加入一男一女鯰魚。未指定 X
-        為鯰魚時，將從其餘男嘉賓與五位固定女嘉賓中抽選，保存後不會因刷新而改變。
-      </p>
-      <label>
-        分手原因
-        <select
-          aria-label="分手原因"
-          value={p.reason}
-          onChange={(e) => change({ reason: e.target.value })}
-        >
-          {config.reasons.map((r) => (
-            <option key={r}>{r}</option>
-          ))}
-        </select>
-      </label>
-      <label>
-        初始復合傾向 {p.reunion}%
-        <input
-          aria-label="初始復合傾向"
-          type="range"
-          min="0"
-          max="100"
-          value={p.reunion}
-          onChange={(e) => change({ reunion: Number(e.target.value) })}
-        />
-      </label>
-      <p>初始換乘傾向 {100 - p.reunion}%</p>
-      <button type="submit" disabled={!valid}>
-        保存設定，開始第一天
+        </fieldset>
+      )}
+      {step === 2 && (
+        <label>
+          前任 X
+          <select
+            aria-label="前任 X"
+            value={p.ex}
+            onChange={(e) => change({ ex: e.target.value })}
+          >
+            <option value="">請選擇</option>
+            {p.men.map((m) => (
+              <option key={m}>{m}</option>
+            ))}
+          </select>
+        </label>
+      )}
+      {step === 3 && (
+        <label>
+          <input
+            type="checkbox"
+            checked={p.late}
+            onChange={(e) => change({ late: e.target.checked })}
+          />
+          安排於後續入場
+        </label>
+      )}
+      {step === 4 && (
+        <label>
+          分手原因
+          <select
+            aria-label="分手原因"
+            value={p.reason}
+            onChange={(e) => change({ reason: e.target.value })}
+          >
+            {config.reasons.map((r) => (
+              <option key={r}>{r}</option>
+            ))}
+          </select>
+        </label>
+      )}
+      {step === 5 && (
+        <label>
+          目前回頭的傾向 {p.reunion}%
+          <input
+            aria-label="初始復合傾向"
+            type="range"
+            min="0"
+            max="100"
+            value={p.reunion}
+            onChange={(e) => change({ reunion: Number(e.target.value) })}
+          />
+        </label>
+      )}
+      {step === 6 && (
+        <label>
+          MBTI
+          <select
+            aria-label="MBTI"
+            value={p.mbti || "INFP"}
+            onChange={(e) => change({ mbti: e.target.value })}
+          >
+            {[
+              "INTJ",
+              "INTP",
+              "ENTJ",
+              "ENTP",
+              "INFJ",
+              "INFP",
+              "ENFJ",
+              "ENFP",
+              "ISTJ",
+              "ISFJ",
+              "ESTJ",
+              "ESFJ",
+              "ISTP",
+              "ISFP",
+              "ESTP",
+              "ESFP",
+            ].map((m) => (
+              <option key={m}>{m}</option>
+            ))}
+          </select>
+        </label>
+      )}
+      <button type="submit" disabled={!allowed}>
+        {step === 6 ? "封存資料，閱讀節目規則" : "下一題"}
       </button>
+      {step > 0 && (
+        <button type="button" onClick={() => move(step - 1)}>
+          上一題
+        </button>
+      )}
     </form>
   );
 }

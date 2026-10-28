@@ -4,6 +4,11 @@ import { X } from "lucide-react";
 import { AppArtwork } from "./AppArtwork";
 import type { Work } from "./schema";
 export function notificationContent(text: string, apps: Work["apps"]) {
+  const tagged = text.match(/^\[app:([a-z]+)\]([\s\S]*)$/);
+  if (tagged) {
+    const app = apps.find((a) => a.id === tagged[1] && a.installed);
+    if (app) return { title: app.name, body: tagged[2], appId: app.id };
+  }
   const separator = text.search(/[:：]/);
   const sender = separator > 0 ? text.slice(0, separator) : "信息";
   const app = apps.find((a) => a.name === sender);
@@ -22,7 +27,7 @@ export function SystemNotifications({
 }: {
   notices: string[];
   apps: Work["apps"];
-  onOpen: () => void;
+  onOpen: (appId: string) => void;
   onDismiss: (index: number) => void;
   compact?: boolean;
 }) {
@@ -53,7 +58,7 @@ export function SystemNotifications({
                 if (info.offset.x < -80) onDismiss(index);
               }}
             >
-              <button className="notice-open" onClick={onOpen}>
+              <button className="notice-open" onClick={() => onOpen(n.appId)}>
                 <span className="notice-app-art">
                   <AppArtwork id={n.appId} />
                 </span>

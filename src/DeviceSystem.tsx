@@ -67,6 +67,7 @@ export function DeviceLock({
   setPinOpen,
   error,
   onUnlock,
+  onNoticeOpen,
   onCamera,
   onLight,
 }: {
@@ -78,6 +79,7 @@ export function DeviceLock({
   setPinOpen: (v: boolean) => void;
   error: string;
   onUnlock: (v: string) => void;
+  onNoticeOpen?: (appId: string) => void;
   onCamera: () => void;
   onLight: () => void;
 }) {
@@ -130,7 +132,7 @@ export function DeviceLock({
                 compact
                 notices={notices}
                 apps={work.apps}
-                onOpen={open}
+                onOpen={onNoticeOpen || open}
                 onDismiss={onDismiss}
               />
             )}

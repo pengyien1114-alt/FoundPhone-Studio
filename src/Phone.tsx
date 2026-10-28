@@ -1,3 +1,4 @@
+import { packSeasonAnswer } from "./story-forms/season";
 import {
   groupEpisodeItems,
   renderStoryItem,
@@ -139,6 +140,7 @@ function PhoneRuntime({
   onRuntime?: (s: Runtime) => void;
 }) {
   const [app, setApp] = useState("");
+  const [appVisit, setAppVisit] = useState(0);
   const [homeRequest, setHomeRequest] = useState(0);
   const [locked, setLocked] = useState(!creator);
   const [pinOpen, setPinOpen] = useState(false);
@@ -147,6 +149,7 @@ function PhoneRuntime({
   const [recent, setRecent] = useState<string[]>([]);
   const appSnapshots = useRef(new Map<string, HTMLElement>());
   const [banner, setBanner] = useState("");
+  const pendingNotice = useRef("");
   const noticesSeen = useRef(0);
   const [contextApp, setContextApp] = useState("");
   const [deviceScale, setDeviceScale] = useState(0.84);
@@ -274,6 +277,7 @@ function PhoneRuntime({
   const open = (id: string) => {
     if (!work.apps.some((a) => a.id === id && a.installed)) return;
     setApp(id);
+    setAppVisit((v) => v + 1);
     setKeyboard(false);
     setRecent((v) => [id, ...v.filter((a) => a !== id)].slice(0, 8));
     setFolder("");
@@ -288,6 +292,10 @@ function PhoneRuntime({
       setLocked(false);
       setPinOpen(false);
       event("password", pin);
+      if (pendingNotice.current) {
+        open(pendingNotice.current);
+        pendingNotice.current = "";
+      }
     } else {
       setPinError("密码不正确");
       setPinOpen(true);
@@ -297,6 +305,7 @@ function PhoneRuntime({
     if (app && !work.apps.some((a) => a.id === app && a.installed)) setApp("");
   }, [app, work.apps]);
   const displayTime = creator ? work.phone.time : s.time || work.phone.time;
+  const storyTextValues = storyValues(work, s);
   const plugin = getApp(app);
   useEffect(() => {
     const count = s.notifications.length;
@@ -434,6 +443,10 @@ function PhoneRuntime({
                 setPinOpen={setPinOpen}
                 error={pinError}
                 onUnlock={unlock}
+                onNoticeOpen={(id) => {
+                  pendingNotice.current = id;
+                  beginUnlock();
+                }}
                 onLight={() => setPanel("light")}
                 onCamera={() => {
                   setQuickCamera(true);
@@ -448,6 +461,7 @@ function PhoneRuntime({
                 origin={launchOrigin}
               >
                 <AppContent
+                  key={appVisit}
                   app={plugin}
                   name={
                     work.apps.find((a) => a.id === app)?.name ?? plugin.name
@@ -455,7 +469,7 @@ function PhoneRuntime({
                   items={[
                     ...(work.data[app] ?? []),
                     ...(s.messages[app] ?? []),
-                  ].map((item) => renderStoryItem(item, storyValues(work, s)))}
+                  ].map((item) => renderStoryItem(item, storyTextValues))}
                   creator={creator}
                   state={s}
                   onRead={(id) => event("read", id)}
@@ -465,6 +479,18 @@ function PhoneRuntime({
                   onSettings={onSettings}
                   onUi={(key, value) => {
                     const current = runtimeRef.current;
+                    const stored =
+                      app === "kakao" &&
+                      key.startsWith("answer:") &&
+                      work.variables.production === true
+                        ? packSeasonAnswer(
+                            work,
+                            current,
+                            key.slice(7),
+                            String(value),
+                          )
+                        : value;
+                    if (stored === undefined) return;
                     update(
                       dispatch(
                         work,
@@ -472,7 +498,7 @@ function PhoneRuntime({
                           ...current,
                           ui: {
                             ...current.ui,
-                            [app]: { ...current.ui?.[app], [key]: value },
+                            [app]: { ...current.ui?.[app], [key]: stored },
                           },
                         },
                         "variable",
@@ -561,11 +587,12 @@ function PhoneRuntime({
                     <SystemNotifications
                       notices={s.notifications}
                       apps={work.apps}
-                      onOpen={() => {
+                      onOpen={(id) => {
                         setPanel("");
-                        if (locked) beginUnlock();
-                        else if (installedApps.some((a) => a.id === "messages"))
-                          open("messages");
+                        if (locked) {
+                          pendingNotice.current = id;
+                          beginUnlock();
+                        } else open(id);
                       }}
                       onDismiss={dismissNotice}
                     />
@@ -592,7 +619,7 @@ function PhoneRuntime({
                   key={c.target}
                   onClick={() => update(choose(work, s, c.target))}
                 >
-                  {renderStoryText(c.label, storyValues(work, s))}
+                  {renderStoryText(c.label, storyTextValues)}
                   <ArrowUp size={15} />
                 </button>
               ))}
@@ -689,7 +716,7 @@ function PhoneRuntime({
               className="device-banner"
               onClick={() => {
                 setBanner("");
-                setPanel("notification");
+                open(notificationContent(banner, work.apps).appId);
               }}
             >
               <AppIcon

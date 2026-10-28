@@ -1,3 +1,4 @@
+import { KakaoQuestion } from "../../story-forms/KakaoQuestion";
 /* React/data adapters for dudwo5/Mymy UI templates: kt/ktn/KHD/bub,
  * igHome/igProfile/igDM/igSheet, xHome. See NOTICE.txt for permission.
  * Author content, DOM globals, timers and media dependencies are excluded. */
@@ -62,14 +63,18 @@ function Back({ onClick }: { onClick: () => void }) {
   );
 }
 export function MymyKakao(p: SkinProps) {
+  const [actionQuestion, setActionQuestion] = useState("");
   const [tab, setTab] = useSkinState<string>(p, "mymyTab", "聊天"),
     [sent, setSent] = useSkinState<string[]>(p, "mymyKktSent", []),
     [draft, setDraft] = useState(""),
     [query, setQuery] = useState(""),
     [menu, setMenu] = useState(false);
-  const list = grouped(p.items),
+  const orderedItems = [...p.items].sort(
+    (a, b) => Number(a.meta.order || 0) - Number(b.meta.order || 0),
+  );
+  const list = grouped(orderedItems),
     messages = [
-      ...p.items.filter((i) => i.title === p.thread),
+      ...orderedItems.filter((i) => i.title === p.thread),
       ...sent.flatMap((raw, index) => {
         try {
           const entry: unknown = JSON.parse(raw);
@@ -101,7 +106,31 @@ export function MymyKakao(p: SkinProps) {
     const node = scroll.current;
     if (node) node.scrollTop = node.scrollHeight;
   }, [p.thread, messages.length]);
-  const scripted = messages.some((m) => m.meta.selectionMode);
+  const question = messages.find(
+    (m) => m.meta.form && !p.completed?.includes("submit-" + m.id),
+  );
+  const currentProduction = orderedItems.find(
+    (m) =>
+      m.meta.production === "true" &&
+      !m.outgoing &&
+      !p.completed?.includes(
+        m.meta.completionNode || (m.meta.form ? "submit-" : "read-") + m.id,
+      ),
+  );
+  const openedProduction = useRef("");
+  useEffect(() => {
+    if (
+      currentProduction &&
+      openedProduction.current !== currentProduction.id
+    ) {
+      openedProduction.current = currentProduction.id;
+      if (p.thread !== currentProduction.title)
+        p.onThread(currentProduction.title);
+    }
+  }, [currentProduction, p]);
+  const scripted = messages.some(
+    (m) => m.meta.selectionMode || m.meta.form || m.meta.production === "true",
+  );
   const pending = [...messages]
     .reverse()
     .find(
@@ -136,7 +165,7 @@ export function MymyKakao(p: SkinProps) {
                     (run.first ? " first" : "")
                   }
                 >
-                  {!m.outgoing && run.first && (
+                  {!m.outgoing && run.first && m.meta.anonymous !== "true" && (
                     <>
                       <div className="kzmav">
                         <Avatar name={m.sender} src={m.avatar} />
@@ -153,11 +182,21 @@ export function MymyKakao(p: SkinProps) {
                   )}
                   <button
                     className={"kzbub" + (m.media ? " kzimg" : "")}
-                    onClick={() =>
-                      m.meta.local !== "true" &&
-                      (p.creator || m.meta.selectionMode !== "speech") &&
-                      read(p, m)
-                    }
+                    onClick={() => {
+                      if (
+                        m.meta.control === "action" &&
+                        m.id === question?.id
+                      ) {
+                        setActionQuestion(m.id);
+                        return;
+                      }
+                      if (
+                        m.meta.local !== "true" &&
+                        (p.creator ||
+                          (!m.meta.form && m.meta.selectionMode !== "speech"))
+                      )
+                        read(p, m);
+                    }}
                   >
                     {m.media ? <Media item={m} /> : m.body}
                   </button>
@@ -169,62 +208,91 @@ export function MymyKakao(p: SkinProps) {
             })}
             {!messages.length && <Blank />}
           </div>
-          <form
-            className="kzinp"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!scripted && draft.trim()) {
-                setSent([
-                  ...sent,
-                  JSON.stringify([
-                    p.thread,
-                    draft.trim(),
-                    p.virtualTime || "09:41",
-                  ]),
-                ]);
-                setDraft("");
-              }
-            }}
-          >
-            <button
-              type="button"
-              aria-label="添加聊天内容"
-              onClick={() => (p.creator ? p.onAdd() : setMenu(!menu))}
-            >
-              <Plus size={21} />
-            </button>
-            <input
-              aria-label="KKT消息"
-              placeholder={
-                scripted
-                  ? speech
-                    ? "输入消息 · 點此選擇台詞"
-                    : pending
-                      ? "請點上方對話框選擇動作"
-                      : "等待節目組下一則訊息"
-                  : "输入消息"
-              }
-              readOnly={scripted}
-              onClick={openSpeech}
-              onKeyDown={(e) => {
-                if (scripted && (e.key === "Enter" || e.key === " ")) {
-                  e.preventDefault();
-                  openSpeech();
+          {question && question.meta.control !== "action" ? (
+            <KakaoQuestion
+              key={question.id}
+              item={question}
+              ui={p.ui}
+              onUi={p.onUi}
+            />
+          ) : (
+            <form
+              className="kzinp"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!scripted && draft.trim()) {
+                  setSent([
+                    ...sent,
+                    JSON.stringify([
+                      p.thread,
+                      draft.trim(),
+                      p.virtualTime || "09:41",
+                    ]),
+                  ]);
+                  setDraft("");
                 }
               }}
-              value={draft}
-              maxLength={2000}
-              onChange={(e) => !scripted && setDraft(e.target.value)}
-            />
-            <Smile size={22} />
-            <button
-              className={draft.trim() ? "go" : ""}
-              aria-label="发送KKT消息"
-              disabled={scripted || !draft.trim()}
             >
-              ↑
-            </button>
-          </form>
+              <button
+                type="button"
+                aria-label="添加聊天内容"
+                onClick={() => (p.creator ? p.onAdd() : setMenu(!menu))}
+              >
+                <Plus size={21} />
+              </button>
+              <input
+                aria-label="KKT消息"
+                placeholder={
+                  scripted
+                    ? speech
+                      ? "输入消息 · 點此選擇台詞"
+                      : pending
+                        ? "請點上方對話框選擇動作"
+                        : "等待節目組下一則訊息"
+                    : "输入消息"
+                }
+                readOnly={scripted}
+                onClick={openSpeech}
+                onKeyDown={(e) => {
+                  if (scripted && (e.key === "Enter" || e.key === " ")) {
+                    e.preventDefault();
+                    openSpeech();
+                  }
+                }}
+                value={draft}
+                maxLength={2000}
+                onChange={(e) => !scripted && setDraft(e.target.value)}
+              />
+              <Smile size={22} />
+              <button
+                className={draft.trim() ? "go" : ""}
+                aria-label="发送KKT消息"
+                disabled={scripted || !draft.trim()}
+              >
+                ↑
+              </button>
+            </form>
+          )}
+          {question &&
+            actionQuestion === question.id &&
+            question.meta.control === "action" && (
+              <div className="story-overlay">
+                <h3>{question.body.split("\n")[0]}</h3>
+                {(JSON.parse(question.meta.options || "[]") as string[]).map(
+                  (value) => (
+                    <button
+                      key={value}
+                      onClick={() => {
+                        p.onUi?.("answer:" + question.id, value);
+                        setActionQuestion("");
+                      }}
+                    >
+                      {value}
+                    </button>
+                  ),
+                )}
+              </div>
+            )}
           {menu && (
             <div className="mymy-local-menu">
               <strong>{p.thread}</strong>

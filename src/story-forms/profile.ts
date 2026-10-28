@@ -1,3 +1,4 @@
+import { seasonValues } from "./season";
 import type { Item, Runtime, Work } from "../schema";
 
 export type Profile = {
@@ -9,6 +10,8 @@ export type Profile = {
   reunion: number;
   maleCatfish?: string;
   femaleCatfish?: string;
+  seed?: string;
+  mbti?: string;
 };
 export type ProfileConfig = {
   men: string[];
@@ -83,6 +86,7 @@ export function saveProfile(
     name: p.name.trim(),
     maleCatfish: p.late ? p.ex : pick(p.men.filter((m) => m !== p.ex)),
     femaleCatfish: pick(config.women),
+    seed: String(Math.floor(random() * 1e9)),
   };
 }
 export function groupEpisodeItems(items: Item[]): Item[] {
@@ -111,6 +115,8 @@ export function storyValues(
   const p = parseProfile(state.ui?.notes?.profile);
   if (!p) return {};
   const config = (work.data.notes || []).map(profileConfig).find(Boolean);
+  if (work.variables.production === true && config)
+    return seasonValues(work, state, p, config);
   const others = p.men.filter((m) => m !== p.ex);
   const cast = castFor(
     p,
