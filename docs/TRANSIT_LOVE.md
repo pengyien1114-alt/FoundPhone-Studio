@@ -30,4 +30,4 @@ GitHub Pages 沿用 `.github/workflows/pages.yml`。倉庫 Settings → Pages �
 
 本次驗證結果：故事校驗、27 條劇情路徑、TypeScript、ESLint、62 項單元測試、正式建置通過；2 項行動視窗故事流程與 8 項原手機回歸通過（離線回歸已調整為讀取作品密碼）。未使用實體 iPhone 驗證。
 
-本次遠端限制：GitHub 連接工具與已登入的 gh CLI 寫入 Git tree 均回傳 `403 Resource not accessible by integration`，因此未能提交至遠端或部署。預期 Pages 網址當時為 404。請先在 ChatGPT 的 GitHub 連接與 GitHub Installed Apps 設定確認此倉庫可寫入；若授權範圍仍不足，重新連接具寫入能力的 GitHub 授權。這是 GitHub 授權問題，不需提供任何 token 或密碼。
+GitHub 倉庫安裝授權完成後，修改已成功推送至 main；Pages 使用 GitHub Actions 部署。試玩入口：https://pengyien1114-alt.github.io/FoundPhone-Studio/ 。
