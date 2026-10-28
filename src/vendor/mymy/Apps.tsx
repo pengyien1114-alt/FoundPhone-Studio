@@ -208,7 +208,7 @@ export function MymyKakao(p: SkinProps) {
             })}
             {!messages.length && <Blank />}
           </div>
-          {question && question.meta.control !== "action" ? (
+          {question ? (
             <KakaoQuestion
               key={question.id}
               item={question}
@@ -748,6 +748,7 @@ export function MymyX(p: SkinProps) {
   useEffect(() => {
     if (
       !p.creator &&
+      !p.detailOpen &&
       pinned?.meta.autoOpen === "true" &&
       p.ui?.["opened-" + pinned.id] !== true
     ) {

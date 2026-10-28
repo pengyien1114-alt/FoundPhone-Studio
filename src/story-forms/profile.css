@@ -61,3 +61,14 @@
   color: #9c2b2b;
   font-size: 12px;
 }
+
+.kakao-options {
+  max-height: 65%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.mymy-ui .kakao-options button {
+  white-space: normal;
+  text-align: left;
+  line-height: 1.6;
+}

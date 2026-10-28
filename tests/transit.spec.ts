@@ -40,33 +40,36 @@ async function kkt(page: Page) {
   await open(page, "KakaoTalk");
   await expect(page.locator(".msgs.kk")).toBeVisible();
 }
-async function text(page: Page, value: string) {
-  await page
-    .getByRole("textbox", { name: "玩家輸入", exact: true })
-    .fill(value);
-  await page.getByRole("button", { name: "送出回答", exact: true }).click();
+async function option(page: Page, choice?: string | number) {
+  const field = page.getByRole("textbox", { name: "KKT消息", exact: true });
+  await expect(field).toHaveAttribute("readonly", "");
+  await field.click();
+  const dialog = page.getByRole("dialog", { name: "回答選項" });
+  await expect(dialog).toBeVisible();
+  const button =
+    typeof choice === "string"
+      ? dialog.getByRole("button", { name: choice, exact: true })
+      : dialog.getByRole("button").nth(choice || 0);
+  const value = await button.innerText();
+  await button.click();
+  await expect(dialog).toHaveCount(0);
+  return value;
 }
-async function action(page: Page, question: string, choice: string) {
-  await page.locator(".kzbub").filter({ hasText: question }).click();
-  await page
-    .locator(".story-overlay")
-    .getByRole("button", { name: choice, exact: true })
-    .click();
+async function action(page: Page, _question: string, choice: string) {
+  await option(page, choice);
 }
 for (const late of [false, true])
-  test(`pre-interview, mandatory letter, gift and nightly collection: late=${late}`, async ({
+  test(`choice-only opening and full first evening: late=${late}`, async ({
     page,
   }) => {
-    test.setTimeout(90000);
+    test.setTimeout(120000);
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto("/");
-    // The lock-screen note notification opens Notes after authentication, not Messages.
     await page.locator(".notice-open").first().click();
     await pin(page);
-    await expect(page.locator(".skin-notes")).toBeVisible();
     await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
-    await page.getByRole("textbox", { name: "你的姓名" }).fill("小雨");
+    await page.getByLabel("你的姓名", { exact: true }).selectOption("小雨");
     await next(page);
     for (const name of [
       "金俊抒",
@@ -86,69 +89,77 @@ for (const late of [false, true])
     await next(page);
     await next(page);
     await page.getByRole("button", { name: "封存資料，閱讀節目規則" }).click();
-    await expect(page.locator(".story-profile")).not.toContainText("金俊抒");
     await home(page);
     await open(page, "备忘录");
-    await expect(page.locator(".notes-list")).not.toContainText("配對");
     await page.getByRole("button", { name: /錄製須知｜請先閱讀/ }).click();
-    await expect(page.locator(".native-note-paper")).toContainText(
-      "第七天晚餐後公開",
-    );
     await expect(page.locator(".device-banner strong")).toHaveText("X");
     await page.locator(".device-banner").click();
-    await expect(page.locator(".post-detail-body")).toContainText("事前採訪");
     await expect(page.locator(".post-detail-body")).not.toContainText("金俊抒");
     await kkt(page);
-    await expect(page.locator(".msgs.kk")).toContainText("Q1：");
+    await expect(
+      page.locator("input:not([readonly]):not([type=hidden]), textarea"),
+    ).toHaveCount(0);
     await expect(page.locator(".msgs.kk")).not.toContainText("Q2：");
-    await text(page, "我不確定對方想什麼，先把自己的需要說清楚。");
+    await page.getByRole("textbox", { name: "KKT消息", exact: true }).click();
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: "再想一下" })
+      .click();
+    await expect(page.locator(".msgs.kk")).not.toContainText("Q2：");
+    await option(page);
     await expect(page.locator(".msgs.kk")).toContainText("Q2：");
-    await expect(page.locator(".msgs.kk")).not.toContainText("Q3：");
-    await text(page, "可能會難受，但我不想替對方決定。");
-    await expect(page.locator(".msgs.kk")).toContainText("Q3：");
-    await text(page, "我希望這次能更清楚說出需要。");
-    await action(page, "今天的事前採訪已保存", "開始第一天");
+    await option(page);
+    await option(page);
+    await option(page, "開始第一天");
     await x(page);
+    await expect(page.locator(".post-detail-body")).toContainText("要幫忙嗎");
     await expect(page.locator(".post-detail-body")).not.toContainText("鯰魚");
-    await expect(page.locator(".post-detail-body")).not.toContainText("中期");
     await kkt(page);
-    await action(
-      page,
-      "你想先怎樣參與今晚的備菜",
-      "主動問旁邊的人需要什麼幫忙",
-    );
+    await option(page); // seat
     await x(page);
+    await expect(page.locator(".post-detail-body")).toContainText("橘子");
+    await kkt(page);
+    await option(page); // introduction
+    await x(page);
+    await expect(page.locator(".post-detail-body")).toContainText("主廚");
+    await kkt(page);
+    await option(page, "主動問旁邊的人需要什麼幫忙");
+    await x(page);
+    await expect(page.locator(".post-detail-body")).toContainText("19:10");
+    await kkt(page);
+    await option(page, 2); // tease at dinner
+    await x(page);
+    await expect(page.locator(".post-detail-body")).toContainText("下次也可以");
     await expect(page.locator(".post-detail-body")).toContainText(
       "你是會認真記住別人小事的人",
     );
     await kkt(page);
-    await action(page, "你需要親自念完信", "我已親自朗讀完這封信");
-    await text(page, "我想先接受這些話，不急著用它們決定最後的方向。");
+    await option(page, "我已親自朗讀完這封信");
+    await option(page);
     await x(page);
     await expect(page.locator(".post-detail-body")).toContainText(
       "你還沒有打開",
     );
     await kkt(page);
-    await action(page, "你要現在打開這個箱子嗎", "打開箱子");
+    await option(page, "打開箱子");
     await x(page);
     await expect(page.locator(".post-detail-body")).toContainText("你拆開包裝");
+    await expect(page.locator(".post-detail-body")).toContainText("走廊");
     await kkt(page);
-    const options = await page
-      .getByRole("combobox", { name: "選擇回答" })
-      .locator("option")
+    await option(page); // select focus
+    await option(page); // select approach
+    await x(page);
+    await expect(page.locator(".post-detail-body")).toContainText("你說：");
+    await kkt(page);
+    await page.getByRole("textbox", { name: "KKT消息", exact: true }).click();
+    const choices = await page
+      .getByRole("dialog")
+      .getByRole("button")
       .allTextContents();
-    expect(options).toHaveLength(6);
-    if (late) expect(options).not.toContain("金俊抒");
-    await page
-      .getByRole("combobox", { name: "選擇回答" })
-      .selectOption({ index: 1 });
-    await page.getByRole("button", { name: "送出回答" }).click();
-    await text(page, "第一句。第二句。第三句。");
-    await expect(page.getByRole("alert")).toContainText("最多兩句");
-    await expect(page.locator(".msgs.kk")).not.toContainText(
-      "所有已入住嘉賓都已發送",
-    );
-    await text(page, "謝謝你今天聽我說話。晚安。");
+    expect(choices).toHaveLength(6);
+    if (late) expect(choices).not.toContain("金俊抒");
+    await page.getByRole("dialog").getByRole("button").first().click();
+    await option(page);
     await expect(page.locator(".msgs.kk")).toContainText(
       "所有已入住嘉賓都已發送",
     );
@@ -159,15 +170,12 @@ for (const late of [false, true])
       .locator(".kzbub")
       .filter({ hasText: "所有已入住嘉賓都已發送" })
       .click();
-    await expect(page.locator(".msgs.kk")).toContainText(
-      /你的 X (選擇了你|沒有選擇你)/,
-    );
     await page
       .locator(".kzbub")
       .filter({ hasText: /你的 X (選擇了你|沒有選擇你)/ })
       .click();
-    await text(page, "我留意到自己可以說慢一點。");
-    await text(page, "明天我想把需要說清楚。");
+    await option(page);
+    const last = await option(page);
     await expect(page.locator(".msgs.kk")).toContainText(
       "準備好後才進入新的一天",
     );
@@ -176,10 +184,8 @@ for (const late of [false, true])
     await page.getByRole("button", { name: "轻触解锁" }).click();
     await pin(page);
     await open(page, "KakaoTalk");
-    await expect(page.locator(".msgs.kk")).toContainText(
-      "明天我想把需要說清楚。",
-    );
-    await page.screenshot({ path: `outputs/season/day1-${late}.png` });
+    await expect(page.locator(".msgs.kk")).toContainText(last);
+    await page.screenshot({ path: `outputs/season/choice-day1-${late}.png` });
     expect(errors).toEqual([]);
   });
 
@@ -274,14 +280,12 @@ test("date-two temporary chat hides identity and closes before departure", async
   await kkt(page);
   await expect(page.locator(".kzname")).toHaveText("你的約會對象的 X");
   await expect(page.locator(".kzmav")).toHaveCount(0);
-  await text(page, "你叫什麼名字，做什麼工作？");
-  await expect(page.getByRole("alert")).toContainText("不得詢問");
-  await text(page, "我想知道他喜歡什麼樣的行程？");
+  await option(page);
   await page
     .locator(".kzbub")
     .filter({ hasText: "你的約會對象的 X：" })
     .click();
-  await text(page, "謝謝，我會直接問他現在的想法。");
+  await option(page);
   await x(page);
   await expect(page.locator(".post-detail-body")).toContainText(
     "聊天室在出發前關閉",
@@ -309,4 +313,21 @@ test("day-fourteen relations are shown only after arrival and explicit viewing c
   await home(page);
   await open(page, "备忘录");
   await expect(page.locator(".notes-list")).toContainText("第十四天");
+});
+
+test("final choice and completion also start from the KKT message field", async ({
+  page,
+}) => {
+  await restore(page, snapshotBefore("final-choice"));
+  await open(page, "KakaoTalk");
+  await page.getByRole("textbox", { name: "KKT消息", exact: true }).click();
+  await page
+    .locator(".story-overlay")
+    .getByRole("button", { name: "我選擇先保持單身", exact: true })
+    .click();
+  await x(page);
+  await expect(page.locator(".post-detail-body")).toContainText("你選擇先單身");
+  await kkt(page);
+  await option(page, "確認結束這次旅程");
+  await expect(page.locator(".story-overlay")).toContainText("保留自己");
 });

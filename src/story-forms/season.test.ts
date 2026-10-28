@@ -8,6 +8,7 @@ import {
   saveProfile,
   renderStoryItem,
   type Profile,
+  castFor,
 } from "./profile";
 import {
   seasonValues,
@@ -103,7 +104,19 @@ for (const late of [false, true])
             expect(storedVotes(state, d)).toBeUndefined();
             expect(state.unlocked).not.toContain(`d${d}-hint`);
           }
-          state = reply(state, id, response(id, item));
+          const offered = JSON.parse(item.meta.options || "[]") as string[];
+          const target =
+            route === "new"
+              ? castFor(p, config).presentMen.find((m) => m !== p.ex)!
+              : p.ex;
+          const value =
+            (id.endsWith("-focus") ||
+              id.endsWith("-recipient") ||
+              id === "final-new-target") &&
+            offered.includes(target)
+              ? target
+              : response(id, item);
+          state = reply(state, id, value);
         } else if (step.choose) state = choose(work, state, step.choose);
         else if (step.event) {
           if (step.event === "read")
@@ -118,14 +131,21 @@ for (const late of [false, true])
         expect(state.unlocked.includes("sealed-roster")).toBe(basicRead);
         expect(state.unlocked.includes("revealed-pairs")).toBe(revealRead);
         if (!state.completed.includes("submit-d14-watch")) {
+          const currentValues = seasonValues(work, state, p, config);
           for (const post of work.data.twitter.filter((i) => visible(i, state)))
-            expect(projected(post, p, state).body).not.toMatch(
+            expect(renderStoryItem(post, currentValues).body).not.toMatch(
               /與.{1,6}曾交往|的X是|的 X 是/,
             );
         }
       }
       expect(state.endings).toContain(path.ending);
-      expect(answer(state, "d0-q1")).toContain("自己的需要");
+      if (route !== "single")
+        expect(seasonValues(work, state, p, config).finalResult).toContain(
+          route === "new" ? "換乘成功" : "復合成功",
+        );
+      expect(answer(state, "d0-q1")).toBe(
+        JSON.parse(get("d0-q1").meta.options)[0],
+      );
       for (let d = 1; d <= 21; d++) {
         const residents = residentCast(p, config, d),
           votes = storedVotes(state, d)!;
@@ -179,9 +199,10 @@ describe("eligibility, privacy and independent choices", () => {
     expect(
       packSeasonAnswer(work, state, "d1-sms", "一。二。三。"),
     ).toBeUndefined();
-    const packed = packSeasonAnswer(work, state, "d1-sms", "晚安。");
+    const sms = JSON.parse(projected(item, p, state).meta.options)[0];
+    const packed = packSeasonAnswer(work, state, "d1-sms", sms);
     expect(packed).toBeDefined();
-    state = reply(state, "d1-sms", "晚安。");
+    state = reply(state, "d1-sms", sms);
     expect(packSeasonAnswer(work, state, "d1-sms", "改寫")).toBeUndefined();
     expect(
       inputError(
@@ -265,11 +286,21 @@ it("keeps travel, mutual-date selection and nightly messages as separate decisio
     "answer:d13-travel": JSON.stringify({ value: p.men[2] }),
   };
   const first = JSON.parse(
-    packSeasonAnswer(work, state, "d13-sms", "今天辛苦了。")!,
+    packSeasonAnswer(
+      work,
+      state,
+      "d13-sms",
+      JSON.parse(projected(get("d13-sms"), p, state).meta.options)[0],
+    )!,
   );
   state.ui!.kakao["answer:d13-travel"] = JSON.stringify({ value: p.men[3] });
   const second = JSON.parse(
-    packSeasonAnswer(work, state, "d13-sms", "今天辛苦了。")!,
+    packSeasonAnswer(
+      work,
+      state,
+      "d13-sms",
+      JSON.parse(projected(get("d13-sms"), p, state).meta.options)[0],
+    )!,
   );
   expect(first.votes).toEqual(second.votes);
   expect(second.votes.find((v: { from: string }) => v.from === p.name).to).toBe(

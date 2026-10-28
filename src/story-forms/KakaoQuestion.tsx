@@ -1,74 +1,64 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Plus, Smile } from "lucide-react";
 import type { Item, UiValue } from "../schema";
-import { inputError } from "./season";
 export function KakaoQuestion({
   item,
-  ui,
   onUi,
 }: {
   item: Item;
   ui?: Record<string, UiValue>;
   onUi?: (key: string, value: UiValue) => void;
 }) {
-  const [value, setValue] = useState(String(ui?.["draft:" + item.id] || ""));
-  const [error, setError] = useState("");
-  useEffect(() => {
-    setValue(String(ui?.["draft:" + item.id] || ""));
-    setError("");
-  }, [item.id]);
-  const change = (v: string) => {
-    setValue(v);
-    onUi?.("draft:" + item.id, v);
-    setError("");
-  };
+  const [opened, setOpened] = useState(false);
   let options: string[] = [];
   try {
     options = JSON.parse(item.meta.options || "[]");
   } catch {
-    /* Author validation reports malformed options. */
+    /* Invalid author data cannot create a free-text fallback. */
   }
   return (
-    <form
-      className="kzinp"
-      aria-label="節目組作答"
-      onSubmit={(e) => {
-        e.preventDefault();
-        const message = inputError(item, value);
-        if (message) {
-          setError(message);
-          return;
-        }
-        onUi?.("answer:" + item.id, value);
-      }}
-    >
-      {item.meta.form === "select" ? (
-        <select
-          aria-label="選擇回答"
-          value={value}
-          onChange={(e) => change(e.target.value)}
-        >
-          <option value="">請選擇</option>
-          {options.map((o) => (
-            <option key={o}>{o}</option>
-          ))}
-        </select>
-      ) : (
+    <>
+      <div className="kzinp" aria-label="節目組作答">
+        <Plus size={21} />
         <input
-          aria-label="玩家輸入"
-          placeholder="______（玩家輸入）"
-          value={value}
-          maxLength={Number(item.meta.maxLength || 1000)}
-          onChange={(e) => change(e.target.value)}
+          aria-label="KKT消息"
+          placeholder="输入消息 · 點此選擇回應"
+          readOnly
+          value=""
+          onClick={() => setOpened(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setOpened(true);
+            }
+          }}
         />
+        <Smile size={22} />
+        <button aria-label="发送KKT消息" disabled>
+          ↑
+        </button>
+      </div>
+      {opened && (
+        <div
+          className="story-overlay kakao-options"
+          role="dialog"
+          aria-label="回答選項"
+        >
+          <h3>{item.body.split("\n")[0]}</h3>
+          {options.map((value) => (
+            <button
+              key={value}
+              onClick={() => {
+                setOpened(false);
+                onUi?.("answer:" + item.id, value);
+              }}
+            >
+              {value}
+            </button>
+          ))}
+          <button onClick={() => setOpened(false)}>再想一下</button>
+        </div>
       )}
-      <button
-        className={value.trim() ? "go" : ""}
-        aria-label="送出回答"
-        disabled={!value.trim()}
-      >
-        ↑
-      </button>
-      {error && <p role="alert">{error}</p>}
-    </form>
+    </>
   );
 }

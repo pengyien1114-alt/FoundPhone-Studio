@@ -1,3 +1,12 @@
+import {
+  seeded,
+  relationships,
+  finalConsent,
+  interest,
+  rivalInterest,
+} from "./relationships";
+export { seeded } from "./relationships";
+import { interactionValues } from "./scenes";
 import type { Item, Runtime, Work } from "../schema";
 import {
   castFor,
@@ -7,7 +16,11 @@ import {
   type ProfileConfig,
 } from "./profile";
 
-type Answer = { value: string; votes?: Vote[] };
+type Answer = {
+  value: string;
+  votes?: Vote[];
+  reaction?: { meetings: number; pressure: number };
+};
 type Vote = { from: string; to: string; text: string };
 export function answer(state: Runtime, id: string): string {
   try {
@@ -30,14 +43,6 @@ export function storedVotes(state: Runtime, day: number): Vote[] | undefined {
   } catch {
     return undefined;
   }
-}
-export function seeded(seed: string): number {
-  let h = 2166136261;
-  for (const c of seed) {
-    h ^= c.charCodeAt(0);
-    h = Math.imul(h, 16777619);
-  }
-  return (h >>> 0) / 4294967296;
 }
 function context(work: Work, state: Runtime) {
   const p = parseProfile(state.ui?.notes?.profile);
@@ -165,6 +170,7 @@ export function dateMatches(
   );
 }
 function nightlyVotes(
+  work: Work,
   p: Profile,
   config: ProfileConfig,
   state: Runtime,
@@ -174,6 +180,7 @@ function nightlyVotes(
   const residents = residentCast(p, config, day);
   const pairs = pairsFor(p, config);
   const votes: Vote[] = [];
+  const bonds = relationships(work, state, p, config, day);
   for (const from of [...residents.men, ...residents.women]) {
     const candidates = residents.men.includes(from)
       ? residents.women
@@ -188,13 +195,26 @@ function nightlyVotes(
       (vote) => vote.from === from,
     )?.to;
     const to = [...candidates].sort((a, b) => {
-      const score = (v: string) =>
-        rank(p, "nightly-heart", day, from, v) +
-        (v === previous ? 0.18 : 0) +
-        (v === oldPartner ? 0.12 : 0) +
-        (v === p.name && from === answer(state, "d2-date") && day > 1
-          ? 0.04
-          : 0);
+      const score = (v: string) => {
+        if (residents.men.includes(from)) {
+          if (v === p.name)
+            return (
+              interest(bonds[from]) + rank(p, "nightly-mood", day, from, v) * 8
+            );
+          return (
+            25 +
+            seeded(`${p.seed}|rival|${from}|${v}`) * 13 +
+            Math.min(day, 14) * 0.25 +
+            rank(p, "nightly-mood", day, from, v) * 8 +
+            (v === previous ? 2 : 0)
+          );
+        }
+        return (
+          rank(p, "nightly-heart", day, from, v) +
+          (v === previous ? 0.18 : 0) +
+          (v === oldPartner ? 0.12 : 0)
+        );
+      };
       return score(b) - score(a);
     })[0];
     const messages = [
@@ -238,7 +258,7 @@ export function inputError(item: Item, value: string): string {
     /姓名|名字|本名|職業|职业|工作|年齡|年龄|幾歲|几岁|你是誰|你是谁/.test(v)
   )
     return "限時聊天室只能交流約會準備，不得詢問身分、年齡或職業。";
-  if (item.meta.form === "sms") {
+  if (item.meta.form === "sms" || item.meta.sms === "true") {
     const sentences = v
       .split(/[。！？!?]+|[.]+(?=\s|$)|\n+/)
       .filter((s) => s.trim());
@@ -275,9 +295,35 @@ export function packSeasonAnswer(
   };
   if (inputError(projected, value)) return undefined;
   const a: Answer = { value: value.trim() };
+  const conversationDay = id.match(/^d(\d+)-approach$/);
+  if (conversationDay) {
+    const next: Runtime = {
+      ...state,
+      ui: {
+        ...state.ui,
+        kakao: { ...state.ui?.kakao, ["answer:" + id]: JSON.stringify(a) },
+      },
+    };
+    const focus = answer(state, `d${conversationDay[1]}-focus`);
+    const r = relationships(
+      work,
+      next,
+      c.p,
+      c.config,
+      Number(conversationDay[1]),
+    )[focus];
+    if (r) a.reaction = { meetings: r.meetings, pressure: r.pressure };
+  }
   const smsDay = id.match(/^d(\d+)-sms$/);
   if (smsDay)
-    a.votes = nightlyVotes(c.p, c.config, state, Number(smsDay[1]), a.value);
+    a.votes = nightlyVotes(
+      work,
+      c.p,
+      c.config,
+      state,
+      Number(smsDay[1]),
+      a.value,
+    );
   return JSON.stringify(a);
 }
 export function seasonValues(
@@ -485,10 +531,9 @@ export function seasonValues(
   ];
   values.task =
     tasks[Math.floor(rank(p, "task-card", 2, p.name, "task") * tasks.length)];
-  values.taskResult =
-    answer(state, "d3-task").length >= 20
-      ? "節目組核對後記錄任務完成，你把任務卡交回。"
-      : "任務尚未完成。節目組保留任務環節，你可以換一種尊重界線的方式再試；尚不能進入其他自由活動。";
+  values.taskResult = answer(state, "d3-task")
+    ? "節目組核對後記錄任務完成，你把任務卡交回。"
+    : "任務尚未完成。節目組保留任務環節，你可以換一種尊重界線的方式再試；尚不能進入其他自由活動。";
   values.femaleArrival = cast.female;
   values.maleArrival = cast.male;
   const fInfo = roster.find((r) => r.name === cast.female),
@@ -570,13 +615,11 @@ export function seasonValues(
       ? "交換與補抽結束後，你仍是尚未互選成功的人。節目組為你安排另一段約會；見面的人此前沒有在小屋出現。"
       : `交換與補抽結束後，節目組確認你與 ${values.date10} 抽到了彼此準備的禮物。其他人的未配對行程，不向你提前透露。`;
   const mutualChoice = answer(state, "d13-mutual");
+  const mutualBond = relationships(work, state, p, config, 13)[mutualChoice];
   const mutualSuccess =
-    !!mutualChoice &&
-    [p.name, ...config.women].sort(
-      (a, b) =>
-        rank(p, "mutual", 13, mutualChoice, b) -
-        rank(p, "mutual", 13, mutualChoice, a),
-    )[0] === p.name;
+    !!mutualBond &&
+    mutualBond.meetings >= 2 &&
+    interest(mutualBond) > rivalInterest(p, config, mutualChoice, 13);
   values.mutualOutcome = mutualSuccess
     ? `你與 ${mutualChoice} 互選成功，一同完成半日行程，五點前回到小屋。`
     : "節目組通知你沒有互選成功。你留在小屋，不得知其他人的單向選擇，也不替對方解釋原因。";
@@ -636,43 +679,29 @@ export function seasonValues(
     )
     .join("\n");
   const selectedFinal = String(state.variables.finalRoute || "");
-  const xChoices = Array.from(
-    { length: 21 },
-    (_, i) =>
-      storedVotes(state, i + 1)?.find((v) => v.from === p.ex)?.to === p.name,
-  ).filter(Boolean).length;
-  const willingEx =
-    rank(p, "final-ex", 21, p.ex, p.name) + Math.min(0.3, xChoices * 0.04) >
-      0.55 && answer(state, "d21-chat2").length > 0;
-  values.finalResult =
-    selectedFinal === "reunion"
-      ? willingEx
-        ? "你選擇再試一次。對方也願意繼續談，但你們沒有把今天當作已經解決過去；離開節目後仍要練習清楚表達與尊重界線。"
-        : "你表達了重新開始的心意，對方仍需要時間。你們沒有強行把一份心意變成兩個人的承諾；你帶著自己的選擇離開。"
-      : selectedFinal === "new"
-        ? `你向 ${answer(state, "final-new-target") || "自己選擇的對象"} 表達想繼續認識的心意。節目組不會替對方承諾接受；是否繼續相處需要兩個人在節目外再次確認。`
-        : "你選擇先單身。你仍然珍惜這些相處，也把界線與生活的重心留給自己。";
+  if (selectedFinal === "reunion") {
+    const result = finalConsent(work, state, p, config, p.ex);
+    values.finalResult =
+      (result.success
+        ? "復合成功。你表達重新開始的心意，對方也選擇了你。"
+        : "你選擇了復合，對方沒有接受重新開始。") + result.reason;
+  } else
+    values.finalResult =
+      "你選擇先單身。你把珍惜與承諾分開，也把生活的重心留給自己。";
   const ownVotes = Array.from({ length: 21 }, (_, i) =>
     storedVotes(state, i + 1)?.find((v) => v.from === p.name),
   ).filter((v): v is Vote => !!v);
   const sentToX = ownVotes.filter((v) => v.to === p.ex).length;
   const newTarget = answer(state, "final-new-target");
   if (selectedFinal === "new" && newTarget) {
-    const interest = Array.from(
-      { length: 21 },
-      (_, i) =>
-        storedVotes(state, i + 1)?.find((v) => v.from === newTarget)?.to ===
-        p.name,
-    ).filter(Boolean).length;
-    const willing =
-      rank(p, "final-new", 21, newTarget, p.name) +
-        Math.min(0.3, interest * 0.04) >
-      0.58;
-    values.finalResult = willing
-      ? `你向 ${newTarget} 表達想繼續認識的心意，對方也願意在節目外繼續相處。這不是過去一切難受都得到補償，而是兩個人同意慢慢開始。`
-      : `你向 ${newTarget} 說清楚自己的心意，對方仍選擇先保留獨處的時間。節目沒有把你的選擇變成對方必須接受的承諾；你帶著自己認真作出的決定離開。`;
+    const result = finalConsent(work, state, p, config, newTarget);
+    values.finalResult =
+      (result.success
+        ? `換乘成功。你與 ${newTarget} 在終選時選擇了彼此。`
+        : `你選擇了 ${newTarget}，對方沒有選擇開始新的關係。`) + result.reason;
   }
-  values.endingJournal = `事前訪問裡，你曾寫：${answer(state, "d0-q1") || "（未填）"}\n\n第一晚念完介紹信，你留下的話是：${answer(state, "d1-letter-feeling") || "（未填）"}。你對那只箱子的選擇是「${answer(state, "d1-gift") || "尚未選擇"}」，之後的心意沒有被這一個動作固定住。\n\n你先和 ${values.date2} 約會，又在下一個正式安排裡和 ${values.date3} 相處。回憶房間的意願是「${answer(state, "d7-room") || "尚未選擇"}」，而日本行的搭檔是 ${values.travelPartner}。這些是不同的環節，沒有哪一次配對直接替夜裡的短信作答。\n\n二十一晚，你寄給熟悉的人 ${sentToX} 次，也有 ${ownVotes.length - sentToX} 次把訊息交給其他人。次數是行動紀錄，不是誰愛得比較多的判決。\n\n最後一次談話，你寫：${answer(state, "d21-chat2") || "（未填）"}\n\n${values.finalResult}\n\n節目結束後釋出的個別訪問裡，曾與你同桌的人說過：「我也在整理自己的過去，不是每一句照顧都有明確的暗示。」那些你沒有看見的停頓，有些來自對方自己的課題，並不都圍著你發生。這不會抹去你感到的委屈，也不要求你改變最後的決定。祝福你帶著自己的語言，繼續生活。`;
+  values.endingJournal = `事前訪問裡，你曾選擇：${answer(state, "d0-q1") || "（尚未選擇）"}\n\n第一晚念完介紹信，你留下的話是：${answer(state, "d1-letter-feeling") || "（尚未選擇）"}。你對那只箱子的選擇是「${answer(state, "d1-gift") || "尚未選擇"}」，之後的心意沒有被這一個動作固定住。\n\n你先和 ${values.date2} 約會，又在下一個正式安排裡和 ${values.date3} 相處。回憶房間的意願是「${answer(state, "d7-room") || "尚未選擇"}」，而日本行的搭檔是 ${values.travelPartner}。這些是不同的環節，沒有哪一次配對直接替夜裡的短信作答。\n\n二十一晚，你寄給熟悉的人 ${sentToX} 次，也有 ${ownVotes.length - sentToX} 次把訊息交給其他人。次數是行動紀錄，不是誰愛得比較多的判決。\n\n最後一次談話，你說：${answer(state, "d21-chat2") || "（尚未選擇）"}\n\n${values.finalResult}\n\n節目結束後釋出的個別訪問裡，曾與你同桌的人說過：「我也在整理自己的過去，不是每一句照顧都有明確的暗示。」那些你沒有看見的停頓，有些來自對方自己的課題，並不都圍著你發生。這不會抹去你感到的委屈，也不要求你改變最後的決定。祝福你帶著自己的語言，繼續生活。`;
+  Object.assign(values, interactionValues(work, state, p, config));
   return Object.fromEntries(
     Object.entries(values).map(([k, v]) => [
       k,
