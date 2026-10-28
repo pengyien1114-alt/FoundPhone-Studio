@@ -49,3 +49,9 @@ npx playwright test --config playwright.transit.config.ts
 測試包含三種最終方向的腳本路徑、兩種出場設定下的完整 21 天真實輸入重放、逐題鎖定、保密時間、短信收發、存檔恢復、匿名聊天室和來源 App 通知；另保留原手機與 App 的瀏覽器回歸。行動視窗測試不等同實體 iPhone Safari 測試。
 
 GitHub Pages 沿用 `.github/workflows/pages.yml`，main 更新後驗證、建置並部署。試玩入口：https://pengyien1114-alt.github.io/FoundPhone-Studio/ 。
+
+## 網頁與離線快取更新
+
+連線時首頁和故事 JSON 使用 Network First，故事請求包含本次建置識別碼並略過瀏覽器 HTTP 快取；離線時回退至已快取的同版資料。新版 Service Worker 接手後會將仍使用舊版的分頁導回原手機入口，不建立另一套介面，不清除 IndexedDB 存檔或桌面設定。回到分頁或恢復連線時也會檢查更新。
+
+快取回歸測試模擬舊 Service Worker 持續返回舊首頁與故事：更新後需能自動載入最新手機、保留相容存檔、讀到同網址更新的故事，且再次離線仍能開啟。瀏覽器測試的故事路由包含版本查詢參數。

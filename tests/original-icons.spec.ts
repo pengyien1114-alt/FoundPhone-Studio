@@ -29,7 +29,7 @@ test("published icons match source bytes and decode on desktop and App Store", a
       ).toBe(manifest[id].sha256);
     }),
   );
-  await page.route("**/test-work.json", (r) =>
+  await page.route("**/test-work.json*", (r) =>
     r.fulfill({
       json: compileStory(
         JSON.parse(readFileSync("stories/test-preview/story.json", "utf8")),

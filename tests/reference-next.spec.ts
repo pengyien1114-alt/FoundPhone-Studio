@@ -40,7 +40,7 @@ async function enter(page: Page) {
       comments: ["这是一条测试回复。"],
     },
   ];
-  await page.route("**/work.json", (r) =>
+  await page.route("**/work.json*", (r) =>
     r.fulfill({ json: compileStory(story).work }),
   );
   await page.goto("/");

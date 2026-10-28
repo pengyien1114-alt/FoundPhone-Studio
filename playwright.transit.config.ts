@@ -6,6 +6,7 @@ export default defineConfig({
     "runtime.spec.ts",
     "preview.spec.ts",
     "mymy.spec.ts",
+    "updates.spec.ts",
   ],
   timeout: 45000,
   workers: 1,
@@ -26,7 +27,12 @@ export default defineConfig({
     },
     {
       name: "existing-runtime",
-      testMatch: ["runtime.spec.ts", "preview.spec.ts", "mymy.spec.ts"],
+      testMatch: [
+        "runtime.spec.ts",
+        "preview.spec.ts",
+        "mymy.spec.ts",
+        "updates.spec.ts",
+      ],
       use: {
         browserName: "chromium",
         viewport: { width: 1440, height: 1000 },

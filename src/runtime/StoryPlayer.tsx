@@ -1,3 +1,4 @@
+import { enableUpdates, storyUrl } from "./updates";
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Phone } from "../Phone";
@@ -9,14 +10,11 @@ function StoryPlayer() {
     [error, setError] = useState("");
   useEffect(() => {
     const abort = new AbortController();
-    fetch(
-      new URLSearchParams(location.search).get("preview") === "test"
-        ? "./test-work.json"
-        : new URLSearchParams(location.search).get("template") === "blank"
-          ? "./blank-work.json"
-          : "./work.json",
-      { signal: abort.signal },
-    )
+    const stopUpdates = enableUpdates();
+    fetch(storyUrl(location.search, document.baseURI), {
+      signal: abort.signal,
+      cache: "no-store",
+    })
       .then((r) => {
         if (!r.ok) throw Error("缺少作品文件，请运行 npm run story:build");
         return r.json();
@@ -30,7 +28,10 @@ function StoryPlayer() {
       .catch((e) => {
         if (e.name !== "AbortError") setError(String(e));
       });
-    return () => abort.abort();
+    return () => {
+      abort.abort();
+      stopUpdates?.();
+    };
   }, []);
   return (
     <main className="story-runtime">

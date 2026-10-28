@@ -7,7 +7,7 @@ const fixture = JSON.parse(
 );
 import { compileStory } from "../src/story-engine/compiler";
 test.beforeEach(async ({ page }) => {
-  await page.route("**/work.json", (route) =>
+  await page.route("**/work.json*", (route) =>
     route.fulfill({ json: compileStory(fixture).work }),
   );
 });
@@ -194,7 +194,7 @@ test("blank phone contains no story or author content", async ({
   page,
   request,
 }) => {
-  await page.unroute("**/work.json");
+  await page.unroute("**/work.json*");
   const w = await request.get("/blank-work.json").then((r) => r.json());
   expect(w.id).toBe("blank-phone");
   expect(w.nodes).toEqual([]);

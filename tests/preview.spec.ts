@@ -9,7 +9,7 @@ test("development preview contains generic placeholders", async ({
   const preview = compileStory(
     JSON.parse(readFileSync("stories/test-preview/story.json", "utf8")),
   ).work;
-  await page.route("**/test-work.json", (r) => r.fulfill({ json: preview }));
+  await page.route("**/test-work.json*", (r) => r.fulfill({ json: preview }));
   expect(Object.values(standard.data).flat()).toHaveLength(0);
   expect(
     preview.apps.filter((a: { installed: boolean }) => a.installed),

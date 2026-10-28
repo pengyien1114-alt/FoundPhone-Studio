@@ -9,7 +9,7 @@ const fixture = JSON.parse(
   ),
 );
 async function start(page: Page) {
-  await page.route("**/work.json", (r) =>
+  await page.route("**/work.json*", (r) =>
     r.fulfill({ json: compileStory(fixture).work }),
   );
   await page.goto("/");

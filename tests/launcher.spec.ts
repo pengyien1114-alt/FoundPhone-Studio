@@ -5,7 +5,7 @@ const blank = compileStory(
   JSON.parse(readFileSync("stories/blank/story.json", "utf8")),
 ).work;
 test.beforeEach(async ({ page }) => {
-  await page.route("**/work.json", (r) => r.fulfill({ json: blank }));
+  await page.route("**/work.json*", (r) => r.fulfill({ json: blank }));
 });
 async function unlock(page: Page) {
   await page.goto("/");
@@ -205,7 +205,7 @@ test("mobile long press supports free cell placement and drag-created folder", a
     serviceWorkers: "block",
   });
   try {
-    await context.route("**/work.json", (r) => r.fulfill({ json: blank }));
+    await context.route("**/work.json*", (r) => r.fulfill({ json: blank }));
     const page = await context.newPage();
     await unlock(page);
     const original = await page
@@ -304,7 +304,7 @@ test("QQ chat and independent X/Weibo detail interactions preserve player state"
       meta: { replyTo: "qq-transfer-test" },
     }),
   ];
-  await page.route("**/work.json", (route) => route.fulfill({ json: w }));
+  await page.route("**/work.json*", (route) => route.fulfill({ json: w }));
   await unlock(page);
   await open(page, "X");
   await page.locator(".kzxx").first().click();
