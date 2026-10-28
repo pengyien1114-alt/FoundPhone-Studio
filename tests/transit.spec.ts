@@ -480,3 +480,55 @@ test("opening soundtrack continues across apps and Music controls pause without 
     .poll(() => audio.evaluate((el) => (el as HTMLAudioElement).paused))
     .toBe(true);
 });
+
+test("eight name-only candidates keep the six-person cap and place Geonwoo after Jiahao", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.locator(".notice-open").first().click();
+  await pin(page);
+  await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
+  await page
+    .getByRole("textbox", { name: "你的姓名", exact: true })
+    .fill("小雨");
+  await next(page);
+  const choices = page.getByRole("checkbox");
+  await expect(choices).toHaveCount(8);
+  const names = await choices.evaluateAll((nodes) =>
+    nodes.map((n) => n.parentElement?.textContent?.trim()),
+  );
+  expect(names[names.indexOf("張家豪") + 1]).toBe("金虔佑");
+  await expect(page.locator(".story-profile fieldset img")).toHaveCount(0);
+  for (const name of [
+    "金俊抒",
+    "張家豪",
+    "金虔佑",
+    "李理悟",
+    "周安信",
+    "鄭相炫",
+  ])
+    await page.getByRole("checkbox", { name, exact: true }).check();
+  await expect(
+    page.getByRole("checkbox", { name: "李相沅", exact: true }),
+  ).toBeDisabled();
+  await expect(
+    page.getByRole("checkbox", { name: "賀鑫隆", exact: true }),
+  ).toBeDisabled();
+  await next(page);
+  const ex = page.getByLabel("前任 X", { exact: true });
+  await ex.selectOption("金虔佑");
+  await expect(ex).toHaveValue("金虔佑");
+  await expect(ex.locator("option")).toHaveCount(7);
+  await next(page);
+  await next(page);
+  await next(page);
+  await next(page);
+  await page.getByRole("button", { name: "封存資料，閱讀節目規則" }).click();
+  await expect(page.locator(".story-profile")).toContainText("入住資料已封存");
+  await page.reload();
+  await page.getByRole("button", { name: "轻触解锁" }).click();
+  await pin(page);
+  await open(page, "备忘录");
+  await page.getByRole("button", { name: /01｜入住前的秘密備忘錄/ }).click();
+  await expect(page.locator(".story-profile")).toContainText("入住資料已封存");
+});

@@ -84,3 +84,88 @@ describe("private participant setup", () => {
     expect(items[1].body).toBe("C");
   });
 });
+
+it("admits Geonwoo as X or another guest while retaining the six-person cast and reveal schedule", async () => {
+  const { initialRuntime } = await import("../schema");
+  const { seasonValues, packSeasonAnswer } = await import("./season");
+  const index = config.men.indexOf("張家豪");
+  expect(config.men[index + 1]).toBe("金虔佑");
+  for (const late of [false, true]) {
+    const p = saveProfile(
+      {
+        name: "小雨",
+        men: [
+          "金虔佑",
+          ...config.men.filter((n) => n !== "金虔佑").slice(0, 5),
+        ],
+        ex: "金虔佑",
+        late,
+        reason: config.reasons[0],
+        reunion: 50,
+      },
+      config,
+      () => 0.5,
+    );
+    const state = initialRuntime(work);
+    state.ui = { notes: { profile: JSON.stringify(p) }, kakao: {} };
+    const values = seasonValues(work, state, p, config);
+    expect(JSON.parse(values.menOptions1)).toHaveLength(5);
+    expect(JSON.parse(values.menOptions10)).toHaveLength(6);
+    expect(JSON.parse(values.menOptions1).includes(p.ex)).toBe(!late);
+    expect(values.publicRoster1).not.toMatch(/23|舞蹈|2003|韓國/);
+    expect(values.publicRoster7.includes("金虔佑｜ESTJ｜23 歲｜舞蹈表演者")).toBe(
+      !late,
+    );
+    state.ui.kakao!["answer:d10-focus"] = JSON.stringify({ value: p.ex });
+    state.unlocked.push("d10-approach");
+    const options = JSON.parse(
+      seasonValues(work, state, p, config).conversationOptions10,
+    );
+    expect(
+      JSON.parse(packSeasonAnswer(work, state, "d10-approach", options[0])!)
+        .exBranch,
+    ).toBe(true);
+    expect(values.firstDinnerEncounters).not.toMatch(/undefined|\{\{/);
+  }
+});
+it("preserves existing cast identities after inserting a candidate and gives the newcomer his own scene", async () => {
+  const { initialRuntime } = await import("../schema");
+  const { seasonValues } = await import("./season");
+  const p = saveProfile(
+    {
+      name: "小雨",
+      men: ["金俊抒", "張家豪", "金虔佑", "李理悟", "周安信", "鄭相炫"],
+      ex: "金俊抒",
+      late: true,
+      reason: config.reasons[0],
+      reunion: 50,
+    },
+    config,
+    () => 0.5,
+  );
+  const state = initialRuntime(work);
+  state.ui = { notes: { profile: JSON.stringify(p) }, kakao: {} };
+  for (const [focus, expected] of [
+    ["金虔佑", "不像開會"],
+    ["李理悟", "姓名牌"],
+    ["鄭相炫", "廚房哪扇櫃子"],
+  ]) {
+    state.ui.kakao!["answer:d1-focus"] = JSON.stringify({ value: focus });
+    state.ui.kakao!["answer:d1-approach"] = JSON.stringify({
+      value: "輕鬆聊聊",
+      optionIndex: 0,
+    });
+    expect(seasonValues(work, state, p, config).interaction1).toContain(
+      expected,
+    );
+  }
+  const former = {
+    ...p,
+    men: config.men.filter((n) => n !== "金虔佑").slice(0, 6),
+  };
+  state.ui.notes!.profile = JSON.stringify(former);
+  expect(parseProfile(state.ui.notes!.profile)?.men).toEqual(former.men);
+  expect(seasonValues(work, state, former, config).men10).not.toContain(
+    "金虔佑",
+  );
+});
