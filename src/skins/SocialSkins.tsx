@@ -18,6 +18,7 @@ import {
   ThumbsUp,
 } from "lucide-react";
 import { useState } from "react";
+import { useChineseScript } from "../story-forms/ChineseScript";
 import type { Item } from "../schema";
 import {
   Avatar,
@@ -89,20 +90,27 @@ function WeiboActions({ p, item }: { p: Props; item: Item }) {
   );
 }
 export function WeiboSkin(p: Props) {
-  const { tab, setTab, q, setQ, items } = useContent(p, "关注");
+  const t = useChineseScript();
+  const { tab, setTab, q, setQ, items } = useContent(
+    p,
+    p.items.some((i) => i.meta.hotRank) ? "发现" : "关注",
+  );
+  const hot = items
+    .filter((i) => i.meta.hotRank)
+    .sort((a, b) => Number(a.meta.hotRank) - Number(b.meta.hotRank));
   const [feed, setFeed] = useState("全部");
   const list = feed === "全部" ? items : items.filter((i) => i.folder === feed);
   return (
     <div className="catalog-skin weibo-ui">
       <Header p={p} />
       <div className="weibo-sections">
-        {["关注", "发现", "我"].map((t) => (
+        {["关注", "发现", "我"].map((label) => (
           <button
-            key={t}
-            className={tab === t ? "selected" : ""}
-            onClick={() => setTab(t)}
+            key={label}
+            className={tab === label ? "selected" : ""}
+            onClick={() => setTab(label)}
           >
-            {t}
+            {t(label)}
           </button>
         ))}
       </div>
@@ -116,6 +124,25 @@ export function WeiboSkin(p: Props) {
         ) : (
           <>
             <SearchBox value={q} set={setQ} />
+            {tab === "发现" && hot.length > 0 && (
+              <section className="weibo-hot-search" aria-label="微博熱搜榜">
+                <h3>{t("微博熱搜 · 終選之夜")}</h3>
+                {hot.map((i) => (
+                  <button
+                    className="weibo-hot-row"
+                    key={i.id}
+                    onClick={() => p.onItem(i)}
+                  >
+                    <b>{i.meta.hotRank}</b>
+                    <span>
+                      {t(i.title)}
+                      <small>{t(i.meta.heat + " 熱度")}</small>
+                    </span>
+                    <em>{t(i.meta.hotBadge || "熱")}</em>
+                  </button>
+                ))}
+              </section>
+            )}
             <div className="weibo-feed-filter">
               {["全部", ...groupItems(items).filter((g) => g !== "未分类")].map(
                 (g) => (

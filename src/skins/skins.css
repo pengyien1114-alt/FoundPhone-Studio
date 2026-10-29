@@ -4150,3 +4150,46 @@
   border: 0;
   color: inherit;
 }
+.weibo-hot-search {
+  background: var(--app-card, #fff);
+  color: var(--app-text, #222);
+  margin: 10px 0;
+  padding: 12px 16px;
+}
+.weibo-hot-search h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+.weibo-hot-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 0;
+  text-align: left;
+  border-bottom: 1px solid #8882;
+  color: inherit;
+}
+.weibo-hot-row > b {
+  width: 18px;
+  color: #ff6b32;
+  font-size: 20px;
+}
+.weibo-hot-row > span {
+  flex: 1;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.weibo-hot-row small {
+  display: block;
+  font-size: 12px;
+  color: #888;
+}
+.weibo-hot-row em {
+  background: #ff773c;
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-style: normal;
+}

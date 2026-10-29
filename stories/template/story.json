@@ -300,6 +300,12 @@
         "meta": {
           "library": "true"
         }
+      },
+      {
+        "id": "aftershow-writing",
+        "title": "節目後續文案詞庫",
+        "body": "{\"outcomes\":{\"reunion\":{\"captions\":[{\"text\":\"這次不讓你猜了。{{ex}}，我們慢慢來。🤍\",\"photo\":\"回到日常的第一頁\"},{\"text\":\"不用再裝不熟了，還有點不習慣。\",\"photo\":\"錄製結束後的相簿\"},{\"text\":\"謝謝陪我們走完這一段的人。節目結束了，生活剛開始。\",\"photo\":\"收官後的第一篇\"}],\"comments\":[\"mug_for_two: 不用猜了！！！！截圖發群裡了！！！！\",\"the_last_frame: {{ex}}，這次真的能好好說話了吧😭\",\"cp_archive_21: 雙向的！這次真的是雙向的！我沒白熬這21天\",\"not_marriage_office: 好了好了是重新開始不是明天辦婚禮，評論區先把桌子收一下😂\",\"wait_for_ep22: 回覆 @not_marriage_office：我連椅子都搬來了你叫我收？！\",\"one_more_try: 比起最後抱沒抱到，我更在意之後還能不能好好說話。這次加油啊\",\"late_train_home: 救命我在地鐵上笑出聲，旁邊的人以為我中獎了\",\"bias_first: {{player}}開心就好，別為了讓我們嗑糖硬發合照喔\",\"reunion_club: 我還記得他們前面那種客氣到不行的樣子，誰懂現在這一句的含金量\",\"soft_launch_police: 我本來只想路過，看到本人更新又坐下了\"],\"topics\":[{\"title\":\"{{player}} {{ex}}終選雙向復合\",\"body\":\"終選播出，{{player}}表達了重新開始的心意，{{ex}}也選擇了同一個方向。這次不是單方面等待，也不是把留戀直接當成問題已經解決。兩人願意把節目裡練習過的相處帶回生活。\",\"comments\":[\"嗑到真的也會餓: 我今晚吃飯吃一半直接放下筷子了，誰懂\",\"不負責尖叫: 復合這兩個字我反覆確認三次，怕我又看錯字幕😭\",\"先別替人結婚: 有雙向就先高興，之後能不能走好是他們的生活。\",\"回放第幾遍了: 回覆 @先別替人結婚：同意，但今天先讓我高興一下好不好！！\",\"今天不上班嗎: 前面有些話是真的談開了，不是最後一集突然塞個好結局。\",\"紙巾不夠用: 我朋友之前一直叫我別嗑前任線，現在給我打了六個電話\",\"沒白蹲這個坑: 我終於可以把收藏夾名字改回來了\",\"理智只剩一格: 選彼此是起點，不是交作業，祝真的過得比節目裡輕鬆。\"]},{\"title\":\"復合之後怎麼不再分開\",\"body\":\"觀眾重新討論兩人曾公開談過的分手原因。終選給了重新開始的機會，未來還需要兩個人繼續溝通；一個選擇不能自動替代生活裡的改變。\",\"comments\":[\"拒絕結局濾鏡: 前任線最怕只想念好的那部分，這個題目問得好\",\"重看不代表看懂: 我以前覺得復合就是回到以前，現在反而希望他們別回到以前。\",\"咖啡還沒喝: 回覆 @重看不代表看懂：對，要的是不同的相處，不是把原來的問題再走一遍\",\"回家再說也可以: 節目裡敢把難聽的話說出來，至少比只會互相忍好多了\",\"不要當戀愛監工: 不要從今天開始天天查兩個人的定位了吧，太可怕了\",\"半夜也要追: 我可以嗑，也可以知道往後沒有保證，不矛盾\",\"冷靜不了一點: 我負責歡呼，他們負責過日子，就這麼定了\",\"明天要早起: 這樓比熱搜第一還有用，我先收藏給未來的自己。\"]}]},\"new\":{\"captions\":[{\"text\":\"下次見，不用等節目組排時間了。{{finalPerson}} ☺️\",\"photo\":\"下一次見面的約定\"},{\"text\":\"有人一起走，回家的路好像也沒那麼長。\",\"photo\":\"收官後的第一篇\"},{\"text\":\"謝謝這21天，也謝謝後來認識的你。接下來慢慢來。\",\"photo\":\"節目之外的相簿\"}],\"comments\":[\"no_more_matching: 不用節目組排時間了！！懂了！！我懂了！！\",\"new_chapter_club: {{finalPerson}}自己看著辦，下次見面請準時🥹\",\"cp_screenshot: {{player}}這篇我存了，別刪，我們群裡都在哭\",\"just_one_small_step: 終於可以光明正大約吃飯了，不用我幫你們猜半天了\",\"moonlight_buffer: 回覆 @cp_screenshot：群裡本來安靜了，這篇一發又99+\",\"its_not_a_race: 不是誰贏過誰，就是兩個人願意往前走，喜歡這樣。\",\"old_ship_archive: 我原本嗑另一對，看到本人這麼說也只能祝福了，真心的\",\"tomorrow_is_monday: 我還要上班呢，這樣我明天怎麼起得來！！\",\"solo_fan_corner: 先說我最喜歡的是{{player}}本人，更新日常也會看的🤍\",\"not_your_script: 認識的時間不是最長，願意好好相處比較重要，請繼續。\"],\"topics\":[{\"title\":\"{{player}} {{finalPerson}}換乘成功\",\"body\":\"終選結果公布，{{player}}與{{finalPerson}}選擇了彼此。這是雙方在最後環節重新確認的心意，不等同於白天的約會或旅行搭檔安排。\",\"comments\":[\"今天嗑哪對: 我承認一開始沒看好，現在我坐主桌邊上可以嗎\",\"下班才敢點開: 誰把這個當晚八點新聞給我報的，我在工位憋笑快沒了\",\"慢慢走也很好: 是兩個人都選了才有的結果，這點真的很重要\",\"前任線畢業了: 我有點酸，但也沒辦法替別人選，祝好。\",\"不要比較輸贏: 回覆 @前任線畢業了：嗑過的都是真的感受，沒必要追著人罵\",\"已經看第四遍: 我只會啊啊啊啊，長評論等我明天醒了再寫\",\"不押寶的路人: 新關係也不保證輕鬆，但能開始就很好\",\"定時早睡失敗: 二十一天前不認識他們，現在這條熱搜我刷了半小時\"]},{\"title\":\"換乘成功不等於前任輸了\",\"body\":\"收官討論裡，有人為新的雙向心動高興，也有人對過去的關係意難平。節目的結果確認的是現在的選擇，沒有把任何一段真實相處當作輸贏。\",\"comments\":[\"別比了先吃飯: 終於有人說了，戀愛不是淘汰賽\",\"舊船也有風景: 嗑前任線的可以難過，但別去新人評論區陰陽怪氣吧\",\"新船靠岸: 回覆 @舊船也有風景：謝謝，我們也不會用以前的難過做笑話\",\"檸檬水去冰: 路人表示兩條線都看得進去，不想被分隊\",\"今晚有點空: 不是選新人就代表過去全是假的，哪有那麼簡單\",\"別替我圓滿: 我最喜歡{{player}}終於把自己的話說清楚，結果放後面\",\"啤酒已經沒氣: 希望下次看他們是普通約會日常，不是回應爭議\",\"備忘錄寫滿了: 我現在需要的是睡覺，不是再看三百篇輸贏分析。\"]}]},\"single\":{\"captions\":[{\"text\":\"一個人回家，也有好好吃飯。\",\"photo\":\"回家後的第一頓飯\"},{\"text\":\"先不急著回答下一段，最近想睡個好覺。\",\"photo\":\"自己的日常\"},{\"text\":\"謝謝你們陪我走完21天。之後也會慢慢更新生活。\",\"photo\":\"節目結束後的相簿\"}],\"comments\":[\"solo_table_for_one: 一個人也要吃好！這條我舉雙手同意\",\"cp_folder_closed: 我嗑的沒成，但還是想來看看你，睡個好覺🤍\",\"not_a_matchmaker: 評論區不要再拉人配對啦，人家自己選得很清楚\",\"small_daily_things: 有普通日常看我就很開心，真的不用急著給下一個答案\",\"sad_but_respectful: 有點捨不得，但不是每季都要湊成一對才算看完。\",\"lunch_before_love: 回覆 @solo_table_for_one：先把晚飯吃好，戀愛可以晚點再說\",\"once_was_a_shipper: 我先把CP超話靜音幾天，本人的更新還是會追的\",\"dont_check_reflections: 別分析餐具了，一個碗也能被你們數出暗號😂\",\"spring_after_rain: {{player}}看見這裡！今天也有人很喜歡你！\",\"better_sleep_please: 收官快樂，下次見可以只是說早餐吃什麼。\"],\"topics\":[{\"title\":\"{{player}}終選選擇單身\",\"body\":\"在終選裡，{{player}}選擇暫不開始一段關係。這是明確的個人決定，不是等待別人補上答案。節目結束，生活仍然繼續。\",\"comments\":[\"先吃點好的: 不是所有故事都得兩個人一起離開吧，這樣我也接受\",\"CP粉緩緩再來: 心裡有點空，但不想把自己的期待壓給本人\",\"不代替人選擇: 回覆 @CP粉緩緩再來：我也是，想哭跟尊重可以同時存在\",\"早上七點的我: 最後能說清楚不要什麼，也挺不容易的\",\"單人桌也挺好: 別把單身叫敗局了，真的受不了\",\"看完需要散步: 我原本想看甜的，結果最後在想自己的事。\",\"今晚先關超話: 這季結束我先回自己的生活了，謝謝這21天\",\"不是都得有答案: 想談就談，不想談就停，先把這個權利還給參加的人。\"]},{\"title\":\"單身也是換乘戀愛的答案\",\"body\":\"觀眾討論終選是否一定要牽手離開。有人覺得遺憾，也有人認為把自己放回生活中心，同樣是這21天能帶走的改變。\",\"comments\":[\"不要替我可惜: 一定要有對象才算人生圓滿？我不信\",\"人還是要下班: 戀綜讓我一個母單看著看著鬆了口氣，也挺神奇的\",\"我的CP畢業了: 我會難過，但不會去催本人跟誰聯絡。\",\"柚子茶少糖: 回覆 @我的CP畢業了：這才是正常嗑法吧\",\"鏡頭之外也有生活: 收官之後不是所有更新都得交代感情狀態\",\"慢半拍也沒事: 最後那個選擇其實很有勇氣，選了就先好好生活\",\"今晚早點休息: 不用再等匿名短信了，想想也替人鬆口氣\",\"等下還要洗碗: 好，熱搜關掉，我也要去把自己的飯吃完了。\"]}]},\"unreturnedReunion\":{\"captions\":[{\"text\":\"有些話終於說完了。接下來先照顧好自己。\",\"photo\":\"回家路上的車窗\"},{\"text\":\"到家了。晚飯有吃，大家不用擔心。\",\"photo\":\"回家後的第一頓飯\"},{\"text\":\"謝謝這段時間陪我一起等答案的人。之後慢慢見。\",\"photo\":\"留給自己的下一頁\"}],\"comments\":[\"send_you_a_cloud: 看到了，先抱一下🤍不用急著把心情整理好\",\"old_ship_dock: 意難平是真的，但不會去問他為什麼不選。你們都好好的\",\"not_the_same_thing: 想念和重新在一起原來真不是一回事，這季我學到了\",\"bias_only_today: {{player}}不用為了讓我們放心，裝作已經沒事。\",\"late_reply_is_ok: 回覆 @bias_only_today：對，想休息多久就休息多久\",\"one_more_bowl: 有吃飯就好，我真的只是想確認這個🥲\",\"cp_box_in_storage: CP收藏夾先留著，沒有結局也不是我白喜歡了\",\"dont_tag_him: 不要再評論區一直@前任了，讓這篇留給本人吧\",\"walking_home_slow: 我以為自己只是看節目，收官之後反而有點想哭\",\"we_can_wait_here: 這不是一篇找暗號的貼文，我就留句晚安。\"],\"topics\":[{\"title\":\"{{player}}與{{ex}}沒有雙向復合\",\"body\":\"終選時，{{player}}表達了重新開始的心意，{{ex}}尚未準備好作出同樣的承諾。兩人沒有在這一晚共同確認復合，過去的留戀與重新開始的準備被分開面對。\",\"comments\":[\"今晚先別剪糖: 我真的難過，但別拿以前每個溫柔鏡頭逼人必須答應\",\"不想聽標準答案: 我前面還抱希望，後面談到沒有解決的問題其實已經有跡象了\",\"熱水已經涼了: 一直想念的人也可能不敢再走一次，越想越難受\",\"雙向才有下一步: 回覆 @熱水已經涼了：這就是最難受的部分，不是沒感情，是沒辦法現在一起走\",\"不要私訊嘉賓: 難受就樓裡說，別去本人那邊要解釋\",\"船靠岸了嗎: 沒成也不代表前面的相處是騙人的，別把自己的感動全推翻\",\"回放先暫停: 我需要緩一下，現在看誰說可惜都想哭\",\"給彼此留點位置: 今晚先到這裡，別替任何人許下一年後一定復合的願。\"]},{\"title\":\"留戀和復合之間還差什麼\",\"body\":\"收官後，觀眾回看兩人關於過去的談話。收到短信代表某一刻的心意，是否能再開始，還需要信任、具體的改變與雙方意願。\",\"comments\":[\"不只看最後一分鐘: 每一封都能有重量，但不等於簽了復合合約\",\"再想一次就睡: 看得最難受的是還記得，又不確定自己能不能做到\",\"前任線觀察員: 我嗑得上頭的時候也忘了他們真的分過手。\",\"有人懂停頓嗎: 回覆 @前任線觀察員：對，分手原因不是拿來增加虐感的裝飾\",\"不替誰下判決: 不答應不一定是冷漠，答應了又做不到也會傷人\",\"雨停再走: 希望以後別為了觀眾期待再湊一個交代\",\"相愛不是考試: 說不上誰有錯，只是兩個人的時間沒有接上\",\"等我喝口水: 這個樓我得明天再看，現在只想安靜一下。\"]}]},\"unreturnedNew\":{\"captions\":[{\"text\":\"有好好說出喜歡，也有好好往回走。\",\"photo\":\"回家路上的車窗\"},{\"text\":\"回家了，先把自己安頓好。\",\"photo\":\"自己的日常\"},{\"text\":\"謝謝這21天。沒說完的留在那裡，之後的生活慢慢來。\",\"photo\":\"收官後的第一篇\"}],\"comments\":[\"you_did_say_it: 有把想說的說出來就已經很勇敢了🤍\",\"one_way_ship: 我嗑了很久，但現在只想說{{player}}好好休息。\",\"not_a_winning_game: 沒走到一起不等於你不好，真的拜託別這樣想\",\"daily_update_club: 下一篇發什麼都行，早餐、天氣、路邊的貓，我都看\",\"a_little_sad_tonight: 回覆 @one_way_ship：我也，今天不找暗號了\",\"dont_force_a_sequel: 不要在這裡喊{{finalPerson}}來追回吧，兩個人都說得很清楚了\",\"almost_is_a_memory: 難過歸難過，那些一起笑過的畫面我還是喜歡\",\"just_a_good_night: 我只想留一句晚安，不催你整理心情\",\"your_side_of_the_table: 本人粉來了，不管跟誰在一起都會喜歡你\",\"screen_off_soon: 這篇看完我也去洗個澡，好好過自己的晚上。\"],\"topics\":[{\"title\":\"{{player}}向{{finalPerson}}表白未雙向\",\"body\":\"{{player}}在終選向{{finalPerson}}表達心意，對方沒有選擇開始新的關係。節目呈現的是這一刻雙方不同的答案，沒有把曾經的相處改寫成錯誤。\",\"comments\":[\"最後一集破防了: 我還以為能成，看到結果那一下整個人安靜了\",\"不是單方面就好: 喜歡可以一個人說，開始得兩個人一起。\",\"追劇也要吃飯: 沒成不代表前面每次約會都是假的吧，別這樣回踩\",\"今晚不分析眼神: 回覆 @追劇也要吃飯：是，我還是很喜歡那些一起笑的時候\",\"別替人開追妻劇本: 沒有官宣後續就停在節目結果，不編誰一定會後悔\",\"CP筆記合起來: 我可能要緩幾天，但不去任何人那裡鬧\",\"平常心也會難過: 說勇敢很容易，真的走過去需要很大勇氣\",\"把未來還給本人: 以後可能怎樣留給以後，今天先讓人回家吧。\"]},{\"title\":\"沒有雙向也不否定心動\",\"body\":\"一段新的靠近沒有在終選成為戀愛關係。觀眾對哪些互動曾讓自己相信兩人有可能，留下不同的回看角度；沒有人能替另一個人完成承諾。\",\"comments\":[\"想再看一次約會: 不是所有舒服的相處都能長成戀愛，這點我以前不服\",\"當時真的有笑: 就算不在一起，那時候笑得開心也算數\",\"單向線也有觀眾: 我會遺憾，但不想把誰拉出來審判\",\"今晚拒絕打分: 回覆 @單向線也有觀眾：同意，感情不是答題比賽\",\"不做表情偵探了: 我少截一張圖，能多聽一句完整的話，可能早就不會誤會\",\"下次見普通日常: 收官後不用再為觀眾維持曖昧了吧，想想也挺好\",\"不要催下一任: 先讓人把生活過回來，再說別的\",\"滿格電看成沒電: 我追這季追到充電線都換了一條，今晚終於可以早睡。\"]}]}},\"captionComments\":[[\"frame.by.frame: 好了這張的文案我截走了，誰都別攔我😭\",\"coffee_is_cold: 所以這篇要加進置頂合集嗎，我先存。\",\"no_more_refresh: 回覆 @frame.by.frame：我已經轉給陪我追了21天的朋友了\",\"just_one_more_ep: 本人發一篇，我能在評論區住三天。\",\"low_battery_club: 手機只剩2%還是要先來報到\",\"晚睡也要吃早餐: 沒有一百個愛心但我先放一個🤍\"],[\"ordinary.sun: 終於不是小屋的沙發了！！歡迎回到自己的生活\",\"not_a_detective: 普通一篇日常，我差點又拿出放大鏡。好了我收起來\",\"one_slow_morning: 回覆 @not_a_detective：不要分析啦先誇一下文案ㅋㅋ\",\"yellow_mug: 有日常看就很開心，不用每篇都有大事\",\"home_before_dark: 這種鬆一口氣的感覺好好。\",\"screen_time_21: 我宣布本人的日常比預告片還難等。\"],[\"thankyou_next_ep: 不用謝啦，追得又哭又笑是我自願的🥲\",\"paper_cup_03: 我才要謝謝，這21天真的陪我熬過好多下班路\",\"dont_ask_for_more: 發完就去吃頓好的，不用一直回應大家！\",\"rewind_please: 回覆 @paper_cup_03：我也是，通勤都在刷討論樓\",\"my_only_bias: 不管下一篇隔多久，都會來看🤍\",\"bye_bye_house: 最後一次喊收官快樂！下次見可以是普通日常了。\"]],\"topics\":[{\"title\":\"第一次約會到終選的距離\",\"body\":\"第一場正式約會，{{player}}在節目中與{{date2}}相處。約會是認識彼此的開始，不是預先承諾終選。觀眾翻回最初幾集，重新看待那些曾經很確定的猜測。\",\"comments\":[\"第一集就押錯: 我第一場約會之後就說穩了，現在請把我麥克風拔掉\",\"時間線補課中: 當時的心動是真的，後來改變也可以是真的啊\",\"今晚吃點甜的: 我那時只顧著看兩個人坐多近，現在想聽他們到底聊了什麼\",\"今天不押任何人: 回覆 @第一集就押錯：別走，你的每個穩了我都截圖了😂\",\"普通觀眾也會哭: 最開始連名字都記不住，最後在替人等一句話\",\"不想拉踩的CP粉: 沒有到終選也可以是很好的一次約會，放過過去的每一幕\",\"二倍速沒開過: 我從來沒想過一張約會卡能讓我反覆看這麼多次\",\"下一季再也不猜: 記住我現在這句，下季第一集我又會忘。\"]},{\"title\":\"旅行搭檔不是終選答案\",\"body\":\"日本行裡，{{player}}和{{travelPartner}}作為旅行搭檔同行。旅行、約會、匿名短信與終選是不同的環節。觀眾整理公開行程時，也發現自己曾把一次同行看成了最終答案。\",\"comments\":[\"飛機座位觀察員: 我當時拿機場圖分析了兩小時，現在看自己像個傻子\",\"別怪旅行搭檔: 一起出門又不是簽終身合約，真的不要強行對答案\",\"我真的嗑過這段: 回覆 @飛機座位觀察員：我看過你那篇，還收藏了，咱倆都別笑誰\",\"今天也想去旅行: 感情先不說，日本那幾段風景我是真的想去\",\"不想再開放大鏡: 一個搭檔、一封短信、一個終選，本來就可能是三個人\",\"看戀綜也有作業: 我筆記本箭頭改得都快破了，下次拿鉛筆寫\",\"各自都有行程: 這次有拍到其他人怎麼相處挺好的，不然我永遠只看一條線\",\"旅行不是畢業考: 喜歡過一段同行，也可以把它留在旅行裡。\"]},{\"title\":\"換乘戀愛21天收官\",\"body\":\"六對已分手的情侶走過21天。有人重新理解過去，有人試著往前，也有人選擇暫停。收官討論仍在繼續，鏡頭之外的生活交還給每一位嘉賓。\",\"comments\":[\"片尾不用放太快: 十二個名字我都認識了，你現在跟我說結束了？\",\"不是背景板觀眾: 其他人的後續也想看，別只剪出一條主線\",\"自動播放不要停: 我以為我在追劇，結果最後是在跟一屋子人告別\",\"週末突然沒事: 回覆 @自動播放不要停：下週這個時間我到底要幹嘛\",\"紙巾盒空了: 有人做飯有人洗碗，這些日常現在想想比預告還捨不得\",\"情緒需要緩衝: 大結局看完不想立刻看解讀，就想發會兒呆\",\"下集不存在了: 每季最難接受的不是配沒配成，是再也沒有下集預告\",\"明天也要生活: 都好好的吧，節目裡沒說完的不用每一句都補給我們。\"]},{\"title\":\"嗑CP可以別催本人交作業\",\"body\":\"終選過後，粉絲開始等待嘉賓更新社群。有觀眾提醒：喜歡一段互動，可以留住回憶，也需要尊重公開結果與本人生活，不把每篇日常都當作感情證據。\",\"comments\":[\"只存圖不催更: 我嗑我的，別人的生活不是我的待播劇\",\"不要數兩個杯子: 普通人也會同時喝水和咖啡，放過餐桌吧😂\",\"只看節目公開的: 不扒私人定位、不催合照、不私訊追問，真的沒那麼難\",\"有糖再開心: 回覆 @不要數兩個杯子：謝謝，我連杯子倒影都快被你們看出第三個人了\",\"理智也會尖叫: 我可以啊啊啊啊，但不會去叫本人照我希望的活\",\"不要改寫結果: 有官宣看官宣，沒官宣就當普通更新，不編地下複合\",\"晚睡嗑糖早起上班: 收官了給人喘口氣，也給我自己喘口氣\",\"下一篇見就好: 有新日常就開心，沒有就去把自己的日子過好。\"]}],\"igTopic\":{\"title\":\"{{player}}收官後第一篇IG\",\"body\":\"{{player}}在節目結束後更新 Instagram：\\n\\n「{{afterIgCaption}}」\\n\\n貼文下出現追完節目的觀眾與 CP 粉留言。這是本人選擇留下的話，沒有另行確認任何未公開的感情變動。\",\"comments\":[\"刷新先停一下: 剛還在刷大結局，轉頭IG就更新了？？\",\"先看完本人文案: 有話就看本人說的，不要再幫人填空了\",\"評論區集合完畢: 群聊一秒安靜，因為所有人都去留言了😂\",\"只留一顆心: 回覆 @評論區集合完畢：我回來了，手還在抖\",\"今天也追到好晚: 普通一篇更新也能看出神，追完一季有後勁\",\"不要翻譯成劇本: 這篇沒有寫的意思就先別替本人加上去吧\",\"收到更新很開心: 不一定要合照，有在過自己的生活就很好\",\"明天真的要早起: 好了看完這篇我就睡，這次真的。\"]}}",
+        "hidden": true
       }
     ],
     "twitter": [
@@ -11880,6 +11886,248 @@
           "opening": "true"
         }
       }
+    ],
+    "instagram": [
+      {
+        "id": "after-ig-compose",
+        "title": "收官後的第一篇",
+        "body": "節目結束了。想在這裡留下什麼？點一下，選擇你的第一篇貼文。",
+        "hidden": true,
+        "meta": {
+          "form": "post-select",
+          "options": "{{afterIgOptions}}"
+        }
+      },
+      {
+        "id": "after-ig-post",
+        "title": "{{afterIgPhoto}}",
+        "body": "{{afterIgCaption}}",
+        "sender": "{{player}}",
+        "hidden": true,
+        "kind": "post",
+        "time": "節目播畢後 · 剛剛",
+        "likes": 186421,
+        "comments": [
+          "{{afterIgComment0}}",
+          "{{afterIgComment1}}",
+          "{{afterIgComment2}}",
+          "{{afterIgComment3}}",
+          "{{afterIgComment4}}",
+          "{{afterIgComment5}}",
+          "{{afterIgComment6}}",
+          "{{afterIgComment7}}",
+          "{{afterIgComment8}}",
+          "{{afterIgComment9}}",
+          "{{afterIgComment10}}",
+          "{{afterIgComment11}}",
+          "{{afterIgComment12}}",
+          "{{afterIgComment13}}",
+          "{{afterIgComment14}}",
+          "{{afterIgComment15}}"
+        ],
+        "meta": {
+          "location": "節目之外的生活",
+          "commentsReadOnly": "true"
+        }
+      }
+    ],
+    "weibo": [
+      {
+        "id": "after-hot-1",
+        "title": "{{afterHotTitle1}}",
+        "body": "#{{afterHotTitle1}}#\n\n{{afterHotBody1}}",
+        "sender": "換乘戀愛話題觀察",
+        "hidden": true,
+        "kind": "post",
+        "folder": "終選熱搜",
+        "time": "收官夜 · 即時",
+        "likes": 341745,
+        "comments": [
+          "{{afterHot1Comment0}}",
+          "{{afterHot1Comment1}}",
+          "{{afterHot1Comment2}}",
+          "{{afterHot1Comment3}}",
+          "{{afterHot1Comment4}}",
+          "{{afterHot1Comment5}}",
+          "{{afterHot1Comment6}}",
+          "{{afterHot1Comment7}}"
+        ],
+        "meta": {
+          "hotRank": "1",
+          "hotBadge": "爆",
+          "heat": "6943萬",
+          "reposts": "242875",
+          "commentCount": "86091"
+        }
+      },
+      {
+        "id": "after-hot-2",
+        "title": "{{afterHotTitle2}}",
+        "body": "#{{afterHotTitle2}}#\n\n{{afterHotBody2}}",
+        "sender": "換乘戀愛話題觀察",
+        "hidden": true,
+        "kind": "post",
+        "folder": "終選熱搜",
+        "time": "收官夜 · 即時",
+        "likes": 323308,
+        "comments": [
+          "{{afterHot2Comment0}}",
+          "{{afterHot2Comment1}}",
+          "{{afterHot2Comment2}}",
+          "{{afterHot2Comment3}}",
+          "{{afterHot2Comment4}}",
+          "{{afterHot2Comment5}}",
+          "{{afterHot2Comment6}}",
+          "{{afterHot2Comment7}}"
+        ],
+        "meta": {
+          "hotRank": "2",
+          "hotBadge": "熱",
+          "heat": "6404萬",
+          "reposts": "225576",
+          "commentCount": "78500"
+        }
+      },
+      {
+        "id": "after-hot-3",
+        "title": "{{afterHotTitle3}}",
+        "body": "#{{afterHotTitle3}}#\n\n{{afterHotBody3}}",
+        "sender": "換乘戀愛話題觀察",
+        "hidden": true,
+        "kind": "post",
+        "folder": "終選熱搜",
+        "time": "收官夜 · 即時",
+        "likes": 304871,
+        "comments": [
+          "{{afterHot3Comment0}}",
+          "{{afterHot3Comment1}}",
+          "{{afterHot3Comment2}}",
+          "{{afterHot3Comment3}}",
+          "{{afterHot3Comment4}}",
+          "{{afterHot3Comment5}}",
+          "{{afterHot3Comment6}}",
+          "{{afterHot3Comment7}}"
+        ],
+        "meta": {
+          "hotRank": "3",
+          "hotBadge": "熱",
+          "heat": "5865萬",
+          "reposts": "208277",
+          "commentCount": "70909"
+        }
+      },
+      {
+        "id": "after-hot-4",
+        "title": "{{afterHotTitle4}}",
+        "body": "#{{afterHotTitle4}}#\n\n{{afterHotBody4}}",
+        "sender": "換乘戀愛話題觀察",
+        "hidden": true,
+        "kind": "post",
+        "folder": "終選熱搜",
+        "time": "收官夜 · 即時",
+        "likes": 286434,
+        "comments": [
+          "{{afterHot4Comment0}}",
+          "{{afterHot4Comment1}}",
+          "{{afterHot4Comment2}}",
+          "{{afterHot4Comment3}}",
+          "{{afterHot4Comment4}}",
+          "{{afterHot4Comment5}}",
+          "{{afterHot4Comment6}}",
+          "{{afterHot4Comment7}}"
+        ],
+        "meta": {
+          "hotRank": "4",
+          "hotBadge": "熱",
+          "heat": "5326萬",
+          "reposts": "190978",
+          "commentCount": "63318"
+        }
+      },
+      {
+        "id": "after-hot-5",
+        "title": "{{afterHotTitle5}}",
+        "body": "#{{afterHotTitle5}}#\n\n{{afterHotBody5}}",
+        "sender": "換乘戀愛話題觀察",
+        "hidden": true,
+        "kind": "post",
+        "folder": "終選熱搜",
+        "time": "收官夜 · 即時",
+        "likes": 267997,
+        "comments": [
+          "{{afterHot5Comment0}}",
+          "{{afterHot5Comment1}}",
+          "{{afterHot5Comment2}}",
+          "{{afterHot5Comment3}}",
+          "{{afterHot5Comment4}}",
+          "{{afterHot5Comment5}}",
+          "{{afterHot5Comment6}}",
+          "{{afterHot5Comment7}}"
+        ],
+        "meta": {
+          "hotRank": "5",
+          "hotBadge": "熱",
+          "heat": "4787萬",
+          "reposts": "173679",
+          "commentCount": "55727"
+        }
+      },
+      {
+        "id": "after-hot-6",
+        "title": "{{afterHotTitle6}}",
+        "body": "#{{afterHotTitle6}}#\n\n{{afterHotBody6}}",
+        "sender": "換乘戀愛話題觀察",
+        "hidden": true,
+        "kind": "post",
+        "folder": "終選熱搜",
+        "time": "收官夜 · 即時",
+        "likes": 249560,
+        "comments": [
+          "{{afterHot6Comment0}}",
+          "{{afterHot6Comment1}}",
+          "{{afterHot6Comment2}}",
+          "{{afterHot6Comment3}}",
+          "{{afterHot6Comment4}}",
+          "{{afterHot6Comment5}}",
+          "{{afterHot6Comment6}}",
+          "{{afterHot6Comment7}}"
+        ],
+        "meta": {
+          "hotRank": "6",
+          "hotBadge": "熱",
+          "heat": "4248萬",
+          "reposts": "156380",
+          "commentCount": "48136"
+        }
+      },
+      {
+        "id": "after-hot-7",
+        "title": "{{afterHotTitle7}}",
+        "body": "#{{afterHotTitle7}}#\n\n{{afterHotBody7}}",
+        "sender": "換乘戀愛話題觀察",
+        "hidden": true,
+        "kind": "post",
+        "folder": "終選熱搜",
+        "time": "收官夜 · 即時",
+        "likes": 231123,
+        "comments": [
+          "{{afterHot7Comment0}}",
+          "{{afterHot7Comment1}}",
+          "{{afterHot7Comment2}}",
+          "{{afterHot7Comment3}}",
+          "{{afterHot7Comment4}}",
+          "{{afterHot7Comment5}}",
+          "{{afterHot7Comment6}}",
+          "{{afterHot7Comment7}}"
+        ],
+        "meta": {
+          "hotRank": "7",
+          "hotBadge": "新",
+          "heat": "3709萬",
+          "reposts": "139081",
+          "commentCount": "40545"
+        }
+      }
     ]
   },
   "variables": {
@@ -19099,6 +19347,41 @@
           "type": "notification",
           "key": "",
           "value": "[app:kakao]最後紀錄已保存；你可以確認結束這次旅程。"
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-1",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-2",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-3",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-4",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-5",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-6",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "[app:weibo]終選夜熱搜已更新，看看收官討論。"
         }
       ]
     },
@@ -21389,7 +21672,19 @@
       "id": "submit-finish-season",
       "label": "確認節目結束",
       "event": "variable",
-      "target": "ui:kakao:answer:finish-season"
+      "target": "ui:kakao:answer:finish-season",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "after-ig-compose",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "[app:instagram]節目結束後的第一篇，想留下什麼？"
+        }
+      ]
     },
     {
       "id": "submit-d2-date-choice-a",
@@ -21761,6 +22056,111 @@
           "type": "time",
           "key": "",
           "value": "09:00"
+        }
+      ]
+    },
+    {
+      "id": "open-aftershow-instagram",
+      "label": "舊存檔接續收官彩蛋",
+      "event": "openApp",
+      "target": "instagram",
+      "conditions": [
+        {
+          "key": "completed:submit-finish-season",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "after-ig-compose",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "open-aftershow-weibo",
+      "label": "舊存檔接續終選熱搜",
+      "event": "openApp",
+      "target": "weibo",
+      "conditions": [
+        {
+          "key": "read:final-result",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "after-hot-1",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-2",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-3",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-4",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-5",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-6",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "publish-after-ig",
+      "label": "分享收官後第一篇貼文",
+      "event": "variable",
+      "target": "ui:instagram:answer:after-ig-compose",
+      "conditions": [
+        {
+          "key": "completed:submit-finish-season",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "hide",
+          "key": "after-ig-compose",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-ig-post",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "after-hot-7",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "[app:instagram]你的貼文有新留言。追完節目的觀眾來了。"
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "[app:weibo]收官後的第一篇 IG 登上熱搜。"
         }
       ]
     }
@@ -23163,13 +23563,41 @@
         {
           "event": "variable",
           "target": "ui:kakao:answer:finish-season"
+        },
+        {
+          "event": "openApp",
+          "target": "weibo"
+        },
+        {
+          "event": "read",
+          "target": "after-hot-1"
+        },
+        {
+          "event": "openApp",
+          "target": "instagram"
+        },
+        {
+          "event": "variable",
+          "target": "ui:instagram:answer:after-ig-compose"
+        },
+        {
+          "event": "read",
+          "target": "after-ig-post"
+        },
+        {
+          "event": "read",
+          "target": "after-hot-7"
         }
       ],
       "ending": "旅程完成｜重新理解",
       "expectUnlocked": [
         "sealed-roster",
         "revealed-pairs",
-        "final-journal"
+        "final-journal",
+        "after-ig-compose",
+        "after-ig-post",
+        "after-hot-1",
+        "after-hot-7"
       ]
     },
     {
@@ -24573,13 +25001,41 @@
         {
           "event": "variable",
           "target": "ui:kakao:answer:finish-season"
+        },
+        {
+          "event": "openApp",
+          "target": "weibo"
+        },
+        {
+          "event": "read",
+          "target": "after-hot-1"
+        },
+        {
+          "event": "openApp",
+          "target": "instagram"
+        },
+        {
+          "event": "variable",
+          "target": "ui:instagram:answer:after-ig-compose"
+        },
+        {
+          "event": "read",
+          "target": "after-ig-post"
+        },
+        {
+          "event": "read",
+          "target": "after-hot-7"
         }
       ],
       "ending": "旅程完成｜新的可能",
       "expectUnlocked": [
         "sealed-roster",
         "revealed-pairs",
-        "final-journal"
+        "final-journal",
+        "after-ig-compose",
+        "after-ig-post",
+        "after-hot-1",
+        "after-hot-7"
       ]
     },
     {
@@ -25979,13 +26435,41 @@
         {
           "event": "variable",
           "target": "ui:kakao:answer:finish-season"
+        },
+        {
+          "event": "openApp",
+          "target": "weibo"
+        },
+        {
+          "event": "read",
+          "target": "after-hot-1"
+        },
+        {
+          "event": "openApp",
+          "target": "instagram"
+        },
+        {
+          "event": "variable",
+          "target": "ui:instagram:answer:after-ig-compose"
+        },
+        {
+          "event": "read",
+          "target": "after-ig-post"
+        },
+        {
+          "event": "read",
+          "target": "after-hot-7"
         }
       ],
       "ending": "旅程完成｜保留自己",
       "expectUnlocked": [
         "sealed-roster",
         "revealed-pairs",
-        "final-journal"
+        "final-journal",
+        "after-ig-compose",
+        "after-ig-post",
+        "after-hot-1",
+        "after-hot-7"
       ]
     }
   ]

@@ -632,6 +632,127 @@ test("final choice and completion also start from the KKT message field", async 
   await expect(page.locator(".story-overlay")).toContainText("保留自己");
 });
 
+test("aftershow: finish, preview an IG caption, share and read fans, then the matching Weibo topics", async ({
+  page,
+}) => {
+  test.setTimeout(90000);
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await restore(page, snapshotBefore("final-choice"));
+  await open(page, "KakaoTalk");
+  await page.getByRole("button", { name: "KKT消息", exact: true }).click();
+  await page
+    .locator(".story-overlay")
+    .getByRole("button", { name: "我選擇先保持單身", exact: true })
+    .click();
+  await x(page);
+  await kkt(page);
+  await option(page, "確認結束這次旅程");
+  await page.getByRole("button", { name: "查看節目後續", exact: true }).click();
+  await expect(page.locator(".mymy-instagram")).toBeVisible();
+  await expect(page.locator(".story-overlay.ending")).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "新增Instagram貼文", exact: true })
+    .click();
+  const composer = page.getByRole("dialog", {
+    name: "新增Instagram貼文",
+    exact: true,
+  });
+  await expect(composer.getByRole("radio")).toHaveCount(3);
+  await expect(
+    composer.getByRole("button", { name: "分享貼文", exact: true }),
+  ).toBeDisabled();
+  await expect(composer.locator("input, textarea")).toHaveCount(0);
+  await composer.getByRole("button", { name: "取消發文", exact: true }).click();
+  await expect(page.locator(".igp")).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "新增Instagram貼文", exact: true })
+    .click();
+  const text = await composer.getByRole("radio").first().innerText();
+  await composer.getByRole("radio").first().click();
+  await expect(composer.locator(".mymy-ig-preview")).toHaveText(text);
+  await page.screenshot({ path: "outputs/season/aftershow-ig-preview.png" });
+  await composer.getByRole("button", { name: "分享貼文", exact: true }).click();
+  await expect(page.locator(".igp")).toHaveCount(1);
+  await expect(page.locator(".igc").last()).toContainText(text);
+  await expect(
+    page.getByRole("button", { name: "新增Instagram貼文", exact: true }),
+  ).toHaveCount(0);
+  await page.locator(".cmall").click();
+  await expect(
+    page
+      .getByRole("dialog", { name: "Instagram评论" })
+      .locator(".mymy-comments p"),
+  ).toHaveCount(16);
+  await expect(page.locator(".mymy-comments")).toContainText("不要再拉人配對");
+  await page.screenshot({ path: "outputs/season/aftershow-ig-fans.png" });
+  await page.getByRole("button", { name: "关闭评论面板" }).click();
+  await home(page);
+  await open(page, "微博");
+  await expect(
+    page.getByRole("region", { name: "微博熱搜榜" }).locator(".weibo-hot-row"),
+  ).toHaveCount(7);
+  await expect(page.locator(".weibo-hot-row").first()).toContainText(
+    "小雨終選選擇單身",
+  );
+  await page.screenshot({ path: "outputs/season/aftershow-weibo-hot.png" });
+  await page.locator(".weibo-hot-row").last().click();
+  await expect(page.locator(".post-detail-body")).toContainText(text);
+  await expect(page.locator(".post-detail-comment")).toHaveCount(8);
+  await page.reload();
+  await page.getByRole("button", { name: "轻触解锁" }).click();
+  await pin(page);
+  await expect(page.locator(".story-overlay.ending")).toHaveCount(0);
+  await open(page, "Instagram");
+  await expect(page.locator(".igc").last()).toContainText(text);
+  await expect(
+    page.getByRole("button", { name: "新增Instagram貼文", exact: true }),
+  ).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test("aftershow: an older completed save unlocks the extras and does not announce an unreturned reunion as a couple", async ({
+  page,
+}) => {
+  test.setTimeout(60000);
+  const raw = JSON.parse(readFileSync("stories/template/story.json", "utf8"));
+  const { work } = compileStory(raw);
+  let state = snapshotBefore("finish-season");
+  for (const id of ["d7-repair", "d14-repair", "d19-repair", "d21-chat1"])
+    delete state.ui!.kakao!["answer:" + id];
+  state = dispatch(work, state, "variable", "ui:kakao:answer:finish-season");
+  state.unlocked = state.unlocked.filter((id) => !id.startsWith("after-"));
+  await restore(page, state);
+  await page.getByRole("button", { name: "查看節目後續", exact: true }).click();
+  await page
+    .getByRole("button", { name: "新增Instagram貼文", exact: true })
+    .click();
+  const composer = page.getByRole("dialog", {
+    name: "新增Instagram貼文",
+    exact: true,
+  });
+  await expect(composer.getByRole("radio").first()).toHaveText(
+    "有些話終於說完了。接下來先照顧好自己。",
+  );
+  await composer.getByRole("radio").first().click();
+  await composer.getByRole("button", { name: "分享貼文", exact: true }).click();
+  await page.locator(".cmall").click();
+  await expect(page.locator(".mymy-comments")).toContainText(
+    "不要再評論區一直@前任",
+  );
+  await expect(page.locator(".mymy-comments")).not.toContainText(
+    "這次真的是雙向",
+  );
+  await page.getByRole("button", { name: "关闭评论面板" }).click();
+  await home(page);
+  await open(page, "微博");
+  await expect(page.locator(".weibo-hot-row").first()).toContainText(
+    "沒有雙向復合",
+  );
+  await page.locator(".weibo-hot-row").first().click();
+  await expect(page.locator(".post-detail-body")).toContainText("尚未準備好");
+});
+
 test("official X posts have audience-scale counters in detail and feed, with per-cut comments", async ({
   page,
 }) => {

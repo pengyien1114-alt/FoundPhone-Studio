@@ -1,4 +1,6 @@
 import { packSeasonAnswer } from "./story-forms/season";
+import { packAftershowPost } from "./story-forms/aftershow";
+import { parseProfile, profileConfig } from "./story-forms/profile";
 import {
   ChineseScriptContext,
   parseScript,
@@ -537,17 +539,42 @@ function PhoneRuntime({
                     onSettings={onSettings}
                     onUi={(key, value) => {
                       const current = runtimeRef.current;
-                      const stored =
+                      let stored: UiValue | undefined = value;
+                      if (
                         app === "kakao" &&
                         key.startsWith("answer:") &&
                         work.variables.production === true
-                          ? packSeasonAnswer(
-                              work,
-                              current,
-                              key.slice(7),
-                              String(value),
-                            )
-                          : value;
+                      ) {
+                        stored = packSeasonAnswer(
+                          work,
+                          current,
+                          key.slice(7),
+                          String(value),
+                        );
+                      } else if (
+                        app === "instagram" &&
+                        key === "answer:after-ig-compose" &&
+                        work.variables.production === true
+                      ) {
+                        const profile = parseProfile(
+                          current.ui?.notes?.profile,
+                        );
+                        const config = (work.data.notes || [])
+                          .map(profileConfig)
+                          .find(Boolean);
+                        stored =
+                          profile && config
+                            ? packAftershowPost(
+                                work,
+                                current,
+                                "after-ig-compose",
+                                String(value),
+                                profile,
+                                config,
+                                storyValues(work, current),
+                              )
+                            : undefined;
+                      }
                       if (stored === undefined) return;
                       update(
                         dispatch(
@@ -686,22 +713,49 @@ function PhoneRuntime({
                 ))}
               </div>
             )}
-            {!creator && s.endings.length > 0 && !locked && (
-              <div className="story-overlay ending">
-                <span className="eyebrow">ENDING · {s.endings.length}</span>
-                <h2>故事在这里停泊。</h2>
-                <p>{s.endings[s.endings.length - 1]}</p>
-                <button
-                  onClick={() => {
-                    update(dispatch(work, initialRuntime(work), "start"));
-                    setApp("");
-                    setLocked(true);
-                  }}
-                >
-                  重新开始
-                </button>
-              </div>
-            )}
+            {!creator &&
+              s.endings.length > 0 &&
+              !locked &&
+              s.ui?.system?.dismissedEnding !==
+                s.endings[s.endings.length - 1] && (
+                <div className="story-overlay ending">
+                  <span className="eyebrow">ENDING · {s.endings.length}</span>
+                  <h2>故事在这里停泊。</h2>
+                  <p>{s.endings[s.endings.length - 1]}</p>
+                  {work.data.notes?.some(
+                    (i) => i.id === "aftershow-writing",
+                  ) && (
+                    <button
+                      onClick={() => {
+                        const current = runtimeRef.current;
+                        update({
+                          ...current,
+                          ui: {
+                            ...current.ui,
+                            system: {
+                              ...current.ui?.system,
+                              dismissedEnding:
+                                current.endings[current.endings.length - 1],
+                            },
+                          },
+                        });
+                        open("instagram");
+                      }}
+                    >
+                      {t("查看節目後續")}
+                    </button>
+                  )}
+                  <button
+                    onClick={() => {
+                      update(dispatch(work, initialRuntime(work), "start"));
+                      setApp("");
+                      setLocked(true);
+                    }}
+                  >
+                    重新开始
+                  </button>
+                </div>
+              )}
             {!creator && s.incomingCall && (
               <div className="incoming-call-screen">
                 <small>

@@ -654,3 +654,49 @@
   line-height: 1.75;
   overflow-wrap: anywhere;
 }
+.mymy-aftershow-invite {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px !important;
+  line-height: 1.6;
+}
+.mymy-ig-compose {
+  max-height: 84%;
+  overflow-y: auto;
+  padding-bottom: 28px;
+}
+.mymy-ig-compose > p,
+.mymy-ig-compose [role="radiogroup"] {
+  margin: 16px;
+  font-size: 16px;
+  line-height: 1.65;
+}
+.mymy-ig-compose [role="radio"] {
+  display: block;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 10px 0;
+  text-align: left;
+  color: inherit;
+  background: transparent;
+}
+.mymy-ig-compose [aria-checked="true"] {
+  border-color: #3797f0;
+  background: #3797f015;
+}
+.mymy-ig-compose .mymy-ig-share {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 16px;
+  padding: 13px;
+  border-radius: 10px;
+  background: #3797f0;
+  color: white;
+  font-weight: 600;
+}
+.mymy-ig-share:disabled {
+  opacity: 0.4;
+}

@@ -1,6 +1,7 @@
 import { savedAnswer } from "./answers";
 import { chooseHearts, heartScores, type HeartTable } from "./hearts";
 import { socialValues } from "./social";
+import { aftershowValues } from "./aftershow";
 import { dateValues } from "./dates";
 import { packMoment, momentFor } from "./encounters";
 import { dateRoute, type CharacterDateAnswer } from "./characters";
@@ -856,6 +857,7 @@ export function seasonValues(
   Object.assign(values, interactionValues(work, state, p, config));
   Object.assign(values, socialValues(work, state, p, config, values));
   Object.assign(values, dateValues(work, state, values));
+  Object.assign(values, aftershowValues(work, state, p, config, values));
   return Object.fromEntries(
     Object.entries(values).map(([k, v]) => [
       k,

@@ -426,6 +426,16 @@ export function MymyKakao(p: SkinProps) {
   );
 }
 export function MymyInstagram(p: SkinProps) {
+  const t = useChineseScript();
+  const composer = p.items.find((i) => i.meta.form === "post-select");
+  const [compose, setCompose] = useState(false),
+    [caption, setCaption] = useState("");
+  let captions: string[] = [];
+  try {
+    captions = JSON.parse(composer?.meta.options || "[]");
+  } catch {
+    /* Only authored captions may be published. */
+  }
   const [tab, setTab] = useSkinState<string>(p, "mymyTab", "主页"),
     [liked, setLiked] = useSkinState<string[]>(p, "mymyLiked", []),
     [saved, setSaved] = useSkinState<string[]>(p, "mymySaved", []),
@@ -437,7 +447,10 @@ export function MymyInstagram(p: SkinProps) {
     [draft, setDraft] = useState(""),
     [pop, setPop] = useState("");
   const posts = p.items.filter(
-      (i) => i.folder !== "私信" && i.meta.story !== "true",
+      (i) =>
+        i.folder !== "私信" &&
+        i.meta.story !== "true" &&
+        i.meta.form !== "post-select",
     ),
     stories = p.items.filter((i) => i.meta.story === "true"),
     dms = p.items.filter((i) => i.folder === "私信"),
@@ -534,7 +547,7 @@ export function MymyInstagram(p: SkinProps) {
           openPost(i);
         }}
       >
-        <b>{i.sender}</b> {i.body}
+        <b>{i.sender}</b> {t(i.body)}
       </button>
       <button className="cmall" onClick={() => setSheet(i)}>
         查看评论{" "}
@@ -557,6 +570,17 @@ export function MymyInstagram(p: SkinProps) {
           <span className="igl2">
             {selected ? "帖子" : tab === "主页" ? "Instagram" : tab}
           </span>
+          {composer && (
+            <button
+              aria-label="新增Instagram貼文"
+              onClick={() => {
+                setCaption("");
+                setCompose(true);
+              }}
+            >
+              <Plus />
+            </button>
+          )}
           <button aria-label="打开私信" onClick={() => setTab("私信")}>
             <Send />
           </button>
@@ -565,6 +589,18 @@ export function MymyInstagram(p: SkinProps) {
           {selected && post(selected)}
           {!selected && tab === "主页" && (
             <>
+              {composer && (
+                <button
+                  className="igc mymy-aftershow-invite"
+                  onClick={() => {
+                    setCaption("");
+                    setCompose(true);
+                  }}
+                >
+                  <Plus size={20} />
+                  {t(composer.body)}
+                </button>
+              )}
               <div className="sts">
                 {stories.map((s, n) => (
                   <button
@@ -666,6 +702,56 @@ export function MymyInstagram(p: SkinProps) {
           ))}
         </nav>
       </div>
+      {compose && composer && (
+        <div className="kzcs">
+          <button
+            className="kzbk"
+            aria-label="關閉貼文預覽"
+            onClick={() => setCompose(false)}
+          />
+          <section
+            className="kzsh mymy-ig-compose"
+            role="dialog"
+            aria-label="新增Instagram貼文"
+          >
+            <div className="mymy-sheet-handle" />
+            <header>
+              <b>{t("新增貼文")}</b>
+              <button aria-label="取消發文" onClick={() => setCompose(false)}>
+                <X />
+              </button>
+            </header>
+            <p>{t("選一段你想留下的話，確認後再分享。")}</p>
+            <div role="radiogroup" aria-label="貼文文案">
+              {captions.map((text) => (
+                <button
+                  key={text}
+                  role="radio"
+                  aria-checked={caption === text}
+                  onClick={() => setCaption(text)}
+                >
+                  {t(text)}
+                </button>
+              ))}
+            </div>
+            {caption && <p className="mymy-ig-preview">{t(caption)}</p>}
+            <button
+              className="mymy-ig-share"
+              disabled={!caption}
+              onClick={() => {
+                if (caption) {
+                  p.onUi?.("answer:" + composer.id, caption);
+                  setCompose(false);
+                  setSelected(null);
+                  setTab("主页");
+                }
+              }}
+            >
+              {t("分享貼文")}
+            </button>
+          </section>
+        </div>
+      )}
       {sheet && (
         <div className="kzcs">
           <button
@@ -690,29 +776,31 @@ export function MymyInstagram(p: SkinProps) {
               ].map((c, n) => (
                 <p key={n}>
                   <Avatar name={c.split(":")[0]} />
-                  {c}
+                  {t(c)}
                 </p>
               ))}
             </div>
-            <form
-              className="cmb2"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (draft.trim()) {
-                  setReplies([...replies, sheet.id + "\t" + draft.trim()]);
-                  setDraft("");
-                }
-              }}
-            >
-              <input
-                aria-label="添加评论"
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-                placeholder="添加评论"
-                maxLength={500}
-              />
-              <button>发布</button>
-            </form>
+            {sheet.meta.commentsReadOnly !== "true" && (
+              <form
+                className="cmb2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (draft.trim()) {
+                    setReplies([...replies, sheet.id + "\t" + draft.trim()]);
+                    setDraft("");
+                  }
+                }}
+              >
+                <input
+                  aria-label="添加评论"
+                  value={draft}
+                  onChange={(e) => setDraft(e.target.value)}
+                  placeholder="添加评论"
+                  maxLength={500}
+                />
+                <button>发布</button>
+              </form>
+            )}
           </section>
         </div>
       )}

@@ -273,7 +273,14 @@ describe("eligibility, privacy and independent choices", () => {
     expect(notices.length).toBeGreaterThan(100);
     for (const a of notices) {
       const n = notificationContent(String(a.value), work.apps);
-      expect(["twitter", "notes", "kakao", "safari"]).toContain(n.appId);
+      expect([
+        "twitter",
+        "notes",
+        "kakao",
+        "safari",
+        "instagram",
+        "weibo",
+      ]).toContain(n.appId);
       expect(n.appId).not.toBe("messages");
     }
   });
