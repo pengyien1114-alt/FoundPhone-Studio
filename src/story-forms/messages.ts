@@ -1,17 +1,210 @@
 import type { Work, Runtime } from "../schema";
-import { castFor, type Profile, type ProfileConfig } from "./profile";
-import { selected } from "./relationships";
+import type { Profile, ProfileConfig } from "./profile";
+import { selected, seeded, publicPartner } from "./relationships";
+import { savedAnswer } from "./answers";
 import { approachIndex } from "./contacts";
 import { momentFor, momentRecord } from "./encounters";
-function messages(work: Work, key: string): string[] {
-  try {
-    return JSON.parse(
-      work.data.notes.find((i) => i.id === "message-writing")?.meta[key] ||
-        "[]",
-    );
-  } catch {
-    return [];
+
+export type SmsIntent = "flirt" | "reach" | "probe" | "boundary";
+export type SmsChoice = { text: string; intent: SmsIntent };
+type Mode = "curious" | "familiar" | "close" | "tense" | "reconnect";
+type Stage = "early" | "middle" | "late";
+type Voice = {
+  outgoing: Record<Mode, SmsChoice[]>;
+  incoming: Record<Mode, string[]>;
+};
+type SmsBook = {
+  version: 2;
+  generic: Partial<Record<Mode | "ex" | "reach", SmsChoice[]>>;
+  characters: Record<string, Voice>;
+  exes: {
+    outgoing: Record<Stage, SmsChoice[]>;
+    incoming: Record<Stage, string[]>;
+  }[];
+  incoming: Partial<Record<Mode | "ex", string[]>>;
+};
+const books = new WeakMap<Work, SmsBook>();
+export function smsBook(work: Work): SmsBook {
+  const prior = books.get(work);
+  if (prior) return prior;
+  const raw = work.data.notes?.find((i) => i.id === "message-writing")?.body;
+  const book = raw
+    ? (JSON.parse(raw) as SmsBook)
+    : ({
+        version: 2 as const,
+        generic: {},
+        characters: {},
+        exes: [],
+        incoming: {},
+      } as SmsBook);
+  books.set(work, book);
+  return book;
+}
+export type SmsContext = {
+  mode: Mode;
+  contacts: number;
+  stage: Stage;
+  returning: boolean;
+};
+export function smsContext(
+  work: Work,
+  state: Runtime,
+  person: string,
+  day: number,
+  ex: string,
+): SmsContext {
+  const seen = new Set<number>();
+  let lastSignal = 0;
+  let contacted = false;
+  let priorPick = "";
+  let streak = 0;
+  for (let d = 1; d <= day; d++) {
+    const response = momentRecord(state, `d${d}-approach`);
+    if (selected(state, `d${d}-focus`) === person && response) {
+      seen.add(d);
+      contacted = true;
+      lastSignal =
+        typeof response.sceneSignal === "number"
+          ? response.sceneSignal
+          : approachIndex(work, state, d) === 1
+            ? -1
+            : 1;
+    }
+    for (const turn of ["a", "b"]) {
+      const date = savedAnswer(state, `d${d}-date-choice-${turn}`);
+      if (date?.dateTarget === person) {
+        seen.add(d);
+        contacted = true;
+        const effect = date.sceneEffect;
+        if (effect)
+          lastSignal =
+            Number(effect.affinity || 0) -
+            Math.max(0, Number(effect.pressure || 0));
+      }
+    }
+    if (d < day) {
+      const pick = selected(state, `d${d}-recipient`);
+      if (pick === person) {
+        streak++;
+        priorPick = person;
+      } else if (pick) {
+        streak = 0;
+        priorPick = pick;
+      }
+    }
   }
+  const returning =
+    Array.from({ length: Math.max(0, day - 2) }, (_, i) => i + 1).some(
+      (d) => selected(state, `d${d}-recipient`) === person,
+    ) &&
+    !!priorPick &&
+    priorPick !== person;
+  const mode: Mode =
+    contacted && lastSignal < 0
+      ? "tense"
+      : returning
+        ? "reconnect"
+        : seen.size >= 3 && streak >= 2
+          ? "close"
+          : person === ex || seen.size
+            ? "familiar"
+            : "curious";
+  return {
+    mode,
+    contacts: seen.size,
+    stage: day < 7 ? "early" : day < 14 ? "middle" : "late",
+    returning,
+  };
+}
+function previousMessages(state: Runtime, day: number) {
+  const chosen = new Set<string>(),
+    received = new Set<string>(),
+    recent = new Set<string>();
+  for (let d = 1; d < day; d++) {
+    const record = savedAnswer(state, `d${d}-sms`);
+    if (record?.value) chosen.add(record.value);
+    for (const vote of record?.votes || []) received.add(vote.text);
+    if (d >= day - 3)
+      for (const text of record?.smsOptions || []) recent.add(text);
+  }
+  return { chosen, received, recent };
+}
+const shortMessage = (text: string) =>
+  text.length <= 70 &&
+  !/\{\{|今天那段|回來以後我又想到|\n|「.*」/.test(text) &&
+  text.split(/[。！？!?]+/).filter((s) => s.trim()).length <= 2;
+function ordered<T>(rows: T[], key: string, text: (row: T) => string) {
+  return rows
+    .map((row) => ({ row, rank: seeded(key + text(row)) }))
+    .sort((a, b) => a.rank - b.rank)
+    .map((entry) => entry.row);
+}
+export function smsChoices(
+  work: Work,
+  state: Runtime,
+  p: Profile,
+  config: ProfileConfig,
+  day: number,
+): SmsChoice[] {
+  const to = selected(state, `d${day}-recipient`);
+  const book = smsBook(work);
+  // Future forms still need a valid preview, but have no recipient or history
+  // to resolve. Do not regenerate 21 nights of imaginary letters per render.
+  if (!to)
+    return (["flirt", "probe", "boundary"] as const)
+      .map((intent) =>
+        book.generic.curious?.find((row) => row.intent === intent),
+      )
+      .filter((row): row is SmsChoice => !!row);
+  const context = smsContext(work, state, to, day, p.ex);
+  const history = previousMessages(state, day);
+  const isEx = to === p.ex,
+    voice = book.characters[to];
+  const background = book.exes[Math.max(0, config.reasons.indexOf(p.reason))];
+  const personal = isEx
+    ? background?.outgoing[context.stage] || []
+    : voice?.outgoing[context.mode] || [];
+  const generic =
+    book.generic[
+      isEx && context.mode !== "tense" && context.mode !== "reconnect"
+        ? "ex"
+        : context.mode
+    ] || [];
+  // Deliberately provide different intentions, rather than three synonymous
+  // thank-you notes. A rejected boundary never becomes a flirt on another night.
+  const intentions: SmsIntent[] =
+    isEx || ["tense", "reconnect"].includes(context.mode)
+      ? ["reach", "probe", "boundary"]
+      : ["flirt", "probe", "boundary"];
+  const fallback = isEx
+    ? []
+    : [...(book.generic.curious || []), ...(book.generic.reach || [])];
+  const pool = [...personal, ...generic, ...fallback];
+  const result = intentions
+    .map((intent) => {
+      const eligible = pool.filter(
+        (row) =>
+          row.intent === intent &&
+          shortMessage(row.text) &&
+          !history.chosen.has(row.text),
+      );
+      const fresh = eligible.filter((row) => !history.recent.has(row.text));
+      const options = fresh.length ? fresh : eligible;
+      // Prefer the recipient's own language when it has not appeared recently.
+      const own = options.filter((row) => personal.includes(row));
+      const contextual = options.filter((row) => generic.includes(row));
+      return ordered(
+        own.length ? own : contextual.length ? contextual : options,
+        `${p.seed}|sms2|${day}|${to}|${intent}|`,
+        (row) => row.text,
+      )[0];
+    })
+    .filter((row): row is SmsChoice => !!row);
+  return ordered(
+    result,
+    `${p.seed}|sms-order|${day}|${to}|`,
+    (row) => row.intent,
+  );
 }
 export function outgoingSms(
   work: Work,
@@ -19,101 +212,19 @@ export function outgoingSms(
   p: Profile,
   config: ProfileConfig,
   day: number,
-  facts: Record<string, string>,
+  _facts: Record<string, string>,
 ): string[] {
-  const to = selected(state, `d${day}-recipient`),
-    reason = Math.max(0, config.reasons.indexOf(p.reason));
-  if (to === p.ex)
-    return messages(
-      work,
-      `ex${reason}${day < 7 ? "early" : day < 14 ? "middle" : "late"}`,
-    );
-  const moment = momentFor(work, state, p, config, day);
-  if (
-    moment?.saved?.sceneId &&
-    moment.target === to &&
-    momentRecord(state, `d${day}-approach`)?.sceneId
-  ) {
-    return (moment.branch.sms || moment.scene.sms || []).map(moment.render);
-  }
-  if (day === 1) {
-    const cast = castFor(p, config),
-      men = cast.presentMen.filter((m) => m !== p.ex),
-      quiet = men[1 % men.length];
-    if (
-      to === selected(state, "d1-focus") &&
-      approachIndex(work, state, 1) === 1
-    )
-      return [
-        "剛才有些問題問得太急了，不是要你第一天就給我一個以後。我只是發現自己很想聽你的想法。",
-        "你說想慢一點，我有聽見。今天先把晚安寄過來，不追著問下一個答案。",
-        "剛才那段話比我以為的難接，我回來後又想了一次。下次也想留一點空間聽你說。",
-      ];
-    if (to === selected(state, "d1-focus"))
-      return [
-        "剛才一起坐著的那幾分鐘，比我以為的自在。明天有空的話，想把沒聊完的話接下去。",
-        "今天有點緊張，可能沒讓你看出來我其實很想繼續聊。先說一聲晚安。",
-        "我還沒有想好這裡會發生什麼，但今天那段相處我有記住。謝謝你。",
-      ];
-    if (to === quiet)
-      return [
-        "剛才在廚房一起試味道的時候，緊張少了一點。下次也一起做飯吧。",
-        "今天你等我說完口味才下醬，我有注意到。晚安。",
-        "年糕比原本想的好吃，有一部分應該算我們配合得不錯。明天見。",
-      ];
-    if (selected(state, "d1-seat").includes(to))
-      return [
-        "剛進門不知道該坐哪裡的時候，謝謝你替我留了位置。明天想多和你聊一點。",
-        "今天坐在你旁邊那一會兒，讓我沒有那麼像剛來的客人。晚安。",
-        "我記得你今天接的那個玩笑，也記得後來自己沒那麼緊張了。明天見。",
-      ];
-    return [
-      "今天一起吃飯時，我有幾次想接你的話，最後還是慢了一點。希望明天不只是叫得出名字。",
-      "你今天說的一件小事，我回房間後還記得。明天有機會再聊吧。",
-      "第一天能記住的事情不多，你是其中一個。晚安。",
-    ];
-  }
-  const dated =
-    day === 2
-      ? facts.date2
-      : day === 3
-        ? facts.date3
-        : day === 10
-          ? facts.date10
-          : "";
-  if (to === dated)
-    return [
-      "今天回來的路比出發時自在，我有發現。下次想聽你把那段話說完。",
-      "今天有一段安靜，我沒有急著找話題。原來和你待著也可以很自然。",
-      "今天的行程結束了，但我還在想我們聊過的事。希望回到小屋後也能繼續。",
-    ];
-  if (to === selected(state, `d${day}-focus`)) {
-    const index = approachIndex(work, state, day);
-    return index === 1
-      ? [
-          "剛才有些問題問得太急了，不是想讓你立刻給答案。只是比我想像中更在意你的想法。",
-          "今天的話我回來後又想了一次，也許有些不安不該都交給你。晚安。",
-          "剛才氣氛有點僵，但我沒有後悔把在意說出來。之後也想聽你的步調。",
-        ]
-      : [
-          day >= 14
-            ? "今天在你面前不用假裝自己很確定，對我來說很重要。謝謝你還願意聽。"
-            : "今天有一段話，我原本只打算說一半。和你坐下後，才發現自己還想說下去。",
-          "想把明天的一小段時間也留給你，不只是今晚這封訊息。你有空的話，我會去問。",
-          "有些開心不是當下很熱鬧，而是回來之後還會想到。今天和你聊天就是這樣。",
-        ];
-  }
-  return day < 14
-    ? [
-        "今天沒能和你聊太久，但有留意你回來時的笑。明天想問問你今天過得怎樣。",
-        "我還想多知道一點你沒有在大家面前說完的事。不是今晚一定要回答，先晚安。",
-        "今天的心意先留在這封訊息裡。明天有機會的話，我會自己走過去。",
-      ]
-    : [
-        "這幾天沒有每一段時間都留給你，但我知道今晚最想把話寄給誰。晚安。",
-        "如果明天還能再聊一次，我想把自己的意思說得更清楚。今天先把這句留給你。",
-        "有些期待變得很具體，卻還沒有到能輕易答應的時候。謝謝你讓我有時間想。",
-      ];
+  const recorded = savedAnswer(state, `d${day}-sms`);
+  if (recorded?.smsVersion === 2 && recorded.smsOptions)
+    return recorded.smsOptions;
+  return smsChoices(work, state, p, config, day).map((row) => row.text);
+}
+export function smsEffect(intent: SmsIntent, context: SmsContext) {
+  if (intent === "boundary") return { affinity: 0, clarity: 1, pressure: -1 };
+  if (intent === "probe") return { affinity: 0, clarity: 1, pressure: 1 };
+  if (intent === "flirt")
+    return { affinity: 2, pressure: context.mode === "curious" ? 1 : 0 };
+  return { affinity: 1, clarity: 1 };
 }
 export function incomingToPlayer(
   work: Work,
@@ -123,57 +234,81 @@ export function incomingToPlayer(
   from: string,
   day: number,
 ): string {
-  if (from === p.ex && selected(state, `d${day}-focus`) !== p.ex) {
-    const unsaid = [
-      "今天有幾次想問你要不要再坐一會兒，最後還是只說了和大家一樣的招呼。這封訊息想留一點不一樣的意思。",
-      "有一句中文今天還沒敢當面說，不是因為沒有練過。想說的是晚安，也想說我沒有忘記。",
-      "今天沒有什麼要補給你，只是還是想和你說一句晚安。不是要你給我同樣的回答。",
-      "今天忍住沒有問你在看誰，卻還是想知道你回房間後會想起什麼。這次先把在意說成晚安。",
-      "今天沒有替你決定什麼，還是有很多次想叫你的名字。這一封不是誰交代的。",
-      "我今天有把自己的安排做好，也有想到你。想讓這兩件事都能留在同一個晚上。",
-    ];
-    return unsaid[Math.max(0, config.reasons.indexOf(p.reason))];
-  }
-  if (from === p.ex) {
-    const rows = messages(
-      work,
-      `incoming${Math.max(0, config.reasons.indexOf(p.reason))}${day < 7 ? "early" : day < 14 ? "middle" : "late"}`,
-    );
-    return (
-      rows[approachIndex(work, state, day) === 1 ? 1 : 0] ||
-      "有些習慣比我以為的更難改。今天還是想和你說晚安。"
-    );
-  }
+  const book = smsBook(work),
+    context = smsContext(work, state, from, day, p.ex);
+  const history = previousMessages(state, day),
+    voice = book.characters[from];
+  const background = book.exes[Math.max(0, config.reasons.indexOf(p.reason))];
+  const personal =
+    from === p.ex
+      ? background?.incoming[context.stage] || []
+      : voice?.incoming[context.mode] || [];
+  // A difficult conversation must not be followed by a disconnected promise
+  // that everything is fine. Neither side knows the current anonymous ballot.
+  const rows =
+    context.mode === "tense"
+      ? [...(voice?.incoming.tense || []), ...(book.incoming.tense || [])]
+      : [
+          ...personal,
+          ...(voice?.incoming[context.mode] || []),
+          ...(book.incoming[context.mode] || []),
+          ...(from === p.ex ? book.incoming.ex || [] : []),
+        ];
+  const fresh = rows.filter(
+    (text) => shortMessage(text) && !history.received.has(text),
+  );
+  const own = fresh.filter((text) => personal.includes(text));
+  const choices = own.length ? own : fresh;
   const moment = momentFor(work, state, p, config, day);
+  const shared =
+    from === moment?.names.b ? moment?.sharedClueB : moment?.sharedClue;
   if (
-    moment?.sharedClue &&
+    day % 7 === 4 &&
+    moment &&
     [moment.names.a, moment.names.b].includes(from) &&
-    day % 3 === 1
+    shared &&
+    shortMessage(shared) &&
+    !history.received.has(shared) &&
+    context.mode !== "tense"
   )
-    return from === moment.names.b ? moment.sharedClueB : moment.sharedClue;
-  if (
-    moment?.saved?.sceneId &&
-    moment.target === from &&
-    momentRecord(state, `d${day}-approach`)?.sceneId
-  ) {
-    return moment.render(
-      (moment.branch.incoming || moment.scene.incoming || [])[
-        approachIndex(work, state, day) === 1 ? 1 : 0
-      ] || "剛才還有一點話想說。先晚安，明天見。",
-    );
-  }
-  const cast = castFor(p, config),
-    men = cast.presentMen.filter((m) => m !== p.ex),
-    quiet = men[1 % men.length];
-  if (day === 1 && from === quiet && selected(state, "d1-action"))
-    return "今天在廚房本來有點緊張，後來忘記自己在緊張了。下次想把試味道以外的話也說完。";
-  if (from === selected(state, `d${day}-focus`))
-    return approachIndex(work, state, day) === 1
-      ? "剛才沒能馬上回答，不代表沒有在想你說的話。我想照自己的步調把話說清楚。"
-      : "今天坐下來之後，比原本打算的聊得久一點。如果明天也想聊，可以再來找我。";
-  if (day === 1 && selected(state, "d1-seat").includes(from))
-    return "剛進門那段安靜，後來想起來有點好笑。謝謝你願意接我的話，明天見。";
-  return day === 1
-    ? "今天同桌吃飯，聽見你笑的時候有想再和你說句話。明天想找個比較不慌的時機。"
-    : "今天有幾個瞬間，我還想和你再聊聊。明天如果有空，一起坐一會兒吧。";
+    return shared;
+  return (
+    ordered(
+      choices.length ? choices : rows,
+      `${p.seed}|incoming2|${day}|${from}|`,
+      (text) => text,
+    )[0] || "想再見你，先不找別的理由。"
+  );
+}
+export function otherSms(
+  work: Work,
+  state: Runtime,
+  p: Profile,
+  config: ProfileConfig,
+  from: string,
+  to: string,
+  day: number,
+): string {
+  const book = smsBook(work);
+  const mode: Mode =
+    day >= 8 &&
+    (publicPartner(p, config, to) === from ||
+      publicPartner(p, config, from) === to)
+      ? "close"
+      : day === 1
+        ? "curious"
+        : "familiar";
+  const history = previousMessages(state, day);
+  const rows = [
+    ...(book.characters[from]?.incoming[mode] || []),
+    ...(book.incoming[mode] || []),
+  ];
+  const fresh = rows.filter((text) => !history.received.has(text));
+  return (
+    ordered(
+      fresh.length ? fresh : rows,
+      `${p.seed}|npc-sms2|${day}|${from}|${to}|`,
+      (text) => text,
+    )[0] || "還想再跟你說幾句，沒找到機會。"
+  );
 }

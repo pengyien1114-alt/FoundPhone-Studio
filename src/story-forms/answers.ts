@@ -11,6 +11,10 @@ export type SavedAnswer = {
   dateTarget?: string;
   exBranch?: boolean;
   votes?: { from: string; to: string; text: string }[];
+  smsVersion?: 2;
+  smsIntent?: string;
+  smsOptions?: string[];
+  smsEffect?: Record<string, number>;
 };
 const parsed = new WeakMap<
   Runtime,

@@ -213,7 +213,12 @@ export function relationshipHistory(
     changes.push({
       day: d,
       target: selected(state, `d${d}-recipient`),
-      effect: { affinity: 1, sent: 1 },
+      // Old recordings keep their original +1. New intentions are snapshotted
+      // at sending; re-opening or later story changes never re-score a letter.
+      effect: {
+        ...(savedAnswer(state, `d${d}-sms`)?.smsEffect || { affinity: 1 }),
+        sent: 1,
+      },
       meeting: false,
     });
   }

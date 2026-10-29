@@ -4,7 +4,13 @@ import { dateValues } from "./dates";
 import { packMoment, momentFor } from "./encounters";
 import { dateRoute, type CharacterDateAnswer } from "./characters";
 import { daytimeValues } from "./daytime";
-import { incomingToPlayer } from "./messages";
+import {
+  incomingToPlayer,
+  otherSms,
+  smsChoices,
+  smsContext,
+  smsEffect,
+} from "./messages";
 import { firstNightScore, firstNightSignals } from "./contacts";
 import {
   seeded,
@@ -33,6 +39,10 @@ type Answer = {
   exBranch?: boolean;
   reaction?: { meetings: number; pressure: number };
   dateTarget?: string;
+  smsVersion?: 2;
+  smsIntent?: string;
+  smsOptions?: string[];
+  smsEffect?: Record<string, number>;
 } & Partial<CharacterDateAnswer>;
 type Vote = { from: string; to: string; text: string };
 export function answer(state: Runtime, id: string): string {
@@ -228,23 +238,13 @@ function nightlyVotes(
       };
       return score(b) - score(a);
     })[0];
-    const messages = [
-      "今天謝謝你願意聽我把話說完。希望明天也能好好聊一會兒。",
-      "一起吃飯的那段時間，我覺得很自在。晚安。",
-      "我記得你今天說的小事。明天見。",
-      "今天有幾個瞬間，我還想再慢慢理解。謝謝你沒有催我。",
-    ];
     votes.push({
       from,
       to,
       text:
         to === p.name
           ? incomingToPlayer(work, state, p, config, from, day)
-          : messages[
-              Math.floor(
-                rank(p, "message-text", day, from, to) * messages.length,
-              )
-            ],
+          : otherSms(work, state, p, config, from, to, day),
     });
   }
   return votes;
@@ -374,7 +374,23 @@ export function packSeasonAnswer(
     if (r) a.reaction = { meetings: r.meetings, pressure: r.pressure };
   }
   const smsDay = id.match(/^d(\d+)-sms$/);
-  if (smsDay)
+  if (smsDay) {
+    const day = Number(smsDay[1]);
+    const target = selected(state, `d${day}-recipient`);
+    if (!residentCast(c.p, c.config, day).men.includes(target))
+      return undefined;
+    const options = smsChoices(work, state, c.p, c.config, day);
+    const choice = options.find((row) => row.text === a.value);
+    if (!choice) return undefined;
+    Object.assign(a, {
+      smsVersion: 2,
+      smsIntent: choice.intent,
+      smsOptions: options.map((row) => row.text),
+      smsEffect: smsEffect(
+        choice.intent,
+        smsContext(work, state, target, day, c.p.ex),
+      ),
+    });
     a.votes = nightlyVotes(
       work,
       c.p,
@@ -383,6 +399,7 @@ export function packSeasonAnswer(
       Number(smsDay[1]),
       a.value,
     );
+  }
   return JSON.stringify(a);
 }
 export function seasonValues(

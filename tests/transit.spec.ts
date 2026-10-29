@@ -194,7 +194,32 @@ for (const late of [false, true])
     expect(choices).toHaveLength(6);
     if (late) expect(choices).not.toContain("金俊抒");
     await page.getByRole("dialog").getByRole("button").first().click();
-    await option(page);
+    await page.getByRole("button", { name: "KKT消息", exact: true }).click();
+    const letterDialog = page.getByRole("dialog", { name: "回答選項" });
+    const letterOptions = (
+      await letterDialog.getByRole("button").allTextContents()
+    ).filter((text) => text !== "再想一下");
+    expect(letterOptions).toHaveLength(3);
+    for (const text of letterOptions) {
+      expect(text).not.toMatch(/今天|回來以後我又想到|謝謝你願意聽/);
+      expect(text.length).toBeLessThanOrEqual(70);
+    }
+    await letterDialog.getByRole("button").first().click();
+    const recorded = await page.evaluate(() => {
+      const key = Object.keys(localStorage).find((key) =>
+        key.startsWith("foundphone-progress-v1:"),
+      )!;
+      const state = JSON.parse(localStorage.getItem(key)!).state;
+      const letter = JSON.parse(state.ui.kakao["answer:d1-sms"]);
+      return {
+        version: letter.smsVersion,
+        options: letter.smsOptions,
+        intent: letter.smsIntent,
+      };
+    });
+    expect(recorded.version).toBe(2);
+    expect(recorded.options).toEqual(letterOptions);
+    expect(recorded.intent).toMatch(/flirt|reach|probe|boundary/);
     await expect(page.locator(".msgs.kk")).toContainText(
       "所有已入住嘉賓都已發送",
     );
