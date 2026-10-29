@@ -47,6 +47,11 @@ export function interactionValues(
   for (let d = 1; d <= 21; d++) {
     const m = momentFor(work, state, p, config, d);
     if (m?.old) {
+      values[`conversationWith${d}`] = values[`focus${d}`];
+      values[`conversationPrompt${d}`] = "你想對他說什麼？";
+      values[`encounterPeople${d}`] = (
+        d >= 10 ? p.men : castFor(p, config).presentMen
+      ).join("、");
       values[`encounterChoices${d}`] = JSON.stringify(
         d >= 10 ? p.men : castFor(p, config).presentMen,
       );

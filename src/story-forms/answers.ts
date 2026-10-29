@@ -15,6 +15,10 @@ export type SavedAnswer = {
   smsIntent?: string;
   smsOptions?: string[];
   smsEffect?: Record<string, number>;
+  datePairs?: Record<string, string>;
+  travelPairs?: Record<string, string>;
+  heartVersion?: 1;
+  heartScores?: Record<string, Record<string, number>>;
 };
 const parsed = new WeakMap<
   Runtime,

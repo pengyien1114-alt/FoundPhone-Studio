@@ -177,3 +177,28 @@ it("an already delivered letter and its sender choices remain the saved recordin
   expect(seasonValues(work, state, p, config).sms1).toBe(receipt);
   expect(state.ui!.kakao!["answer:d1-sms"]).toBe(packed);
 });
+
+it("even repeated tense encounters keep three fresh outgoing choices through the final night", () => {
+  for (const isEx of [true, false]) {
+    const { p, state } = setup(),
+      target = isEx ? p.ex : p.men[1],
+      used = new Set<string>();
+    for (let day = 1; day <= 21; day++) {
+      put(state, `d${day}-focus`, { target });
+      put(state, `d${day}-approach`, {
+        sceneId: `tense-${day}`,
+        target,
+        sceneSignal: -1,
+      });
+      put(state, `d${day}-recipient`, { value: target });
+      const options = smsChoices(work, state, p, config, day);
+      expect(options, `${target}/${day}`).toHaveLength(3);
+      for (const row of options) expect(used.has(row.text)).toBe(false);
+      used.add(options[0].text);
+      put(state, `d${day}-sms`, {
+        value: options[0].text,
+        smsOptions: options.map((row) => row.text),
+      });
+    }
+  }
+});

@@ -116,6 +116,7 @@ export function dateValues(
   })();
   for (const day of [2, 3, 10, 13]) {
     const target = day === 13 ? facts.mutualTarget : facts["date" + day];
+    result[`dateContext${day}`] = target ? `約會對象：${target}` : "留在小屋";
     const route =
       day === 13 && !together
         ? undefined

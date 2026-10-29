@@ -43,7 +43,12 @@ export function KakaoQuestion({
           role="dialog"
           aria-label="回答選項"
         >
-          <h3>{item.body.split("\n")[0]}</h3>
+          {item.meta.interactionWith && (
+            <p className="kakao-interaction-context">
+              {t(item.meta.interactionWith)}
+            </p>
+          )}
+          <h3>{t(item.meta.choicePrompt || item.body.split("\n")[0])}</h3>
           {options.map((value) => (
             <button
               key={value}

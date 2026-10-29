@@ -1,4 +1,5 @@
 import { savedAnswer } from "./answers";
+import { chooseHearts, heartScores, type HeartTable } from "./hearts";
 import { socialValues } from "./social";
 import { dateValues } from "./dates";
 import { packMoment, momentFor } from "./encounters";
@@ -11,15 +12,13 @@ import {
   smsContext,
   smsEffect,
 } from "./messages";
-import { firstNightScore, firstNightSignals } from "./contacts";
+import { firstNightScore } from "./contacts";
 import {
   seeded,
   relationships,
   finalConsent,
-  interest,
-  rivalInterest,
+  hiddenAffections,
   selected,
-  publicPartner,
 } from "./relationships";
 export { seeded } from "./relationships";
 import { interactionValues } from "./scenes";
@@ -39,10 +38,14 @@ type Answer = {
   exBranch?: boolean;
   reaction?: { meetings: number; pressure: number };
   dateTarget?: string;
+  datePairs?: Record<string, string>;
+  travelPairs?: Record<string, string>;
   smsVersion?: 2;
   smsIntent?: string;
   smsOptions?: string[];
   smsEffect?: Record<string, number>;
+  heartVersion?: 1;
+  heartScores?: Record<string, Record<string, number>>;
 } & Partial<CharacterDateAnswer>;
 type Vote = { from: string; to: string; text: string };
 export function answer(state: Runtime, id: string): string {
@@ -180,6 +183,65 @@ export function dateMatches(
     (m, w) => rank(p, "male-counterselection", day, m, w),
   );
 }
+export function travelPlan(
+  p: Profile,
+  config: ProfileConfig,
+  state: Runtime,
+): Record<string, string> {
+  const travelPreferred: Record<string, string> = {};
+  for (const w of [p.name, ...config.women])
+    travelPreferred[w] =
+      w === p.name
+        ? answer(state, "d13-travel") || p.men[0]
+        : [...p.men].sort(
+            (a, b) =>
+              rank(p, "travel-choice", 13, w, b) -
+              rank(p, "travel-choice", 13, w, a),
+          )[0];
+  const lockedTravel: Record<string, string> = {};
+  for (const m of p.men) {
+    const wantedWoman = [p.name, ...config.women].sort(
+      (a, b) =>
+        rank(p, "travel-male-choice", 13, m, b) -
+        rank(p, "travel-male-choice", 13, m, a),
+    )[0];
+    if (travelPreferred[wantedWoman] === m) lockedTravel[wantedWoman] = m;
+  }
+  const remainingWomen = [p.name, ...config.women].filter(
+    (w) => !lockedTravel[w],
+  );
+  const remainingMen = p.men.filter(
+    (m) => !Object.values(lockedTravel).includes(m),
+  );
+  return {
+    ...lockedTravel,
+    ...matchPairs(
+      remainingMen,
+      remainingWomen,
+      {},
+      () => true,
+      (m, w) => rank(p, "travel-fallback", 13, m, w),
+    ),
+  };
+}
+export function nightlyChoices(
+  work: Work,
+  p: Profile,
+  config: ProfileConfig,
+  state: Runtime,
+  day: number,
+) {
+  const table = hiddenAffections(work, state, p, config, day);
+  if (day === 1) {
+    for (const man of residentCast(p, config, day).men)
+      for (const [woman, cell] of Object.entries(table[man])) {
+        cell.score = firstNightScore(work, state, p, config, man, woman);
+        cell.eligible = true;
+      }
+  }
+  const recipients = chooseHearts(table);
+  return { table, recipients };
+}
 function nightlyVotes(
   work: Work,
   p: Profile,
@@ -187,67 +249,25 @@ function nightlyVotes(
   state: Runtime,
   day: number,
   text: string,
+  plan: { table: HeartTable; recipients: Record<string, string> },
 ): Vote[] {
   const residents = residentCast(p, config, day);
-  const pairs = pairsFor(p, config);
-  const votes: Vote[] = [];
-  const bonds = relationships(work, state, p, config, day);
-  for (const from of [...residents.men, ...residents.women]) {
-    const candidates = residents.men.includes(from)
-      ? residents.women
-      : residents.men;
-    if (from === p.name) {
-      votes.push({ from, to: answer(state, `d${day}-recipient`), text });
-      continue;
-    }
-    const ex = pairs.find((r) => r.man === from || r.woman === from);
-    const oldPartner = ex?.man === from ? ex.woman : ex?.man;
-    const previous = storedVotes(state, day - 1)?.find(
-      (vote) => vote.from === from,
-    )?.to;
-    const to = [...candidates].sort((a, b) => {
-      const score = (v: string) => {
-        if (day === 1 && residents.men.includes(from))
-          return firstNightScore(work, state, p, config, from, v);
-        if (residents.men.includes(from)) {
-          if (v === p.name)
-            return (
-              interest(bonds[from]) -
-              bonds[from].sent +
-              Math.max(0, firstNightSignals(work, state, p, config, from)) *
-                Math.max(0, (6 - day) / 10) +
-              (from === p.ex ? 6 : 0) +
-              rank(p, "nightly-mood", day, from, v) * 8
-            );
-          return (
-            14 +
-            seeded(`${p.seed}|rival|${from}|${v}`) * 9 +
-            Math.min(day, 14) * 0.65 +
-            (publicPartner(p, config, v) === from ? Math.min(4, day / 5) : 0) +
-            (v === oldPartner ? 3 : 0) +
-            rank(p, "nightly-mood", day, from, v) * 8 +
-            (v === previous ? 2 : 0)
-          );
-        }
-        return (
-          rank(p, "nightly-heart", day, from, v) +
-          (v === previous ? 0.18 : 0) +
-          (v === oldPartner ? 0.12 : 0) +
-          (publicPartner(p, config, from) === v ? Math.min(0.25, day / 40) : 0)
-        );
-      };
-      return score(b) - score(a);
-    })[0];
-    votes.push({
+  return [...residents.men, ...residents.women].map((from) => {
+    const to =
+      from === p.name
+        ? answer(state, `d${day}-recipient`)
+        : plan.recipients[from];
+    return {
       from,
       to,
       text:
-        to === p.name
-          ? incomingToPlayer(work, state, p, config, from, day)
-          : otherSms(work, state, p, config, from, to, day),
-    });
-  }
-  return votes;
+        from === p.name
+          ? text
+          : to === p.name
+            ? incomingToPlayer(work, state, p, config, from, day)
+            : otherSms(work, state, p, config, from, to, day),
+    };
+  });
 }
 export function inputError(item: Item, value: string): string {
   const v = value.trim();
@@ -329,11 +349,31 @@ export function packSeasonAnswer(
       JSON.parse(projected.meta.options || "[]") as string[]
     ).indexOf(value.trim()),
   };
+  if (id === "d13-travel") {
+    const next = {
+      ...state,
+      ui: {
+        ...state.ui,
+        kakao: { ...state.ui?.kakao, ["answer:" + id]: JSON.stringify(a) },
+      },
+    };
+    a.travelPairs = travelPlan(c.p, c.config, next);
+  }
   const conversationDay = id.match(/^d(\d+)-approach$/);
   const dateDay = id.match(/^d(\d+)-date-choice-[ab]$/);
   if (dateDay) {
     const day = Number(dateDay[1]);
     a.dateTarget = day === 13 ? values.mutualTarget : values["date" + day];
+    if (id.endsWith("-b")) {
+      a.datePairs =
+        day === 2 || day === 3
+          ? dateMatches(c.p, c.config, state, day)
+          : day === 10
+            ? JSON.parse(values.datePairs10 || "{}")
+            : a.dateTarget
+              ? { [c.p.name]: a.dateTarget }
+              : {};
+    }
     const route =
       day === 13 && values.mutualSuccess !== "true"
         ? undefined
@@ -391,14 +431,10 @@ export function packSeasonAnswer(
         smsContext(work, state, target, day, c.p.ex),
       ),
     });
-    a.votes = nightlyVotes(
-      work,
-      c.p,
-      c.config,
-      state,
-      Number(smsDay[1]),
-      a.value,
-    );
+    const plan = nightlyChoices(work, c.p, c.config, state, day);
+    a.heartVersion = 1;
+    a.heartScores = heartScores(plan.table);
+    a.votes = nightlyVotes(work, c.p, c.config, state, day, a.value, plan);
   }
   return JSON.stringify(a);
 }
@@ -424,6 +460,7 @@ export function seasonValues(
   }
   const values: Record<string, string> = {
     player: p.name,
+    ex: p.ex,
     mbti: p.mbti || "INFP",
     other,
     reason: p.reason,
@@ -699,6 +736,7 @@ export function seasonValues(
   }
   const extraWoman = [p.name, ...config.women].find((w) => !giftPairs[w])!;
   giftPairs[extraWoman] = cast.male;
+  values.datePairs10 = JSON.stringify(giftPairs);
   values.date10 = giftPairs[p.name];
   values.newMaleCompanion = extraWoman === p.name ? "你" : extraWoman;
   values.giftDateOutcome =
@@ -706,11 +744,23 @@ export function seasonValues(
       ? "交換與補抽結束後，你仍是尚未互選成功的人。節目組為你安排另一段約會；見面的人此前沒有在小屋出現。"
       : `交換與補抽結束後，節目組確認你與 ${values.date10} 抽到了彼此準備的禮物。其他人的未配對行程，不向你提前透露。`;
   const mutualChoice = answer(state, "d13-mutual");
-  const mutualBond = relationships(work, state, p, config, 12)[mutualChoice];
+  const mutualBond = relationships(work, state, p, config, 12, false)[
+    mutualChoice
+  ];
+  const mutualFeelings =
+    mutualBond && mutualBond.meetings >= 2
+      ? hiddenAffections(work, state, p, config, 13, 12)[mutualChoice]
+      : undefined;
   const mutualSuccess =
     !!mutualBond &&
     mutualBond.meetings >= 2 &&
-    interest(mutualBond) > rivalInterest(p, config, mutualChoice, 13);
+    !!mutualFeelings?.[p.name]?.eligible &&
+    Object.entries(mutualFeelings).every(
+      ([woman, cell]) =>
+        woman === p.name ||
+        !cell.eligible ||
+        cell.score < mutualFeelings[p.name].score,
+    );
   values.mutualOutcome = mutualSuccess
     ? `你與 ${mutualChoice} 互選成功，一同完成半日行程，五點前回到小屋。`
     : "節目組通知你沒有互選成功。你留在小屋，不得知其他人的單向選擇，也不替對方解釋原因。";
@@ -719,52 +769,29 @@ export function seasonValues(
   values.dateVisibility10 = values.date10 === p.ex ? "player" : "public";
   values.dateVisibility13 =
     mutualSuccess && mutualChoice === p.ex ? "player" : "public";
-  const travelPreferred: Record<string, string> = {};
-  for (const w of [p.name, ...config.women])
-    travelPreferred[w] =
-      w === p.name
-        ? answer(state, "d13-travel") || p.men[0]
-        : [...p.men].sort(
-            (a, b) =>
-              rank(p, "travel-choice", 13, w, b) -
-              rank(p, "travel-choice", 13, w, a),
-          )[0];
-  const lockedTravel: Record<string, string> = {};
-  for (const m of p.men) {
-    const wantedWoman = [p.name, ...config.women].sort(
-      (a, b) =>
-        rank(p, "travel-male-choice", 13, m, b) -
-        rank(p, "travel-male-choice", 13, m, a),
-    )[0];
-    if (travelPreferred[wantedWoman] === m) lockedTravel[wantedWoman] = m;
-  }
-  const remainingWomen = [p.name, ...config.women].filter(
-    (w) => !lockedTravel[w],
-  );
-  const remainingMen = p.men.filter(
-    (m) => !Object.values(lockedTravel).includes(m),
-  );
-  const travel = {
-    ...lockedTravel,
-    ...matchPairs(
-      remainingMen,
-      remainingWomen,
-      {},
-      () => true,
-      (m, w) => rank(p, "travel-fallback", 13, m, w),
-    ),
-  };
+  const travel =
+    savedAnswer(state, "d13-travel")?.travelPairs ||
+    travelPlan(p, config, state);
   values.travelPartner = travel[p.name];
   values.flight = answer(state, "d14-flight") || "第一組";
-  const flightMen = [...p.men].sort(
-    (a, b) => rank(p, "flight", 14, b, "") - rank(p, "flight", 14, a, ""),
-  );
-  const flightWomen = [...config.women].sort(
-    (a, b) => rank(p, "flight", 14, b, "") - rank(p, "flight", 14, a, ""),
-  );
-  const yourFlight = [p.name, ...flightWomen.slice(0, 2)],
-    otherFlight = flightWomen.slice(2);
-  values.flightRoster = `第一組：${flightMen.slice(0, 3).join("、")}；${(values.flight === "第一組" ? yourFlight : otherFlight).join("、")}。\n第二組：${flightMen.slice(3).join("、")}；${(values.flight === "第二組" ? yourFlight : otherFlight).join("、")}。`;
+  const partnerWomen = Object.keys(travel)
+    .filter((w) => w !== p.name)
+    .sort(
+      (a, b) =>
+        rank(p, "flight-pair", 14, b, "") - rank(p, "flight-pair", 14, a, ""),
+    );
+  const yourWomen = [p.name, ...partnerWomen.slice(0, 2)],
+    otherWomen = partnerWomen.slice(2);
+  const groupWomen =
+    values.flight === "第一組"
+      ? [yourWomen, otherWomen]
+      : [otherWomen, yourWomen];
+  values.flightRoster = groupWomen
+    .map(
+      (women, i) =>
+        `${i === 0 ? "第一組" : "第二組"}：${women.map((w) => travel[w]).join("、")}；${women.join("、")}。`,
+    )
+    .join("\n");
   values.revealPairs = pairs
     .map((r) =>
       r.woman === p.name && reasonIndex === 4

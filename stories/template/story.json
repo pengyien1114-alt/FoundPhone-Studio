@@ -263,7 +263,8 @@
           "repair5d7": "[\"我那時候也想你留下，可是一想到你又為我放棄，就什麼都不敢要了。\", \"我剛才在裡面一直想，以前也不是沒有很好的時候。你還想過那些嗎？\", \"我今天有點撐不住，想先停一下。不是要你猜我還想不想。\"]",
           "repair5d14": "[\"我也有不對，我一直替你決定分開比較好。其實我自己也沒有比較好。\", \"剛才看影片的時候，我一直想，如果沒有分開，現在會怎樣。\", \"我有聽見，也還會難過。但今天先別把那個當成我會回來。\"]",
           "repair5d19": "[\"你不想做就拒絕我，我也會說捨不得。這次不要一個說沒關係，一個就先走。\", \"我有點怕來不及，會想乾脆什麼都先不要管，就回去好不好。\", \"我還想好好說話，可是現在不能給你復合的答案。\"]",
-          "repair5d21": "[\"我還想跟你試，可是我們都要把自己的生活留著。我不想再把喜歡過成欠你。\", \"我還是很想回到以前。你可不可以今天就先選我？\", \"我還是會想你，可是今天不想再答應我們會回去。\"]"
+          "repair5d21": "[\"我還想跟你試，可是我們都要把自己的生活留著。我不想再把喜歡過成欠你。\", \"我還是很想回到以前。你可不可以今天就先選我？\", \"我還是會想你，可是今天不想再答應我們會回去。\"]",
+          "nightlyAffection": "{\"version\":1,\"baseAttraction\":16,\"attractionSpread\":8,\"baseTrust\":10,\"trustSpread\":5,\"priorRelationship\":6,\"routineGrowth\":0.25,\"routineLimit\":3,\"continuity\":1.25,\"moodRange\":0.75,\"distanceLoss\":0.6,\"weights\":{\"金俊抒\":{\"affinity\":1,\"trust\":0.65,\"pressure\":2,\"attachment\":1.1},\"張家豪\":{\"affinity\":1.1,\"trust\":0.45,\"pressure\":1.6,\"attachment\":0.8},\"金虔佑\":{\"affinity\":1.15,\"trust\":0.5,\"pressure\":1.8,\"attachment\":1},\"李理悟\":{\"affinity\":0.95,\"trust\":0.75,\"pressure\":1.7,\"attachment\":1.1},\"李相沅\":{\"affinity\":1,\"trust\":0.65,\"pressure\":2.2,\"attachment\":1.15},\"賀鑫隆\":{\"affinity\":1.15,\"trust\":0.45,\"pressure\":1.5,\"attachment\":0.8},\"周安信\":{\"affinity\":1,\"trust\":0.65,\"pressure\":1.9,\"attachment\":1},\"鄭相炫\":{\"affinity\":1.05,\"trust\":0.55,\"pressure\":1.7,\"attachment\":0.95}}}"
         }
       },
       {
@@ -487,7 +488,7 @@
       {
         "id": "d2-date-scene",
         "title": "EP.2｜第 2 天文字紀錄",
-        "body": "聊天室在出發前關閉，不能在約會後繼續私聊。\n\n{{dateOpening2}}\n\n請到 KKT 點訊息欄，接下現場的互動。",
+        "body": "【{{dateContext2}}】\n\n聊天室在出發前關閉，不能在約會後繼續私聊。\n\n{{dateOpening2}}\n\n請到 KKT 點訊息欄，接下現場的互動。",
         "hidden": true,
         "sender": "換乘戀愛官方",
         "kind": "post",
@@ -552,7 +553,7 @@
       {
         "id": "d3-date-scene",
         "title": "EP.3｜第 3 天文字紀錄",
-        "body": "正式任務核對完成後，你們才開始今天的約會。\n\n{{dateOpening3}}\n\n請到 KKT 點訊息欄，接下現場的互動。",
+        "body": "【{{dateContext3}}】\n\n正式任務核對完成後，你們才開始今天的約會。\n\n{{dateOpening3}}\n\n請到 KKT 點訊息欄，接下現場的互動。",
         "hidden": true,
         "sender": "換乘戀愛官方",
         "kind": "post",
@@ -1022,7 +1023,7 @@
       {
         "id": "d10-date",
         "title": "EP.10｜第 10 天文字紀錄",
-        "body": "{{giftDateOutcome}}\n\n{{dateOpening10}}\n\n請到 KKT 點訊息欄，接下現場的互動。",
+        "body": "【{{dateContext10}}】\n\n{{giftDateOutcome}}\n\n{{dateOpening10}}\n\n請到 KKT 點訊息欄，接下現場的互動。",
         "hidden": true,
         "sender": "換乘戀愛官方",
         "kind": "post",
@@ -1224,7 +1225,7 @@
       {
         "id": "d13-date",
         "title": "EP.13｜第 13 天文字紀錄",
-        "body": "{{mutualOutcome}}\n\n{{dateOpening13}}\n\n請到 KKT 點訊息欄，接下現場的互動。",
+        "body": "【{{dateContext13}}】\n\n{{mutualOutcome}}\n\n{{dateOpening13}}\n\n請到 KKT 點訊息欄，接下現場的互動。",
         "hidden": true,
         "sender": "換乘戀愛官方",
         "kind": "post",
@@ -1324,7 +1325,7 @@
       {
         "id": "d14-arrival",
         "title": "EP.14｜第 14 天文字紀錄",
-        "body": "{{flightRoster}}\n\n你加入 {{flight}}，節目組補足每組三男三女。清晨六點起飛，八點抵達；到達後，你和 {{travelPartner}} 先確認回程時間，再安排附近行程。下午四點前，全員回到集合小屋。\n\n確認十二人都已到齊後，節目組才開始關係公開環節。現在請回 KKT，確認要觀看共同公開的事前素材。",
+        "body": "{{flightRoster}}\n\n你和旅行搭檔 {{travelPartner}} 一起加入 {{flight}}；每組三對搭檔，共三男三女。清晨六點起飛，八點抵達；到達後，你和 {{travelPartner}} 先確認回程時間，再安排附近行程。下午四點前，全員回到集合小屋。\n\n確認十二人都已到齊後，節目組才開始關係公開環節。現在請回 KKT，確認要觀看共同公開的事前素材。",
         "hidden": true,
         "sender": "換乘戀愛官方",
         "kind": "post",
@@ -3074,7 +3075,7 @@
       {
         "id": "d2-date-turn",
         "title": "換乘戀愛｜約會紀錄",
-        "body": "{{dateReply2a}}\n\n{{dateMiddle2}}",
+        "body": "【{{dateContext2}}】\n\n{{dateReply2a}}\n\n{{dateMiddle2}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-10-26 09:00",
@@ -3106,7 +3107,7 @@
       {
         "id": "d2-date-end",
         "title": "換乘戀愛｜約會紀錄",
-        "body": "{{dateReply2b}}\n\n{{dateClosing2}}\n\n八點前回到小屋。有人問今天玩得怎樣，你們只簡單說了去哪裡，沒有替對方報告剛才的話。節目組接著想聽你自己的約會感受。",
+        "body": "【{{dateContext2}}】\n\n{{dateReply2b}}\n\n{{dateClosing2}}\n\n八點前回到小屋。有人問今天玩得怎樣，你們只簡單說了去哪裡，沒有替對方報告剛才的話。節目組接著想聽你自己的約會感受。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-10-26 09:00",
@@ -3138,7 +3139,7 @@
       {
         "id": "d3-date-turn",
         "title": "換乘戀愛｜約會紀錄",
-        "body": "{{dateReply3a}}\n\n{{dateMiddle3}}",
+        "body": "【{{dateContext3}}】\n\n{{dateReply3a}}\n\n{{dateMiddle3}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-10-27 09:00",
@@ -3170,7 +3171,7 @@
       {
         "id": "d3-date-end",
         "title": "換乘戀愛｜約會紀錄",
-        "body": "{{dateReply3b}}\n\n{{dateClosing3}}\n\n五點前回到小屋，大家先整理晚餐分工。晚餐後，門鈴響了，{{femaleArrival}} 站在門口，自我介紹：{{femaleInfo3}}。你替她挪出行李的位置，今天約會裡還沒消化完的心情，也只能先收進口袋。",
+        "body": "【{{dateContext3}}】\n\n{{dateReply3b}}\n\n{{dateClosing3}}\n\n五點前回到小屋，大家先整理晚餐分工。晚餐後，門鈴響了，{{femaleArrival}} 站在門口，自我介紹：{{femaleInfo3}}。你替她挪出行李的位置，今天約會裡還沒消化完的心情，也只能先收進口袋。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-10-27 09:00",
@@ -3202,7 +3203,7 @@
       {
         "id": "d10-date-turn",
         "title": "換乘戀愛｜約會紀錄",
-        "body": "{{dateReply10a}}\n\n{{dateMiddle10}}",
+        "body": "【{{dateContext10}}】\n\n{{dateReply10a}}\n\n{{dateMiddle10}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-11-03 20:00",
@@ -3235,7 +3236,7 @@
       {
         "id": "d10-date-end",
         "title": "換乘戀愛｜約會紀錄",
-        "body": "{{dateReply10b}}\n\n{{dateClosing10}}\n\n八點前回到小屋，{{newMaleCompanion}} 先介紹今天同行的 {{maleArrival}}，再由他補充：{{maleInfo10}}。你看著多出來的杯子，意識到屋裡每條關係都還在變。先讓新來的人把名字記住，晚一點再決定要把時間留給誰。\n\n十二個人都到齊後，節目組替大家重拍了一張合照。有人還在對位置，{{maleArrival}} 站進最後一個空位，剛喊完名字就按了快門。照片貼到冰箱上，原來那張也沒取下來。\n\n{{encounter10}}",
+        "body": "【{{dateContext10}}】\n\n{{dateReply10b}}\n\n{{dateClosing10}}\n\n八點前回到小屋，{{newMaleCompanion}} 先介紹今天同行的 {{maleArrival}}，再由他補充：{{maleInfo10}}。你看著多出來的杯子，意識到屋裡每條關係都還在變。先讓新來的人把名字記住，晚一點再決定要把時間留給誰。\n\n十二個人都到齊後，節目組替大家重拍了一張合照。有人還在對位置，{{maleArrival}} 站進最後一個空位，剛喊完名字就按了快門。照片貼到冰箱上，原來那張也沒取下來。\n\n{{encounter10}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-11-03 20:00",
@@ -3270,7 +3271,7 @@
       {
         "id": "d13-date-turn",
         "title": "換乘戀愛｜約會紀錄",
-        "body": "{{dateReply13a}}\n\n{{dateMiddle13}}",
+        "body": "【{{dateContext13}}】\n\n{{dateReply13a}}\n\n{{dateMiddle13}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-11-06 09:00",
@@ -3303,7 +3304,7 @@
       {
         "id": "d13-date-end",
         "title": "換乘戀愛｜約會紀錄",
-        "body": "{{dateReply13b}}\n\n{{dateClosing13}}\n\n下午五點前，今天的安排結束。接下來另行選擇日本旅行搭檔，今天的約會意願不會自動填進下一張選擇。",
+        "body": "【{{dateContext13}}】\n\n{{dateReply13b}}\n\n{{dateClosing13}}\n\n下午五點前，今天的安排結束。接下來另行選擇日本旅行搭檔，今天的約會意願不會自動填進下一張選擇。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-11-06 09:00",
@@ -3813,7 +3814,9 @@
           "privacy": "anonymous",
           "order": "26",
           "control": "speech",
-          "options": "[\"如果兩個人突然安靜下來，他會希望怎麼相處？\", \"他遇到意見不同時，會怎樣讓對方知道？\", \"有沒有一件他喜歡、但不太會主動提起的小事？\"]"
+          "options": "[\"如果兩個人突然安靜下來，他會希望怎麼相處？\", \"他遇到意見不同時，會怎樣讓對方知道？\", \"有沒有一件他喜歡、但不太會主動提起的小事？\"]",
+          "interactionWith": "匿名聊天室｜你的約會對象的 X",
+          "choicePrompt": "對「你的約會對象的 X」，你想先問什麼？"
         }
       },
       {
@@ -3862,7 +3865,9 @@
           "privacy": "anonymous",
           "order": "28",
           "control": "speech",
-          "options": "[\"謝謝。我會把這當成參考，再問他現在的想法。\", \"我有一點緊張，但想試著認識現在的他。\", \"有些想法我暫時想保留，謝謝你願意分享。\"]"
+          "options": "[\"謝謝。我會把這當成參考，再問他現在的想法。\", \"我有一點緊張，但想試著認識現在的他。\", \"有些想法我暫時想保留，謝謝你願意分享。\"]",
+          "interactionWith": "匿名聊天室｜你的約會對象的 X",
+          "choicePrompt": "你想怎樣回覆？可以如實說自己的想法，也可以只說願意透露的部分。"
         }
       },
       {
@@ -6766,7 +6771,7 @@
       {
         "id": "d14-flight",
         "title": "換乘戀愛節目組",
-        "body": "你希望加入哪一個乘機小組？\n\n點擊下方訊息欄選擇回應。",
+        "body": "你和旅行搭檔 {{travelPartner}} 希望加入哪一個乘機小組？你們會一起分組。\n\n點擊下方訊息欄選擇回應。",
         "hidden": true,
         "sender": "節目組",
         "kind": "text",
@@ -8486,7 +8491,7 @@
       {
         "id": "d21-chat1",
         "title": "最後一次正式談話",
-        "body": "最後一次正式聊天室。他先發來：「我在。」\n\n你看了很久，手還停在訊息欄上。",
+        "body": "聊天室對象：{{ex}}\n\n最後一次正式聊天室。他先發來：「我在。」\n\n你看了很久，手還停在訊息欄上。",
         "hidden": true,
         "sender": "節目組",
         "kind": "text",
@@ -8499,7 +8504,9 @@
           "control": "speech",
           "options": "{{repairOptions21}}",
           "effectTarget": "ex",
-          "effects": "[{\"trust\": 3, \"clarity\": 3, \"repair\": 3}, {\"trust\": -2, \"pressure\": 3}, {\"trust\": 2, \"clarity\": 2, \"release\": 1}]"
+          "effects": "[{\"trust\": 3, \"clarity\": 3, \"repair\": 3}, {\"trust\": -2, \"pressure\": 3}, {\"trust\": 2, \"clarity\": 2, \"release\": 1}]",
+          "interactionWith": "聊天室對象：{{ex}}",
+          "choicePrompt": "最後一次正式聊天室。他先發來：「我在。」"
         }
       },
       {
@@ -8532,7 +8539,7 @@
       {
         "id": "d21-chat2",
         "title": "最後一次正式談話",
-        "body": "對方沒有離開聊天室。剛才那句說完以後，你還想留下哪一句？",
+        "body": "聊天室對象：{{ex}}\n\n對方沒有離開聊天室。剛才那句說完以後，你還想留下哪一句？",
         "hidden": true,
         "sender": "節目組",
         "kind": "text",
@@ -8546,7 +8553,9 @@
           "options": "[\"我想再跟你試一次。這次有事要講，不要又誰都不說。\", \"我還想跟你聯絡，但今天真的不能答應復合。\", \"我想先好好分開。回去以後，暫時不要再找彼此。\"]",
           "effectTarget": "ex",
           "effects": "[{\"clarity\": 3}, {\"clarity\": 1}, {\"release\": 5}]",
-          "legacyOptions": "[\"我願意重新交往，但要把剛才談的改變放進生活裡。\", \"我願意慢慢恢復聯絡，今天還不能答應復合。\", \"我想好好道別，節目結束後先不要保持私下聯絡。\"]"
+          "legacyOptions": "[\"我願意重新交往，但要把剛才談的改變放進生活裡。\", \"我願意慢慢恢復聯絡，今天還不能答應復合。\", \"我想好好道別，節目結束後先不要保持私下聯絡。\"]",
+          "interactionWith": "聊天室對象：{{ex}}",
+          "choicePrompt": "對方沒有離開聊天室。剛才那句說完以後，你還想留下哪一句？"
         }
       },
       {
@@ -8910,7 +8919,7 @@
       {
         "id": "d1-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion1}}",
+        "body": "在場嘉賓：{{encounterPeople1}}\n\n{{encounterQuestion1}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -8923,7 +8932,9 @@
           "options": "{{encounterChoices1}}",
           "order": "15.299999999999999",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople1}}",
+          "choicePrompt": "{{encounterQuestion1}}"
         }
       },
       {
@@ -8943,7 +8954,7 @@
       {
         "id": "d1-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion1}}",
+        "body": "現場交談：{{conversationWith1}}\n\n{{conversationQuestion1}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -8960,7 +8971,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith1}}",
+          "choicePrompt": "{{conversationPrompt1}}"
         }
       },
       {
@@ -8980,7 +8993,7 @@
       {
         "id": "d2-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion2}}",
+        "body": "在場嘉賓：{{encounterPeople2}}\n\n{{encounterQuestion2}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -8993,7 +9006,9 @@
           "options": "{{encounterChoices2}}",
           "order": "30.3",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople2}}",
+          "choicePrompt": "{{encounterQuestion2}}"
         }
       },
       {
@@ -9013,7 +9028,7 @@
       {
         "id": "d2-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion2}}",
+        "body": "現場交談：{{conversationWith2}}\n\n{{conversationQuestion2}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9030,7 +9045,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith2}}",
+          "choicePrompt": "{{conversationPrompt2}}"
         }
       },
       {
@@ -9050,7 +9067,7 @@
       {
         "id": "d3-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion3}}",
+        "body": "在場嘉賓：{{encounterPeople3}}\n\n{{encounterQuestion3}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9063,7 +9080,9 @@
           "options": "{{encounterChoices3}}",
           "order": "43.300000000000004",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople3}}",
+          "choicePrompt": "{{encounterQuestion3}}"
         }
       },
       {
@@ -9083,7 +9102,7 @@
       {
         "id": "d3-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion3}}",
+        "body": "現場交談：{{conversationWith3}}\n\n{{conversationQuestion3}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9100,7 +9119,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith3}}",
+          "choicePrompt": "{{conversationPrompt3}}"
         }
       },
       {
@@ -9120,7 +9141,7 @@
       {
         "id": "d4-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion4}}",
+        "body": "在場嘉賓：{{encounterPeople4}}\n\n{{encounterQuestion4}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9133,7 +9154,9 @@
           "options": "{{encounterChoices4}}",
           "order": "54.300000000000004",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople4}}",
+          "choicePrompt": "{{encounterQuestion4}}"
         }
       },
       {
@@ -9153,7 +9176,7 @@
       {
         "id": "d4-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion4}}",
+        "body": "現場交談：{{conversationWith4}}\n\n{{conversationQuestion4}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9170,7 +9193,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith4}}",
+          "choicePrompt": "{{conversationPrompt4}}"
         }
       },
       {
@@ -9190,7 +9215,7 @@
       {
         "id": "d5-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion5}}",
+        "body": "在場嘉賓：{{encounterPeople5}}\n\n{{encounterQuestion5}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9203,7 +9228,9 @@
           "options": "{{encounterChoices5}}",
           "order": "65.3",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople5}}",
+          "choicePrompt": "{{encounterQuestion5}}"
         }
       },
       {
@@ -9223,7 +9250,7 @@
       {
         "id": "d5-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion5}}",
+        "body": "現場交談：{{conversationWith5}}\n\n{{conversationQuestion5}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9240,7 +9267,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith5}}",
+          "choicePrompt": "{{conversationPrompt5}}"
         }
       },
       {
@@ -9260,7 +9289,7 @@
       {
         "id": "d6-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion6}}",
+        "body": "在場嘉賓：{{encounterPeople6}}\n\n{{encounterQuestion6}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9273,7 +9302,9 @@
           "options": "{{encounterChoices6}}",
           "order": "76.3",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople6}}",
+          "choicePrompt": "{{encounterQuestion6}}"
         }
       },
       {
@@ -9293,7 +9324,7 @@
       {
         "id": "d6-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion6}}",
+        "body": "現場交談：{{conversationWith6}}\n\n{{conversationQuestion6}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9310,7 +9341,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith6}}",
+          "choicePrompt": "{{conversationPrompt6}}"
         }
       },
       {
@@ -9330,7 +9363,7 @@
       {
         "id": "d7-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion7}}",
+        "body": "在場嘉賓：{{encounterPeople7}}\n\n{{encounterQuestion7}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9343,7 +9376,9 @@
           "options": "{{encounterChoices7}}",
           "order": "89.3",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople7}}",
+          "choicePrompt": "{{encounterQuestion7}}"
         }
       },
       {
@@ -9363,7 +9398,7 @@
       {
         "id": "d7-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion7}}",
+        "body": "現場交談：{{conversationWith7}}\n\n{{conversationQuestion7}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9380,7 +9415,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith7}}",
+          "choicePrompt": "{{conversationPrompt7}}"
         }
       },
       {
@@ -9400,7 +9437,7 @@
       {
         "id": "d8-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion8}}",
+        "body": "在場嘉賓：{{encounterPeople8}}\n\n{{encounterQuestion8}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9413,7 +9450,9 @@
           "options": "{{encounterChoices8}}",
           "order": "100.3",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople8}}",
+          "choicePrompt": "{{encounterQuestion8}}"
         }
       },
       {
@@ -9433,7 +9472,7 @@
       {
         "id": "d8-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion8}}",
+        "body": "現場交談：{{conversationWith8}}\n\n{{conversationQuestion8}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9450,7 +9489,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith8}}",
+          "choicePrompt": "{{conversationPrompt8}}"
         }
       },
       {
@@ -9470,7 +9511,7 @@
       {
         "id": "d9-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion9}}",
+        "body": "在場嘉賓：{{encounterPeople9}}\n\n{{encounterQuestion9}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9483,7 +9524,9 @@
           "options": "{{encounterChoices9}}",
           "order": "111.3",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople9}}",
+          "choicePrompt": "{{encounterQuestion9}}"
         }
       },
       {
@@ -9503,7 +9546,7 @@
       {
         "id": "d9-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion9}}",
+        "body": "現場交談：{{conversationWith9}}\n\n{{conversationQuestion9}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9520,7 +9563,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith9}}",
+          "choicePrompt": "{{conversationPrompt9}}"
         }
       },
       {
@@ -9540,7 +9585,7 @@
       {
         "id": "d10-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion10}}",
+        "body": "在場嘉賓：{{encounterPeople10}}\n\n{{encounterQuestion10}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9553,7 +9598,9 @@
           "options": "{{encounterChoices10}}",
           "order": "121.3",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople10}}",
+          "choicePrompt": "{{encounterQuestion10}}"
         }
       },
       {
@@ -9573,7 +9620,7 @@
       {
         "id": "d10-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion10}}",
+        "body": "現場交談：{{conversationWith10}}\n\n{{conversationQuestion10}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9590,7 +9637,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith10}}",
+          "choicePrompt": "{{conversationPrompt10}}"
         }
       },
       {
@@ -9610,7 +9659,7 @@
       {
         "id": "d11-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion11}}",
+        "body": "在場嘉賓：{{encounterPeople11}}\n\n{{encounterQuestion11}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9623,7 +9672,9 @@
           "options": "{{encounterChoices11}}",
           "order": "132.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople11}}",
+          "choicePrompt": "{{encounterQuestion11}}"
         }
       },
       {
@@ -9643,7 +9694,7 @@
       {
         "id": "d11-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion11}}",
+        "body": "現場交談：{{conversationWith11}}\n\n{{conversationQuestion11}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9660,7 +9711,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith11}}",
+          "choicePrompt": "{{conversationPrompt11}}"
         }
       },
       {
@@ -9680,7 +9733,7 @@
       {
         "id": "d12-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion12}}",
+        "body": "在場嘉賓：{{encounterPeople12}}\n\n{{encounterQuestion12}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9693,7 +9746,9 @@
           "options": "{{encounterChoices12}}",
           "order": "143.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople12}}",
+          "choicePrompt": "{{encounterQuestion12}}"
         }
       },
       {
@@ -9713,7 +9768,7 @@
       {
         "id": "d12-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion12}}",
+        "body": "現場交談：{{conversationWith12}}\n\n{{conversationQuestion12}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9730,7 +9785,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith12}}",
+          "choicePrompt": "{{conversationPrompt12}}"
         }
       },
       {
@@ -9750,7 +9807,7 @@
       {
         "id": "d13-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion13}}",
+        "body": "在場嘉賓：{{encounterPeople13}}\n\n{{encounterQuestion13}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9763,7 +9820,9 @@
           "options": "{{encounterChoices13}}",
           "order": "155.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople13}}",
+          "choicePrompt": "{{encounterQuestion13}}"
         }
       },
       {
@@ -9783,7 +9842,7 @@
       {
         "id": "d13-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion13}}",
+        "body": "現場交談：{{conversationWith13}}\n\n{{conversationQuestion13}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9800,7 +9859,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith13}}",
+          "choicePrompt": "{{conversationPrompt13}}"
         }
       },
       {
@@ -9820,7 +9881,7 @@
       {
         "id": "d14-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion14}}",
+        "body": "在場嘉賓：{{encounterPeople14}}\n\n{{encounterQuestion14}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9833,7 +9894,9 @@
           "options": "{{encounterChoices14}}",
           "order": "167.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople14}}",
+          "choicePrompt": "{{encounterQuestion14}}"
         }
       },
       {
@@ -9853,7 +9916,7 @@
       {
         "id": "d14-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion14}}",
+        "body": "現場交談：{{conversationWith14}}\n\n{{conversationQuestion14}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9870,7 +9933,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith14}}",
+          "choicePrompt": "{{conversationPrompt14}}"
         }
       },
       {
@@ -9890,7 +9955,7 @@
       {
         "id": "d15-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion15}}",
+        "body": "在場嘉賓：{{encounterPeople15}}\n\n{{encounterQuestion15}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9903,7 +9968,9 @@
           "options": "{{encounterChoices15}}",
           "order": "178.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople15}}",
+          "choicePrompt": "{{encounterQuestion15}}"
         }
       },
       {
@@ -9923,7 +9990,7 @@
       {
         "id": "d15-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion15}}",
+        "body": "現場交談：{{conversationWith15}}\n\n{{conversationQuestion15}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9940,7 +10007,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith15}}",
+          "choicePrompt": "{{conversationPrompt15}}"
         }
       },
       {
@@ -9960,7 +10029,7 @@
       {
         "id": "d16-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion16}}",
+        "body": "在場嘉賓：{{encounterPeople16}}\n\n{{encounterQuestion16}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -9973,7 +10042,9 @@
           "options": "{{encounterChoices16}}",
           "order": "189.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople16}}",
+          "choicePrompt": "{{encounterQuestion16}}"
         }
       },
       {
@@ -9993,7 +10064,7 @@
       {
         "id": "d16-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion16}}",
+        "body": "現場交談：{{conversationWith16}}\n\n{{conversationQuestion16}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10010,7 +10081,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith16}}",
+          "choicePrompt": "{{conversationPrompt16}}"
         }
       },
       {
@@ -10030,7 +10103,7 @@
       {
         "id": "d17-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion17}}",
+        "body": "在場嘉賓：{{encounterPeople17}}\n\n{{encounterQuestion17}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10043,7 +10116,9 @@
           "options": "{{encounterChoices17}}",
           "order": "200.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople17}}",
+          "choicePrompt": "{{encounterQuestion17}}"
         }
       },
       {
@@ -10063,7 +10138,7 @@
       {
         "id": "d17-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion17}}",
+        "body": "現場交談：{{conversationWith17}}\n\n{{conversationQuestion17}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10080,7 +10155,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith17}}",
+          "choicePrompt": "{{conversationPrompt17}}"
         }
       },
       {
@@ -10100,7 +10177,7 @@
       {
         "id": "d18-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion18}}",
+        "body": "在場嘉賓：{{encounterPeople18}}\n\n{{encounterQuestion18}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10113,7 +10190,9 @@
           "options": "{{encounterChoices18}}",
           "order": "211.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople18}}",
+          "choicePrompt": "{{encounterQuestion18}}"
         }
       },
       {
@@ -10133,7 +10212,7 @@
       {
         "id": "d18-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion18}}",
+        "body": "現場交談：{{conversationWith18}}\n\n{{conversationQuestion18}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10150,7 +10229,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith18}}",
+          "choicePrompt": "{{conversationPrompt18}}"
         }
       },
       {
@@ -10170,7 +10251,7 @@
       {
         "id": "d19-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion19}}",
+        "body": "在場嘉賓：{{encounterPeople19}}\n\n{{encounterQuestion19}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10183,7 +10264,9 @@
           "options": "{{encounterChoices19}}",
           "order": "222.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople19}}",
+          "choicePrompt": "{{encounterQuestion19}}"
         }
       },
       {
@@ -10203,7 +10286,7 @@
       {
         "id": "d19-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion19}}",
+        "body": "現場交談：{{conversationWith19}}\n\n{{conversationQuestion19}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10220,7 +10303,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith19}}",
+          "choicePrompt": "{{conversationPrompt19}}"
         }
       },
       {
@@ -10240,7 +10325,7 @@
       {
         "id": "d20-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion20}}",
+        "body": "在場嘉賓：{{encounterPeople20}}\n\n{{encounterQuestion20}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10253,7 +10338,9 @@
           "options": "{{encounterChoices20}}",
           "order": "233.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople20}}",
+          "choicePrompt": "{{encounterQuestion20}}"
         }
       },
       {
@@ -10273,7 +10360,7 @@
       {
         "id": "d20-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion20}}",
+        "body": "現場交談：{{conversationWith20}}\n\n{{conversationQuestion20}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10290,7 +10377,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith20}}",
+          "choicePrompt": "{{conversationPrompt20}}"
         }
       },
       {
@@ -10310,7 +10399,7 @@
       {
         "id": "d21-focus",
         "title": "換乘戀愛節目組",
-        "body": "{{encounterQuestion21}}",
+        "body": "在場嘉賓：{{encounterPeople21}}\n\n{{encounterQuestion21}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10323,7 +10412,9 @@
           "options": "{{encounterChoices21}}",
           "order": "244.29999999999998",
           "encounter": "true",
-          "composerLabel": "我會怎麼做 ▸"
+          "composerLabel": "我會怎麼做 ▸",
+          "interactionWith": "在場嘉賓：{{encounterPeople21}}",
+          "choicePrompt": "{{encounterQuestion21}}"
         }
       },
       {
@@ -10343,7 +10434,7 @@
       {
         "id": "d21-approach",
         "title": "換乘戀愛節目組",
-        "body": "{{conversationQuestion21}}",
+        "body": "現場交談：{{conversationWith21}}\n\n{{conversationQuestion21}}",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10360,7 +10451,9 @@
           "legacyOptions": "[\"我想多聽你說一點，也願意說說自己今天沒表現好的地方。\", \"我想確認你是不是也在意我。我現在有點難接受不確定的答案。\", \"我今天只想輕鬆聊聊，還不想給彼此更多期待。\"]",
           "exEffects": "[{\"affinity\": 3, \"trust\": 3, \"clarity\": 1, \"repair\": 1}, {\"affinity\": 4, \"trust\": -2, \"pressure\": 4}, {\"affinity\": -1, \"trust\": 1, \"clarity\": 2, \"release\": 1}]",
           "encounter": "true",
-          "composerLabel": "選擇下一個動作／回答 ▸"
+          "composerLabel": "選擇下一個動作／回答 ▸",
+          "interactionWith": "現場交談：{{conversationWith21}}",
+          "choicePrompt": "{{conversationPrompt21}}"
         }
       },
       {
@@ -10380,7 +10473,7 @@
       {
         "id": "d7-repair",
         "title": "換乘戀愛節目組",
-        "body": "回憶房間的東西還一直在腦袋裡。節目組留的這幾分鐘，他就在你面前，這次可以直接說。",
+        "body": "交談對象：X（私下）\n\n回憶房間的東西還一直在腦袋裡。節目組留的這幾分鐘，他就在你面前，這次可以直接說。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10393,7 +10486,9 @@
           "options": "{{repairOptions7}}",
           "order": "89.9",
           "effectTarget": "ex",
-          "effects": "[{\"trust\": 3, \"clarity\": 3, \"repair\": 3}, {\"trust\": -2, \"pressure\": 3}, {\"trust\": 2, \"clarity\": 2, \"release\": 1}]"
+          "effects": "[{\"trust\": 3, \"clarity\": 3, \"repair\": 3}, {\"trust\": -2, \"pressure\": 3}, {\"trust\": 2, \"clarity\": 2, \"release\": 1}]",
+          "interactionWith": "交談對象：X（私下）",
+          "choicePrompt": "你想先對對方說哪一句？"
         }
       },
       {
@@ -10413,7 +10508,7 @@
       {
         "id": "d14-repair",
         "title": "換乘戀愛節目組",
-        "body": "影片播完以後，有些話更難躲了。單獨見面的時候，他先叫了你的名字，沒有假裝你們只是這幾天才認識。",
+        "body": "現場交談：{{ex}}\n\n影片播完以後，有些話更難躲了。單獨見面的時候，他先叫了你的名字，沒有假裝你們只是這幾天才認識。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10426,7 +10521,9 @@
           "options": "{{repairOptions14}}",
           "order": "167.9",
           "effectTarget": "ex",
-          "effects": "[{\"trust\": 3, \"clarity\": 3, \"repair\": 3}, {\"trust\": -2, \"pressure\": 3}, {\"trust\": 2, \"clarity\": 2, \"release\": 1}]"
+          "effects": "[{\"trust\": 3, \"clarity\": 3, \"repair\": 3}, {\"trust\": -2, \"pressure\": 3}, {\"trust\": 2, \"clarity\": 2, \"release\": 1}]",
+          "interactionWith": "現場交談：{{ex}}",
+          "choicePrompt": "你想先對對方說哪一句？"
         }
       },
       {
@@ -10446,7 +10543,7 @@
       {
         "id": "d19-repair",
         "title": "換乘戀愛節目組",
-        "body": "這次見面的時間快到了，工作人員還在門外等。他看了看時鐘，又看回你，沒有催。",
+        "body": "現場交談：{{ex}}\n\n這次見面的時間快到了，工作人員還在門外等。他看了看時鐘，又看回你，沒有催。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "kind": "text",
@@ -10459,7 +10556,9 @@
           "options": "{{repairOptions19}}",
           "order": "222.9",
           "effectTarget": "ex",
-          "effects": "[{\"trust\": 3, \"clarity\": 3, \"repair\": 3}, {\"trust\": -2, \"pressure\": 3}, {\"trust\": 2, \"clarity\": 2, \"release\": 1}]"
+          "effects": "[{\"trust\": 3, \"clarity\": 3, \"repair\": 3}, {\"trust\": -2, \"pressure\": 3}, {\"trust\": 2, \"clarity\": 2, \"release\": 1}]",
+          "interactionWith": "現場交談：{{ex}}",
+          "choicePrompt": "你想先對對方說哪一句？"
         }
       },
       {
@@ -10479,7 +10578,7 @@
       {
         "id": "d2-date-choice-a",
         "title": "換乘戀愛節目組",
-        "body": "{{dateQuestion2a}}\n\n點擊下方訊息欄選擇回應。",
+        "body": "{{dateContext2}}\n\n{{dateQuestion2a}}\n\n點擊下方訊息欄選擇回應。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-10-26 09:00",
@@ -10493,7 +10592,9 @@
           "effectTarget": "date",
           "effects": "[{\"affinity\": 3, \"trust\": 2, \"clarity\": 1}, {\"affinity\": -2, \"trust\": -2, \"pressure\": 2}, {\"affinity\": 1, \"trust\": 1}]",
           "legacyOptions": "[\"我說自己收到的只是參考，想直接聽他今天想怎麼過。\", \"我照著那份建議替他選好，想讓他發現我很懂他。\", \"我坦白自己緊張，問能不能先各點一樣想吃的再慢慢聊。\"]",
-          "legacyQuestion": "他把匿名聊天室裡的一句提醒，和眼前自己的回答放在一起。此刻你想怎樣接話？"
+          "legacyQuestion": "他把匿名聊天室裡的一句提醒，和眼前自己的回答放在一起。此刻你想怎樣接話？",
+          "interactionWith": "{{dateContext2}}",
+          "choicePrompt": "{{dateQuestion2a}}"
         }
       },
       {
@@ -10513,7 +10614,7 @@
       {
         "id": "d2-date-choice-b",
         "title": "換乘戀愛節目組",
-        "body": "{{dateQuestion2b}}\n\n點擊下方訊息欄選擇回應。",
+        "body": "{{dateContext2}}\n\n{{dateQuestion2b}}\n\n點擊下方訊息欄選擇回應。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-10-26 09:00",
@@ -10527,7 +10628,9 @@
           "effectTarget": "date",
           "effects": "[{\"affinity\": 3, \"trust\": 2, \"clarity\": 1}, {\"affinity\": -2, \"trust\": -2, \"pressure\": 2}, {\"affinity\": 1, \"trust\": 1}]",
           "legacyOptions": "[\"我說今天有一段時間真的忘了緊張，想再和他單獨出來。\", \"我問他今天的我，有沒有比他原本在意的人更讓他心動。\", \"我說今天很舒服，但不想太快把這個下午變成承諾。\"]",
-          "legacyQuestion": "等雨小一點的這幾分鐘，你想留下哪一句話？"
+          "legacyQuestion": "等雨小一點的這幾分鐘，你想留下哪一句話？",
+          "interactionWith": "{{dateContext2}}",
+          "choicePrompt": "{{dateQuestion2b}}"
         }
       },
       {
@@ -10547,7 +10650,7 @@
       {
         "id": "d3-date-choice-a",
         "title": "換乘戀愛節目組",
-        "body": "{{dateQuestion3a}}\n\n點擊下方訊息欄選擇回應。",
+        "body": "{{dateContext3}}\n\n{{dateQuestion3a}}\n\n點擊下方訊息欄選擇回應。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-10-27 09:00",
@@ -10561,7 +10664,9 @@
           "effectTarget": "date",
           "effects": "[{\"affinity\": 3, \"trust\": 2, \"clarity\": 1}, {\"affinity\": -2, \"trust\": -2, \"pressure\": 2}, {\"affinity\": 1, \"trust\": 1}]",
           "legacyOptions": "[\"我說剛開始有點不自在，但想把今天當成我們自己的相處。\", \"我追問他知不知道是誰安排我們，想從反應猜出關係。\", \"我先聊剛才走錯路的事，讓彼此不用急著談感情。\"]",
-          "legacyQuestion": "他問起今天的安排，你想怎樣開始這頓午餐？"
+          "legacyQuestion": "他問起今天的安排，你想怎樣開始這頓午餐？",
+          "interactionWith": "{{dateContext3}}",
+          "choicePrompt": "{{dateQuestion3a}}"
         }
       },
       {
@@ -10581,7 +10686,7 @@
       {
         "id": "d3-date-choice-b",
         "title": "換乘戀愛節目組",
-        "body": "{{dateQuestion3b}}\n\n點擊下方訊息欄選擇回應。",
+        "body": "{{dateContext3}}\n\n{{dateQuestion3b}}\n\n點擊下方訊息欄選擇回應。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-10-27 09:00",
@@ -10595,7 +10700,9 @@
           "effectTarget": "date",
           "effects": "[{\"affinity\": 3, \"trust\": 2, \"clarity\": 1}, {\"affinity\": -2, \"trust\": -2, \"pressure\": 2}, {\"affinity\": 1, \"trust\": 1}]",
           "legacyOptions": "[\"我問他願不願意各留一張，說我想記得今天的我們。\", \"我先收起來，問他會不會把別人的合照也留得一樣好。\", \"我把照片推到中間，說先讓它只是今天開心的紀錄。\"]",
-          "legacyQuestion": "你想怎樣處理這張今天才有的合照？"
+          "legacyQuestion": "你想怎樣處理這張今天才有的合照？",
+          "interactionWith": "{{dateContext3}}",
+          "choicePrompt": "{{dateQuestion3b}}"
         }
       },
       {
@@ -10615,7 +10722,7 @@
       {
         "id": "d10-date-choice-a",
         "title": "換乘戀愛節目組",
-        "body": "{{dateQuestion10a}}\n\n點擊下方訊息欄選擇回應。",
+        "body": "{{dateContext10}}\n\n{{dateQuestion10a}}\n\n點擊下方訊息欄選擇回應。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-11-03 20:00",
@@ -10629,7 +10736,9 @@
           "effectTarget": "date",
           "effects": "[{\"affinity\": 3, \"trust\": 2, \"clarity\": 1}, {\"affinity\": -2, \"trust\": -2, \"pressure\": 2}, {\"affinity\": 1, \"trust\": 1}]",
           "legacyOptions": "[\"我說出一個真實的小習慣，再問他為什麼會把那件事記到現在。\", \"我問這份禮物是不是也曾經送過別人，想知道自己是否特殊。\", \"我先談禮物本身，說今天想慢慢看，不急著解讀寓意。\"]",
-          "legacyQuestion": "他問你，那份禮物讓你想起什麼？"
+          "legacyQuestion": "他問你，那份禮物讓你想起什麼？",
+          "interactionWith": "{{dateContext10}}",
+          "choicePrompt": "{{dateQuestion10a}}"
         }
       },
       {
@@ -10649,7 +10758,7 @@
       {
         "id": "d10-date-choice-b",
         "title": "換乘戀愛節目組",
-        "body": "{{dateQuestion10b}}\n\n點擊下方訊息欄選擇回應。",
+        "body": "{{dateContext10}}\n\n{{dateQuestion10b}}\n\n點擊下方訊息欄選擇回應。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-11-03 20:00",
@@ -10663,7 +10772,9 @@
           "effectTarget": "date",
           "effects": "[{\"affinity\": 3, \"trust\": 2, \"clarity\": 1}, {\"affinity\": -2, \"trust\": -2, \"pressure\": 2}, {\"affinity\": 1, \"trust\": 1}]",
           "legacyOptions": "[\"我承認有過，說我想試著把下一次邀請說得更清楚。\", \"我問他是不是已經有想一起離開的人，想今天就知道答案。\", \"我說有些事還沒整理好，但今天不是勉強自己來的。\"]",
-          "legacyQuestion": "這次你想把話說到哪裡？"
+          "legacyQuestion": "這次你想把話說到哪裡？",
+          "interactionWith": "{{dateContext10}}",
+          "choicePrompt": "{{dateQuestion10b}}"
         }
       },
       {
@@ -10683,7 +10794,7 @@
       {
         "id": "d13-date-choice-a",
         "title": "換乘戀愛節目組",
-        "body": "{{dateQuestion13a}}\n\n點擊下方訊息欄選擇回應。",
+        "body": "{{dateContext13}}\n\n{{dateQuestion13a}}\n\n點擊下方訊息欄選擇回應。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-11-06 09:00",
@@ -10697,7 +10808,9 @@
           "effectTarget": "date",
           "effects": "[{\"affinity\": 3, \"trust\": 2, \"clarity\": 1}, {\"affinity\": -2, \"trust\": -2, \"pressure\": 2}, {\"affinity\": 1, \"trust\": 1}]",
           "legacyOptions": "[\"{{dateOption13a0}}\", \"{{dateOption13a1}}\", \"{{dateOption13a2}}\"]",
-          "legacyQuestion": "{{dateQuestion13a}}"
+          "legacyQuestion": "{{dateQuestion13a}}",
+          "interactionWith": "{{dateContext13}}",
+          "choicePrompt": "{{dateQuestion13a}}"
         }
       },
       {
@@ -10717,7 +10830,7 @@
       {
         "id": "d13-date-choice-b",
         "title": "換乘戀愛節目組",
-        "body": "{{dateQuestion13b}}\n\n點擊下方訊息欄選擇回應。",
+        "body": "{{dateContext13}}\n\n{{dateQuestion13b}}\n\n點擊下方訊息欄選擇回應。",
         "hidden": true,
         "sender": "換乘戀愛節目組",
         "time": "2026-11-06 09:00",
@@ -10731,7 +10844,9 @@
           "effectTarget": "date",
           "effects": "[{\"affinity\": 3, \"trust\": 2, \"clarity\": 1}, {\"affinity\": -2, \"trust\": -2, \"pressure\": 2}, {\"affinity\": 1, \"trust\": 1}]",
           "legacyOptions": "[\"{{dateOption13b0}}\", \"{{dateOption13b1}}\", \"{{dateOption13b2}}\"]",
-          "legacyQuestion": "{{dateQuestion13b}}"
+          "legacyQuestion": "{{dateQuestion13b}}",
+          "interactionWith": "{{dateContext13}}",
+          "choicePrompt": "{{dateQuestion13b}}"
         }
       },
       {

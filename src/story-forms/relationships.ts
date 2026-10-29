@@ -1,4 +1,5 @@
 import { savedAnswer } from "./answers";
+import { affectionTable } from "./hearts";
 import type { Runtime, Work } from "../schema";
 import { castFor, type Profile, type ProfileConfig } from "./profile";
 export function seeded(seed: string): number {
@@ -97,6 +98,7 @@ export function relationshipHistory(
   p: Profile,
   config: ProfileConfig,
   throughDay = 21,
+  includeSms = true,
 ): Record<string, Relationship>[] {
   const result = Object.fromEntries(
     p.men.map((name) => [
@@ -208,7 +210,7 @@ export function relationshipHistory(
         item.id.endsWith("-approach") || item.id.endsWith("-date-choice-a"),
     });
   }
-  for (let d = 1; d <= throughDay; d++) {
+  for (let d = 1; includeSms && d <= throughDay; d++) {
     if (!selected(state, `d${d}-sms`)) continue;
     changes.push({
       day: d,
@@ -248,28 +250,44 @@ export function relationships(
   p: Profile,
   config: ProfileConfig,
   throughDay = 21,
+  includeSms = true,
 ) {
-  return relationshipHistory(work, state, p, config, throughDay)[throughDay];
+  return relationshipHistory(work, state, p, config, throughDay, includeSms)[
+    throughDay
+  ];
 }
-// NPCs have preferences among other residents. No final coin toss and no automatic reciprocity.
-export function rivalInterest(
+export function hiddenAffections(
+  work: Work,
+  state: Runtime,
   p: Profile,
   config: ProfileConfig,
-  man: string,
   day: number,
-): number {
-  return Math.max(
-    ...config.women.map(
-      (w) =>
-        25 +
-        seeded(`${p.seed}|rival|${man}|${w}`) * 13 +
-        (publicPartner(p, config, w) === man ? Math.min(4, day / 5) : 0) +
-        Math.min(day, 14) * 0.25,
-    ),
+  throughDay = day,
+) {
+  // Anonymous letters do not identify their sender. Only observed interactions
+  // count towards an NPC's feelings; the player's own intention remains saved.
+  const history = relationshipHistory(
+    work,
+    state,
+    p,
+    config,
+    throughDay,
+    false,
   );
-}
-export function interest(r: Relationship): number {
-  return r.affinity + r.trust * 0.4 - r.pressure * 1.8;
+  const visiblePartners = Object.fromEntries(
+    config.women.map((woman) => [woman, publicPartner(p, config, woman)]),
+  );
+  return affectionTable(
+    work,
+    state,
+    p,
+    config,
+    day,
+    history[throughDay],
+    history[0],
+    visiblePartners,
+    throughDay,
+  );
 }
 export function finalConsent(
   work: Work,
@@ -278,7 +296,7 @@ export function finalConsent(
   config: ProfileConfig,
   target: string,
 ) {
-  const r = relationships(work, state, p, config)[target];
+  const r = relationships(work, state, p, config, 21, false)[target];
   if (!r || r.meetings < (target === p.ex ? 3 : 4))
     return {
       success: false,
@@ -311,7 +329,16 @@ export function finalConsent(
           "最後一次談話裡，你還沒有答應重新交往；對方尊重你提出的界線，沒有把終選變成跳過那段談話的捷徑。",
       };
   }
-  if (r.clarity < 3 || interest(r) <= rivalInterest(p, config, target, 21))
+  const feelings = hiddenAffections(work, state, p, config, 21)[target];
+  const wanted = feelings?.[p.name];
+  const alternatives = Object.entries(feelings || {}).filter(
+    ([name, cell]) => name !== p.name && cell.eligible,
+  );
+  if (
+    r.clarity < 3 ||
+    !wanted?.eligible ||
+    alternatives.some(([, cell]) => cell.score >= wanted.score)
+  )
     return {
       success: false,
       reason:

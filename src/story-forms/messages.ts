@@ -177,7 +177,7 @@ export function smsChoices(
       ? ["reach", "probe", "boundary"]
       : ["flirt", "probe", "boundary"];
   const fallback = isEx
-    ? []
+    ? [...(book.generic.ex || [])]
     : [...(book.generic.curious || []), ...(book.generic.reach || [])];
   const pool = [...personal, ...generic, ...fallback];
   const result = intentions
@@ -247,7 +247,11 @@ export function incomingToPlayer(
   // that everything is fine. Neither side knows the current anonymous ballot.
   const rows =
     context.mode === "tense"
-      ? [...(voice?.incoming.tense || []), ...(book.incoming.tense || [])]
+      ? [
+          ...(voice?.incoming.tense || []),
+          ...(book.incoming.tense || []),
+          ...(from === p.ex ? book.incoming.ex || [] : []),
+        ]
       : [
           ...personal,
           ...(voice?.incoming[context.mode] || []),

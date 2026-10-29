@@ -323,6 +323,11 @@ export function encounterValues(
   for (let day = 1; day <= 21; day++) {
     const m = momentFor(work, state, p, config, day);
     if (!m || m.old) continue;
+    values[`encounterPeople${day}`] = [
+      ...new Set([m.names.a, m.names.b, m.names.woman]),
+    ].join("、");
+    values[`conversationWith${day}`] = m.target || m.names.woman;
+    values[`conversationPrompt${day}`] = m.prompt;
     values[`encounter${day}`] = `【${m.scene.title}】\n\n${m.opening}`;
     values[`encounterChoices${day}`] = JSON.stringify(m.options);
     values[`encounterQuestion${day}`] = m.render(
@@ -347,7 +352,7 @@ export function encounterValues(
       const reply = m.choices[response.optionIndex];
       const spoken = response.value.replace(/^[「“]/, "").replace(/[」”]$/, "");
       values[`interaction${day}`] =
-        `${response.renderedLead ?? m.lead}\n\n你說：「${spoken}」\n\n${response.renderedResult ?? reply?.result ?? ""}`;
+        `【現場交談：${m.target || m.names.woman}】\n\n${response.renderedLead ?? m.lead}\n\n你說：「${spoken}」\n\n${response.renderedResult ?? reply?.result ?? ""}`;
       values[`conversationVisibility${day}`] =
         m.target === p.ex && day < 14 ? "player" : "public";
       const extra = [

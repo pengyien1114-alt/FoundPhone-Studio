@@ -296,6 +296,8 @@ function snapshotBefore(target: string): Runtime {
           : item.meta.form === "sms"
             ? "今天謝謝你。晚安。"
             : "我先把自己的需要說清楚，對方也願意回答，我們一起完成了正式任務並記下具體的過程。";
+      if (typeof value !== "string")
+        throw Error("Replay has no offered response: " + id);
       const packed = packSeasonAnswer(work, state, id, value);
       if (!packed) throw Error("Invalid replay input: " + id);
       state = dispatch(
@@ -392,6 +394,49 @@ test("an immediate reload recovers the latest date choice even with an older dat
   await expect(page.locator(".msgs.kk")).toContainText("約會後");
 });
 
+test("day-two anonymous receipts use the private table and survive reload", async ({
+  page,
+}) => {
+  test.setTimeout(60000);
+  const state = snapshotBefore("d2-sms");
+  await restore(page, state);
+  await open(page, "KakaoTalk");
+  await option(page);
+  const readRecord = () =>
+    page.evaluate(() => {
+      const key = Object.keys(localStorage).find((k) =>
+        k.startsWith("foundphone-progress-v1:"),
+      )!;
+      const state = JSON.parse(localStorage.getItem(key)!).state;
+      const record = JSON.parse(state.ui.kakao["answer:d2-sms"]);
+      const name = JSON.parse(state.ui.notes.profile).name;
+      return {
+        version: record.heartVersion,
+        hasTable: !!record.heartScores,
+        votes: record.votes,
+        received: record.votes.filter((v: { to: string }) => v.to === name),
+      };
+    });
+  const record = await readRecord();
+  expect(record.version).toBe(1);
+  expect(record.hasTable).toBe(true);
+  expect(record.votes).toHaveLength(10);
+  expect(record.received.length).toBeLessThanOrEqual(5);
+  await expect(page.locator(".phone-screen")).not.toContainText("heartScores");
+  await expect(page.locator(".phone-screen")).not.toContainText("隱藏好感");
+  const body = await page.locator(".msgs.kk").innerText();
+  for (const letter of record.received) expect(body).toContain(letter.text);
+  if (!record.received.length) expect(body).toContain("沒有嘉賓選擇您。");
+  await page.reload();
+  await page.getByRole("button", { name: "轻触解锁" }).click();
+  await pin(page);
+  await open(page, "KakaoTalk");
+  expect(await readRecord()).toEqual(record);
+  await expect(
+    page.getByRole("button", { name: "KKT消息", exact: true }),
+  ).toContainText("讀完收件，查看 X 提示");
+});
+
 test("date-two temporary chat hides identity and closes before departure", async ({
   page,
 }) => {
@@ -418,6 +463,33 @@ test("date-two temporary chat hides identity and closes before departure", async
   await expect(page.locator(".msgs.kk")).not.toContainText(
     "你的約會對象的 X：",
   );
+});
+
+test("Japan flight groups keep the confirmed travel partner and show who you are going with", async ({
+  page,
+}) => {
+  test.setTimeout(60000);
+  const state = snapshotBefore("d14-flight");
+  const raw = JSON.parse(readFileSync("stories/template/story.json", "utf8"));
+  const { work } = compileStory(raw),
+    config = work.data.notes.map(profileConfig).find(Boolean)!,
+    p = parseProfile(state.ui?.notes?.profile)!;
+  const partner = seasonValues(work, state, p, config).travelPartner;
+  await restore(page, state);
+  await open(page, "KakaoTalk");
+  await expect(page.locator(".msgs.kk")).toContainText(partner);
+  await option(page, "第二組");
+  await x(page);
+  const body = await page.locator(".post-detail-body").innerText();
+  expect(body).toContain(`你和旅行搭檔 ${partner} 一起加入 第二組`);
+  const line = body.split("\n").find((line) => line.startsWith("第二組："))!;
+  expect(line).toContain(p.name);
+  expect(line).toContain(partner);
+  await page.reload();
+  await page.getByRole("button", { name: "轻触解锁" }).click();
+  await pin(page);
+  await open(page, "X");
+  await expect(page.locator(".phone-screen")).toContainText(partner);
 });
 
 test("day-fourteen relations are shown only after arrival and explicit viewing confirmation", async ({
@@ -548,6 +620,16 @@ test("a date has two decisions with visible consequences before its existing ref
     before.dateOpening2,
   );
   await kkt(page);
+  await expect(page.locator(".msgs.kk")).toContainText(before.date2);
+  await page.getByRole("button", { name: "KKT消息", exact: true }).click();
+  await expect(page.getByRole("dialog")).toContainText(
+    `約會對象：${before.date2}`,
+  );
+  await expect(page.getByRole("dialog")).toContainText(before.dateQuestion2a);
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: "再想一下", exact: true })
+    .click();
   const first = await option(page, 0);
   state.unlocked.push("d2-date-choice-a");
   state.ui!.kakao!["answer:d2-date-choice-a"] = packSeasonAnswer(
