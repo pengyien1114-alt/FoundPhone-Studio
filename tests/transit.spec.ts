@@ -510,6 +510,111 @@ test("day-fourteen relations are shown only after arrival and explicit viewing c
   await expect(page.locator(".notes-list")).toContainText("第十四天");
 });
 
+test("late free-time activities do not replay across three consecutive days", async ({
+  page,
+}) => {
+  test.setTimeout(90000);
+  const titles = new Set<string>();
+  const raw = JSON.parse(readFileSync("stories/template/story.json", "utf8"));
+  const { work } = compileStory(raw),
+    config = work.data.notes.map(profileConfig).find(Boolean)!;
+  for (const day of [15, 16, 17]) {
+    const state = snapshotBefore(`d${day}-afternoon`),
+      p = parseProfile(state.ui?.notes?.profile)!;
+    const moment = momentFor(work, state, p, config, day)!;
+    expect(titles.has(moment.scene.title)).toBe(false);
+    titles.add(moment.scene.title);
+    await restore(page, state);
+    await open(page, "X");
+    await expect(page.locator(".post-detail-body")).toContainText(
+      moment.scene.title,
+    );
+    await expect(page.locator(".post-detail-body")).toContainText(
+      moment.opening,
+    );
+  }
+});
+
+test("the final X reply uses the readiness recorded with the actual conversation", async ({
+  page,
+}) => {
+  test.setTimeout(60000);
+  const state = snapshotBefore("d21-chat1"),
+    raw = JSON.parse(readFileSync("stories/template/story.json", "utf8"));
+  const { work } = compileStory(raw),
+    config = work.data.notes.map(profileConfig).find(Boolean)!,
+    p = parseProfile(state.ui?.notes?.profile)!;
+  const form = renderStoryItem(
+    work.data.kakao.find((i) => i.id === "d21-chat1")!,
+    seasonValues(work, state, p, config),
+  );
+  const text = JSON.parse(form.meta.options)[0];
+  const expected = JSON.parse(
+    packSeasonAnswer(work, state, "d21-chat1", text)!,
+  );
+  await restore(page, state);
+  await open(page, "KakaoTalk");
+  await option(page, text);
+  await expect(page.locator(".msgs.kk")).toContainText(
+    expected.commitmentReply,
+  );
+  if (expected.readinessCode !== "ready")
+    await expect(page.locator(".msgs.kk")).not.toContainText(
+      "回去以後，你還想跟我試嗎",
+    );
+});
+
+test("a ready X can accept the player's explicit final reunion even after an earlier pause", async ({
+  page,
+}) => {
+  test.setTimeout(60000);
+  const state = snapshotBefore("final-choice"),
+    raw = JSON.parse(readFileSync("stories/template/story.json", "utf8"));
+  const { work } = compileStory(raw),
+    p = parseProfile(state.ui?.notes?.profile)!;
+  for (let d = 1; d <= 21; d++) {
+    state.ui!.kakao![`answer:d${d}-focus`] = JSON.stringify({ value: p.ex });
+    state.ui!.kakao![`answer:d${d}-approach`] = JSON.stringify({
+      value: JSON.parse(
+        work.data.kakao.find((i) => i.id === `d${d}-approach`)!.meta
+          .legacyOptions,
+      )[0],
+      optionIndex: 0,
+    });
+  }
+  for (const id of ["d7-repair", "d14-repair", "d19-repair", "d21-chat1"]) {
+    const values = seasonValues(
+      work,
+      state,
+      p,
+      work.data.notes.map(profileConfig).find(Boolean)!,
+    );
+    const item = renderStoryItem(
+      work.data.kakao.find((i) => i.id === id)!,
+      values,
+    );
+    state.ui!.kakao!["answer:" + id] = JSON.stringify({
+      value: JSON.parse(item.meta.options)[0],
+      optionIndex: 0,
+    });
+  }
+  state.ui!.kakao!["answer:d21-chat2"] = JSON.stringify({
+    value: JSON.parse(
+      work.data.kakao.find((i) => i.id === "d21-chat2")!.meta.options,
+    )[1],
+    optionIndex: 1,
+  });
+  await restore(page, state);
+  await open(page, "KakaoTalk");
+  await page.getByRole("button", { name: "KKT消息", exact: true }).click();
+  await page
+    .locator(".story-overlay")
+    .getByRole("button", { name: "我選擇和 X 重新開始", exact: true })
+    .click();
+  await x(page);
+  await expect(page.locator(".post-detail-body")).toContainText("復合成功");
+});
+
 test("final choice and completion also start from the KKT message field", async ({
   page,
 }) => {

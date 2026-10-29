@@ -1,6 +1,13 @@
 import type { Work, Runtime } from "../schema";
 import type { Profile, ProfileConfig } from "./profile";
-import { selected, seeded, publicPartner } from "./relationships";
+import {
+  selected,
+  seeded,
+  publicPartner,
+  relationshipReadiness,
+  playerReunionConfirmed,
+  commitmentWords,
+} from "./relationships";
 import { savedAnswer } from "./answers";
 import { approachIndex } from "./contacts";
 import { momentFor, momentRecord } from "./encounters";
@@ -10,6 +17,7 @@ export type SmsChoice = { text: string; intent: SmsIntent };
 type Mode = "curious" | "familiar" | "close" | "tense" | "reconnect";
 type Stage = "early" | "middle" | "late";
 type Voice = {
+  repertoire?: string[];
   outgoing: Record<Mode, SmsChoice[]>;
   incoming: Record<Mode, string[]>;
 };
@@ -116,14 +124,24 @@ export function smsContext(
     returning,
   };
 }
-function previousMessages(state: Runtime, day: number) {
+function previousMessages(
+  state: Runtime,
+  day: number,
+  receiver?: string,
+  sender?: string,
+) {
   const chosen = new Set<string>(),
     received = new Set<string>(),
     recent = new Set<string>();
   for (let d = 1; d < day; d++) {
     const record = savedAnswer(state, `d${d}-sms`);
     if (record?.value) chosen.add(record.value);
-    for (const vote of record?.votes || []) received.add(vote.text);
+    for (const vote of record?.votes || [])
+      if (
+        (!receiver || vote.to === receiver) &&
+        (!sender || vote.from === sender)
+      )
+        received.add(vote.text);
     if (d >= day - 3)
       for (const text of record?.smsOptions || []) recent.add(text);
   }
@@ -233,10 +251,11 @@ export function incomingToPlayer(
   config: ProfileConfig,
   from: string,
   day: number,
+  reserved: ReadonlySet<string> = new Set(),
 ): string {
   const book = smsBook(work),
     context = smsContext(work, state, from, day, p.ex);
-  const history = previousMessages(state, day),
+  const history = previousMessages(state, day, p.name),
     voice = book.characters[from];
   const background = book.exes[Math.max(0, config.reasons.indexOf(p.reason))];
   const personal =
@@ -245,8 +264,27 @@ export function incomingToPlayer(
       : voice?.incoming[context.mode] || [];
   // A difficult conversation must not be followed by a disconnected promise
   // that everything is fine. Neither side knows the current anonymous ballot.
+  const readiness =
+    from === p.ex && day >= 14
+      ? relationshipReadiness(work, state, p, config, from, day)
+      : undefined;
+  const respectingBoundary =
+    from === p.ex &&
+    day === 21 &&
+    !!selected(state, "d21-chat2") &&
+    !playerReunionConfirmed(work, state);
+  const caution = respectingBoundary
+    ? commitmentWords(work, p, config, "player")?.sms
+    : readiness && !readiness.ready
+      ? commitmentWords(work, p, config, readiness.code)?.sms
+      : undefined;
+  const repertoire =
+    context.mode === "curious" && from !== p.ex && day <= 3
+      ? []
+      : voice?.repertoire || [];
   const rows =
-    context.mode === "tense"
+    caution ||
+    (context.mode === "tense"
       ? [
           ...(voice?.incoming.tense || []),
           ...(book.incoming.tense || []),
@@ -257,12 +295,19 @@ export function incomingToPlayer(
           ...(voice?.incoming[context.mode] || []),
           ...(book.incoming[context.mode] || []),
           ...(from === p.ex ? book.incoming.ex || [] : []),
-        ];
+        ]);
+  if (!caution) rows.push(...repertoire);
   const fresh = rows.filter(
-    (text) => shortMessage(text) && !history.received.has(text),
+    (text) =>
+      shortMessage(text) && !history.received.has(text) && !reserved.has(text),
   );
-  const own = fresh.filter((text) => personal.includes(text));
-  const choices = own.length ? own : fresh;
+  const own = fresh.filter((text) => (caution || personal).includes(text));
+  const distinctVoice = fresh.filter((text) => repertoire.includes(text));
+  const choices = own.length
+    ? own
+    : distinctVoice.length
+      ? distinctVoice
+      : fresh;
   const moment = momentFor(work, state, p, config, day);
   const shared =
     from === moment?.names.b ? moment?.sharedClueB : moment?.sharedClue;
@@ -273,12 +318,14 @@ export function incomingToPlayer(
     shared &&
     shortMessage(shared) &&
     !history.received.has(shared) &&
+    !reserved.has(shared) &&
+    !caution &&
     context.mode !== "tense"
   )
     return shared;
   return (
     ordered(
-      choices.length ? choices : rows,
+      choices,
       `${p.seed}|incoming2|${day}|${from}|`,
       (text) => text,
     )[0] || "想再見你，先不找別的理由。"
@@ -292,6 +339,7 @@ export function otherSms(
   from: string,
   to: string,
   day: number,
+  reserved: ReadonlySet<string> = new Set(),
 ): string {
   const book = smsBook(work);
   const mode: Mode =
@@ -302,15 +350,18 @@ export function otherSms(
       : day === 1
         ? "curious"
         : "familiar";
-  const history = previousMessages(state, day);
+  const history = previousMessages(state, day, undefined, from);
   const rows = [
     ...(book.characters[from]?.incoming[mode] || []),
     ...(book.incoming[mode] || []),
+    ...(book.characters[from]?.repertoire || []),
   ];
-  const fresh = rows.filter((text) => !history.received.has(text));
+  const fresh = rows.filter(
+    (text) => !history.received.has(text) && !reserved.has(text),
+  );
   return (
     ordered(
-      fresh.length ? fresh : rows,
+      fresh,
       `${p.seed}|npc-sms2|${day}|${from}|${to}|`,
       (text) => text,
     )[0] || "還想再跟你說幾句，沒找到機會。"

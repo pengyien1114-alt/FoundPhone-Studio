@@ -2,7 +2,14 @@ import type { Runtime, Work } from "../schema";
 import { castFor, type Profile, type ProfileConfig } from "./profile";
 import { interactionValues as legacyValues } from "./legacyScenes";
 import { encounterValues, momentFor } from "./encounters";
-import { repairOptions, repairChoice, selected } from "./relationships";
+import {
+  repairOptions,
+  repairChoice,
+  selected,
+  relationshipReadiness,
+  commitmentWords,
+} from "./relationships";
+import { savedAnswer } from "./answers";
 export function interactionValues(
   work: Work,
   state: Runtime,
@@ -33,6 +40,9 @@ export function interactionValues(
             ][[7, 14, 19].indexOf(day)]
           : "他點頭，沒有用你還願意坐在這裡，就當成你已經答應。你們停了一會兒，聽到門外有人走動，才各自把手邊的東西拿好。";
     values[`repairReply${day}`] = `你說：「${choice}」\n\n${reply}`;
+    const recorded = savedAnswer(state, `d${day}-repair`)?.commitmentReply;
+    if (typeof recorded === "string")
+      values[`repairReply${day}`] += `\n\n他把話說得很清楚：「${recorded}」`;
   }
   const last = selected(state, "d21-chat1");
   if (last) {
@@ -43,6 +53,19 @@ export function interactionValues(
         : index === 1
           ? "聊天室安靜了一會兒。\n\n「我也很想。」\n\n他停了很久，又補一則。\n「但我不想今天答應你，回去卻又讓你一個人等。」"
           : "他回覆：\n\n「我知道了。你不用因為我還想，就答應我。」\n\n過了一會兒，又出現一句：\n「謝謝你有直接跟我說。」";
+    const recorded = savedAnswer(state, "d21-chat1")?.commitmentReply;
+    const canCompute = !state.read.includes("d21-chat-reply");
+    const status = canCompute
+      ? relationshipReadiness(work, state, p, config, p.ex, 21)
+      : undefined;
+    const honest =
+      typeof recorded === "string"
+        ? recorded
+        : status
+          ? commitmentWords(work, p, config, status.code)?.talk
+          : undefined;
+    if (honest)
+      values.finalTalkReply = `對方停了一會兒，才回覆：\n\n「${honest}」`;
   }
   for (let d = 1; d <= 21; d++) {
     const m = momentFor(work, state, p, config, d);

@@ -19,6 +19,10 @@ export type SavedAnswer = {
   travelPairs?: Record<string, string>;
   heartVersion?: 1;
   heartScores?: Record<string, Record<string, number>>;
+  presentedScenes?: string[];
+  commitmentReply?: string;
+  readinessCode?: string;
+  exReadiness?: { ready: boolean; code: string };
 };
 const parsed = new WeakMap<
   Runtime,

@@ -8,6 +8,7 @@ import {
   characterMoment,
   characterScene,
   recallFor,
+  presentedBefore,
 } from "./characters";
 export type MomentChoice = {
   line: string;
@@ -37,6 +38,7 @@ export type HouseMoment = {
   incoming?: string[];
   voices?: Record<string, string>;
   peer?: string;
+  presentedScenes?: string[];
 };
 export type MomentAnswer = {
   value: string;
@@ -55,6 +57,7 @@ export type MomentAnswer = {
   recallId?: string;
   renderedLead?: string;
   renderedResult?: string;
+  presentedScenes?: string[];
 };
 export function momentRecord(
   state: Runtime,
@@ -139,7 +142,33 @@ export function momentFor(
           women.length
       ],
     other = men.find((m) => m !== a && m !== b)!;
-  const castNames = saved?.cast || { a, b, woman, other };
+  let castNames = saved?.cast || { a, b, woman, other };
+  if (!saved) {
+    const seen = presentedBefore(work, state, day, p.ex);
+    const fresh = shuffled.filter((name) => {
+      const scene = characterScene(work, name, stage, state, day, p.ex);
+      return scene && !seen.has(scene.id);
+    });
+    const freshWomen = women.filter(
+      (name) => !seen.has(`woman:${name}:${stage}`),
+    );
+    if (fresh.length >= 2 && freshWomen.length) {
+      const primary = fresh.includes(a) ? a : fresh[0];
+      const secondary = fresh
+        .filter((n) => n !== primary)
+        .sort(
+          (x, y) =>
+            (recent[y] || 0) - (recent[x] || 0) ||
+            shuffled.indexOf(x) - shuffled.indexOf(y),
+        )[0];
+      castNames = {
+        a: primary,
+        b: secondary,
+        woman: freshWomen.includes(woman) ? woman : freshWomen[0],
+        other: men.find((n) => n !== primary && n !== secondary)!,
+      };
+    }
+  }
   const personal = characterMoment(
     work,
     state,
@@ -292,6 +321,9 @@ export function packMoment(
       woman: m.names.woman,
       other: m.names.other,
     },
+    ...(turn === "focus"
+      ? { presentedScenes: m.scene.presentedScenes || [m.scene.id] }
+      : {}),
     ...(turn === "approach"
       ? {
           renderedLead: m.lead,

@@ -129,11 +129,49 @@ export function characterScene(
       )
         contact++;
       const date = readAnswer(state, `d${d}-date-choice-a`);
-      if (date?.dateTarget === name && date.optionIndex !== 2) contact++;
+      const dateEffect = date?.sceneEffect as Partial<Relationship> | undefined;
+      if (
+        date?.dateTarget === name &&
+        (dateEffect
+          ? (dateEffect.affinity || 0) > 0 && (dateEffect.trust || 0) >= 0
+          : date.optionIndex !== 1)
+      )
+        contact++;
     }
     if (contact < 2 && person?.distantLate) return person.distantLate;
   }
   return person?.scenes.find((s) => s.phase === phase);
+}
+export function presentedBefore(
+  work: Work,
+  state: Runtime,
+  day: number,
+  ex: string,
+) {
+  const seen = new Set<string>();
+  for (let d = 1; d < day; d++) {
+    const saved = readAnswer(state, `d${d}-focus`),
+      reply = readAnswer(state, `d${d}-approach`);
+    if (typeof saved?.sceneId === "string") seen.add(saved.sceneId);
+    if (typeof reply?.actorScene === "string") seen.add(reply.actorScene);
+    if (Array.isArray(saved?.presentedScenes))
+      for (const id of saved.presentedScenes)
+        if (typeof id === "string") seen.add(id);
+    // Recover the two unchosen on-screen beats from older recordings too.
+    const cast = saved?.cast as
+      { a: string; b: string; woman: string } | undefined;
+    const stage = d < 7 ? 0 : d < 14 ? 1 : 2;
+    if (
+      cast &&
+      !Array.isArray(saved?.presentedScenes) &&
+      characterScene(work, cast.a, stage, state, d, ex)?.id === saved?.sceneId
+    ) {
+      const b = characterScene(work, cast.b, stage, state, d, ex);
+      if (b) seen.add(b.id);
+      seen.add(`woman:${cast.woman}:${Math.min(2, Math.floor((d - 1) / 7))}`);
+    }
+  }
+  return seen;
 }
 export function characterMoment(
   work: Work,
@@ -149,17 +187,16 @@ export function characterMoment(
     b = characterScene(work, names.b, phase, state, day, p.ex);
   const woman = characterBook(work).women.find((c) => c.name === names.woman);
   if (!a || !b || !woman) return undefined;
-  const used = new Set<string>();
-  for (let d = 1; d < day; d++) {
-    const saved = readAnswer(state, `d${d}-focus`);
-    if (typeof saved?.sceneId === "string") used.add(saved.sceneId);
-    const reply = readAnswer(state, `d${d}-approach`);
-    if (typeof reply?.actorScene === "string") used.add(reply.actorScene);
-  }
+  const used = presentedBefore(work, state, day, p.ex);
   const saved = readAnswer(state, `d${day}-focus`);
   if (saved?.sceneId && saved.sceneId !== a.id) return undefined;
-  if (!saved?.sceneId && used.has(a.id)) return undefined;
-  const wBeat = woman.beats[Math.min(2, Math.floor((day - 1) / 7))];
+  const presented = [a.id, b.id, `woman:${names.woman}:${phase}`];
+  if (!saved?.sceneId && presented.some((id) => used.has(id))) return undefined;
+  const beatPhase =
+    saved?.sceneId && !Array.isArray(saved.presentedScenes)
+      ? Math.min(2, Math.floor((day - 1) / 7))
+      : phase;
+  const wBeat = woman.beats[beatPhase];
   const peer = publicPartner(p, _config, names.woman);
   const render = (s: string) =>
     textFor(s, { ...names, other: peer, man: names.a, player: p.name });
@@ -190,6 +227,7 @@ export function characterMoment(
     id: a.id,
     phase,
     title: a.title,
+    presentedScenes: presented,
     peer,
     intro:
       render(a.intro) +

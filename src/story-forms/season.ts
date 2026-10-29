@@ -18,6 +18,8 @@ import {
   relationships,
   finalConsent,
   hiddenAffections,
+  relationshipReadiness,
+  commitmentWords,
   selected,
 } from "./relationships";
 export { seeded } from "./relationships";
@@ -46,6 +48,9 @@ type Answer = {
   smsEffect?: Record<string, number>;
   heartVersion?: 1;
   heartScores?: Record<string, Record<string, number>>;
+  exReadiness?: { ready: boolean; code: string };
+  commitmentReply?: string;
+  readinessCode?: string;
 } & Partial<CharacterDateAnswer>;
 type Vote = { from: string; to: string; text: string };
 export function answer(state: Runtime, id: string): string {
@@ -252,21 +257,20 @@ function nightlyVotes(
   plan: { table: HeartTable; recipients: Record<string, string> },
 ): Vote[] {
   const residents = residentCast(p, config, day);
+  const reserved = new Set<string>([text]);
   return [...residents.men, ...residents.women].map((from) => {
     const to =
       from === p.name
         ? answer(state, `d${day}-recipient`)
         : plan.recipients[from];
-    return {
-      from,
-      to,
-      text:
-        from === p.name
-          ? text
-          : to === p.name
-            ? incomingToPlayer(work, state, p, config, from, day)
-            : otherSms(work, state, p, config, from, to, day),
-    };
+    const message =
+      from === p.name
+        ? text
+        : to === p.name
+          ? incomingToPlayer(work, state, p, config, from, day, reserved)
+          : otherSms(work, state, p, config, from, to, day, reserved);
+    reserved.add(message);
+    return { from, to, text: message };
   });
 }
 export function inputError(item: Item, value: string): string {
@@ -413,6 +417,19 @@ export function packSeasonAnswer(
     )[focus];
     if (r) a.reaction = { meetings: r.meetings, pressure: r.pressure };
   }
+  if (["d14-repair", "d19-repair", "d21-chat1"].includes(id)) {
+    const day = Number(id.match(/^d(\d+)/)![1]);
+    const next = {
+      ...state,
+      ui: {
+        ...state.ui,
+        kakao: { ...state.ui?.kakao, ["answer:" + id]: JSON.stringify(a) },
+      },
+    };
+    const ready = relationshipReadiness(work, next, c.p, c.config, c.p.ex, day);
+    a.readinessCode = ready.code;
+    a.commitmentReply = commitmentWords(work, c.p, c.config, ready.code)?.talk;
+  }
   const smsDay = id.match(/^d(\d+)-sms$/);
   if (smsDay) {
     const day = Number(smsDay[1]);
@@ -434,6 +451,15 @@ export function packSeasonAnswer(
     const plan = nightlyChoices(work, c.p, c.config, state, day);
     a.heartVersion = 1;
     a.heartScores = heartScores(plan.table);
+    if (day >= 14)
+      a.exReadiness = relationshipReadiness(
+        work,
+        state,
+        c.p,
+        c.config,
+        c.p.ex,
+        day,
+      );
     a.votes = nightlyVotes(work, c.p, c.config, state, day, a.value, plan);
   }
   return JSON.stringify(a);
@@ -807,7 +833,9 @@ export function seasonValues(
     values.finalResult =
       (result.success
         ? "復合成功。你表達重新開始的心意，對方也選擇了你。"
-        : "你選擇了復合，對方沒有接受重新開始。") + result.reason;
+        : result.code === "player"
+          ? "你們這次沒有共同確認重新開始。"
+          : "你選擇了復合，對方還沒有準備好重新開始。") + result.reason;
   } else
     values.finalResult =
       "你選擇先單身。你把珍惜與承諾分開，也把生活的重心留給自己。";
